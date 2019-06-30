@@ -47,15 +47,31 @@ euc_dist <- function(x, y) {
 #' Compute NND sliding window across given series.
 #' @param data NumericMatrix multivariate data set
 #' @param win int window size for sliding window
-#' @param part_size NND partition
-#' @param threshold for NND pdf
 #' @return NumericMatrix
+#' @details
+#' Given n x p data, slide a window.
+#' Compute NND for each pair of moving window.
+#' @export
+nns_cpp <- function(data, win) {
+    .Call('_swatanomaly_nns_cpp', PACKAGE = 'swatanomaly', data, win)
+}
+
+#' Anomaly detection using NND
+#'
+#' @description
+#' This function detects anomaly based on NND.
+#' @param data NumericMatrix multivariate data set
+#' @param win int window size for sliding window
+#' @param thr threshold for anomaly detection, in each window
+#' @return LogicalVector,
+#' If NND is (strictly) larger than threshold then TRUE.
+#' Otherwise, FALSE
 #' @details
 #' Given n x p data, slide a window.
 #' Compute NND for each pair of moving window.
 #' For threshold, users can use tail value of \code{\link{euc_pdf}}.
 #' @export
-nns_cpp <- function(data, win, part_size, thr) {
-    .Call('_swatanomaly_nns_cpp', PACKAGE = 'swatanomaly', data, win, part_size, thr)
+detect_nnd <- function(data, win, thr) {
+    .Call('_swatanomaly_detect_nnd', PACKAGE = 'swatanomaly', data, win, thr)
 }
 

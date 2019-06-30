@@ -4,9 +4,9 @@ Title: Various algorithms for anomaly detection
 Version: 0.1.0
 Author: person("Young-geun", "Kim", email = "dudrmshub@gmail.com", role = c("aut", "cre"))
 Maintainer: Young-geun Kim <dudrms33@g.skku.edu>
-Description: Provides some algorithms used by NSR anomaly detection projects
-    for example, NND
-License: MIT
+Description: Provides some algorithms used by NSR anomaly detection projects.
+    I keep updating them.
+License: MIT + file LICENSE
 URL: https://github.com/ygeunkim
 Encoding: UTF-8
 LazyData: true

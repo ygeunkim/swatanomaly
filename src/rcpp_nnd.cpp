@@ -86,18 +86,14 @@ double euc_dist(NumericMatrix x, NumericMatrix y) {
 //' Compute NND sliding window across given series.
 //' @param data NumericMatrix multivariate data set
 //' @param win int window size for sliding window
-//' @param part_size NND partition
-//' @param threshold for NND pdf
 //' @return NumericMatrix
 //' @details
 //' Given n x p data, slide a window.
 //' Compute NND for each pair of moving window.
-//' For threshold, users can use tail value of \code{\link{euc_pdf}}.
 //' @export
 // [[Rcpp::export]]
-NumericVector nns_cpp(NumericMatrix data, int win, int part_size, double thr) {
+NumericVector nns_cpp(NumericMatrix data, int win) {
   int n = data.nrow();
-  int p = data.ncol();
   NumericVector x1(win);
   NumericVector x2(win);
   NumericMatrix distmat(n + win - 1, n + win - 1);
@@ -116,3 +112,30 @@ NumericVector nns_cpp(NumericMatrix data, int win, int part_size, double thr) {
   return distvec;
 }
 
+//' Anomaly detection using NND
+//'
+//' @description
+//' This function detects anomaly based on NND.
+//' @param data NumericMatrix multivariate data set
+//' @param win int window size for sliding window
+//' @param thr threshold for anomaly detection, in each window
+//' @return LogicalVector,
+//' If NND is (strictly) larger than threshold then TRUE.
+//' Otherwise, FALSE
+//' @details
+//' Given n x p data, slide a window.
+//' Compute NND for each pair of moving window.
+//' For threshold, users can use tail value of \code{\link{euc_pdf}}.
+//' @export
+// [[Rcpp::export]]
+LogicalVector detect_nnd(NumericMatrix data, int win, NumericVector thr) {
+  NumericVector distvec = nns_cpp(data, win);
+  int w = thr.length();
+  LogicalVector x(w);
+
+  for (int i = 0; i < w; i++) {
+    x[i] = distvec[i] > thr[i];
+  }
+
+  return x;
+}

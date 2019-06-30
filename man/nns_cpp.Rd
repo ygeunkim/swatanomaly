@@ -4,16 +4,12 @@
 \alias{nns_cpp}
 \title{Windowed NNS in Rcpp}
 \usage{
-nns_cpp(data, win, part_size, thr)
+nns_cpp(data, win)
 }
 \arguments{
 \item{data}{NumericMatrix multivariate data set}
 
 \item{win}{int window size for sliding window}
-
-\item{part_size}{NND partition}
-
-\item{threshold}{for NND pdf}
 }
 \value{
 NumericMatrix
@@ -25,5 +21,4 @@ Compute NND sliding window across given series.
 \details{
 Given n x p data, slide a window.
 Compute NND for each pair of moving window.
-For threshold, users can use tail value of \code{\link{euc_pdf}}.
 }
