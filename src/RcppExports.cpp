@@ -5,19 +5,62 @@
 
 using namespace Rcpp;
 
-// rcpp_hello
-List rcpp_hello();
-RcppExport SEXP _swatanomaly_rcpp_hello() {
+// sum_sq
+double sum_sq(NumericVector x);
+RcppExport SEXP _swatanomaly_sum_sq(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(rcpp_hello());
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(sum_sq(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// euc_pdf
+NumericVector euc_pdf(NumericMatrix x, NumericMatrix y, int partition);
+RcppExport SEXP _swatanomaly_euc_pdf(SEXP xSEXP, SEXP ySEXP, SEXP partitionSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type y(ySEXP);
+    Rcpp::traits::input_parameter< int >::type partition(partitionSEXP);
+    rcpp_result_gen = Rcpp::wrap(euc_pdf(x, y, partition));
+    return rcpp_result_gen;
+END_RCPP
+}
+// euc_dist
+double euc_dist(NumericMatrix x, NumericMatrix y);
+RcppExport SEXP _swatanomaly_euc_dist(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(euc_dist(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// nns_cpp
+NumericVector nns_cpp(NumericMatrix data, int win, int part_size, double thr);
+RcppExport SEXP _swatanomaly_nns_cpp(SEXP dataSEXP, SEXP winSEXP, SEXP part_sizeSEXP, SEXP thrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< int >::type win(winSEXP);
+    Rcpp::traits::input_parameter< int >::type part_size(part_sizeSEXP);
+    Rcpp::traits::input_parameter< double >::type thr(thrSEXP);
+    rcpp_result_gen = Rcpp::wrap(nns_cpp(data, win, part_size, thr));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_swatanomaly_rcpp_hello", (DL_FUNC) &_swatanomaly_rcpp_hello, 0},
+    {"_swatanomaly_sum_sq", (DL_FUNC) &_swatanomaly_sum_sq, 1},
+    {"_swatanomaly_euc_pdf", (DL_FUNC) &_swatanomaly_euc_pdf, 3},
+    {"_swatanomaly_euc_dist", (DL_FUNC) &_swatanomaly_euc_dist, 2},
+    {"_swatanomaly_nns_cpp", (DL_FUNC) &_swatanomaly_nns_cpp, 4},
     {NULL, NULL, 0}
 };
 

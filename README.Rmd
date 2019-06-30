@@ -1,0 +1,32 @@
+---
+output: 
+  github_document:
+    pandoc_args: --webtex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  comment = "#>",
+  collapse = TRUE,
+  out.width = "70%",
+  fig.align = "center",
+  fig.width = 6,
+  fig.asp = .618
+  )
+options(digits = 3)
+pander::panderOptions("round", 3)
+```
+
+# `swatanomaly`
+
+Various algorithms for anomaly detection
+
+- NND
+
+## Installation
+
+```{r, eval=FALSE}
+devtools::install_github("ygeunkim/swatanomaly")
+```
+
+
