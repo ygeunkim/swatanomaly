@@ -92,10 +92,11 @@ double euc_dist(NumericMatrix x, NumericMatrix y) {
 //' Compute NND sliding window across given series.
 //' @param data NumericMatrix multivariate data set
 //' @param win int window size for sliding window
-//' @return NumericMatrix
+//' @return NumericVector, NND for each window index (index represented by its starting point)
 //' @details
 //' Given n x p data, slide a window.
 //' Compute NND for each pair of moving window.
+//' Note that the number of windows is nrow - win + 1 given size of window win.
 //' @useDynLib swatanomaly
 //' @importFrom Rcpp sourceCpp
 //' @export
@@ -104,12 +105,12 @@ NumericVector nns_cpp(NumericMatrix data, int win) {
   int n = data.nrow();
   NumericVector x1(win);
   NumericVector x2(win);
-  NumericMatrix distmat(n + win - 1, n + win - 1);
-  NumericVector distvec(n + win - 1);
-  NumericVector findmin(n + win - 1);
+  NumericMatrix distmat(n - win + 1, n - win + 1);
+  NumericVector distvec(n - win + 1);
+  NumericVector findmin(n - win + 1);
 
-  for (int i = 0; i < n + win - 1; i++) {
-    for (int j = 0; j < n + win - 1; j++) {
+  for (int i = 0; i < n - win + 1; i++) {
+    for (int j = 0; j < n - win + 1; j++) {
       distmat(i, j) = euc_dist(data(Range(i, i + win - 1), _), data(Range(j, j + win - 1), _));
     }
     findmin = distmat(i, _);

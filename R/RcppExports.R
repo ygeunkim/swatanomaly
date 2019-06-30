@@ -53,10 +53,11 @@ euc_dist <- function(x, y) {
 #' Compute NND sliding window across given series.
 #' @param data NumericMatrix multivariate data set
 #' @param win int window size for sliding window
-#' @return NumericMatrix
+#' @return NumericVector, NND for each window index (index represented by its starting point)
 #' @details
 #' Given n x p data, slide a window.
 #' Compute NND for each pair of moving window.
+#' Note that the number of windows is nrow - win + 1 given size of window win.
 #' @useDynLib swatanomaly
 #' @importFrom Rcpp sourceCpp
 #' @export

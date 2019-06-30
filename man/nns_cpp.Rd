@@ -12,7 +12,7 @@ nns_cpp(data, win)
 \item{win}{int window size for sliding window}
 }
 \value{
-NumericMatrix
+NumericVector, NND for each window index (index represented by its starting point)
 }
 \description{
 This function computes a windowed NNS.
@@ -21,4 +21,5 @@ Compute NND sliding window across given series.
 \details{
 Given n x p data, slide a window.
 Compute NND for each pair of moving window.
+Note that the number of windows is nrow - win + 1 given size of window win.
 }
