@@ -6,6 +6,8 @@
 #' @description Compute a SS in C++
 #' @param x NumericVector
 #' @return double
+#' @useDynLib swatanomaly
+#' @importFrom Rcpp sourceCpp
 #' @export
 sum_sq <- function(x) {
     .Call('_swatanomaly_sum_sq', PACKAGE = 'swatanomaly', x)
@@ -23,6 +25,8 @@ sum_sq <- function(x) {
 #' First partitioning the series equally.
 #' Next for each partitioned block, it calculates sqrt(sum((x_i - y_i)^2)) versus the other blocks.
 #' Find the minimum result for each block. This is NND of each block.
+#' @useDynLib swatanomaly
+#' @importFrom Rcpp sourceCpp
 #' @export
 euc_pdf <- function(x, y, partition) {
     .Call('_swatanomaly_euc_pdf', PACKAGE = 'swatanomaly', x, y, partition)
@@ -35,6 +39,8 @@ euc_pdf <- function(x, y, partition) {
 #' @param x NumericMatrix column should indicate variable
 #' @param y NumericMatrix column should indicate variable
 #' @return double
+#' @useDynLib swatanomaly
+#' @importFrom Rcpp sourceCpp
 #' @export
 euc_dist <- function(x, y) {
     .Call('_swatanomaly_euc_dist', PACKAGE = 'swatanomaly', x, y)
@@ -51,6 +57,8 @@ euc_dist <- function(x, y) {
 #' @details
 #' Given n x p data, slide a window.
 #' Compute NND for each pair of moving window.
+#' @useDynLib swatanomaly
+#' @importFrom Rcpp sourceCpp
 #' @export
 nns_cpp <- function(data, win) {
     .Call('_swatanomaly_nns_cpp', PACKAGE = 'swatanomaly', data, win)
@@ -70,6 +78,8 @@ nns_cpp <- function(data, win) {
 #' Given n x p data, slide a window.
 #' Compute NND for each pair of moving window.
 #' For threshold, users can use tail value of \code{\link{euc_pdf}}.
+#' @useDynLib swatanomaly
+#' @importFrom Rcpp sourceCpp
 #' @export
 detect_nnd <- function(data, win, thr) {
     .Call('_swatanomaly_detect_nnd', PACKAGE = 'swatanomaly', data, win, thr)

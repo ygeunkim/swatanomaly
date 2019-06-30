@@ -6,6 +6,8 @@ using namespace Rcpp;
 //' @description Compute a SS in C++
 //' @param x NumericVector
 //' @return double
+//' @useDynLib swatanomaly
+//' @importFrom Rcpp sourceCpp
 //' @export
 // [[Rcpp::export]]
 double sum_sq(NumericVector x) {
@@ -31,6 +33,8 @@ double sum_sq(NumericVector x) {
 //' First partitioning the series equally.
 //' Next for each partitioned block, it calculates sqrt(sum((x_i - y_i)^2)) versus the other blocks.
 //' Find the minimum result for each block. This is NND of each block.
+//' @useDynLib swatanomaly
+//' @importFrom Rcpp sourceCpp
 //' @export
 // [[Rcpp::export]]
 NumericVector euc_pdf(NumericMatrix x, NumericMatrix y, int partition) {
@@ -58,6 +62,8 @@ NumericVector euc_pdf(NumericMatrix x, NumericMatrix y, int partition) {
 //' @param x NumericMatrix column should indicate variable
 //' @param y NumericMatrix column should indicate variable
 //' @return double
+//' @useDynLib swatanomaly
+//' @importFrom Rcpp sourceCpp
 //' @export
 // [[Rcpp::export]]
 double euc_dist(NumericMatrix x, NumericMatrix y) {
@@ -90,6 +96,8 @@ double euc_dist(NumericMatrix x, NumericMatrix y) {
 //' @details
 //' Given n x p data, slide a window.
 //' Compute NND for each pair of moving window.
+//' @useDynLib swatanomaly
+//' @importFrom Rcpp sourceCpp
 //' @export
 // [[Rcpp::export]]
 NumericVector nns_cpp(NumericMatrix data, int win) {
@@ -126,6 +134,8 @@ NumericVector nns_cpp(NumericMatrix data, int win) {
 //' Given n x p data, slide a window.
 //' Compute NND for each pair of moving window.
 //' For threshold, users can use tail value of \code{\link{euc_pdf}}.
+//' @useDynLib swatanomaly
+//' @importFrom Rcpp sourceCpp
 //' @export
 // [[Rcpp::export]]
 LogicalVector detect_nnd(NumericMatrix data, int win, NumericVector thr) {
