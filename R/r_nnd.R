@@ -4,7 +4,7 @@
 #' This function computes threshold using \code{\link{euc_pdf}}
 #' @param data NumericMatrix multivariate data set
 #' @param part_size partition for \code{\link{euc_pdf}}
-#' @param prob probability for quantile. See [stats::quantile].
+#' @param prob probability for quantile. See \link[stats]{quantile.default}.
 #' @return double quantile value for the result of \code{\link{euc_pdf}}
 #' @importFrom stats quantile
 #' @details
@@ -12,7 +12,7 @@
 #' Threshold is a tail of pdf, e.g. 0.99.
 #' @seealso
 #'    \code{\link{euc_pdf}}
-#'    [stats::quantile]
+#'    \link[stats]{quantile.default}
 #'    \code{\link{detect_nnd}}
 #'    \code{\link{detect_nndvec}}
 #' @export

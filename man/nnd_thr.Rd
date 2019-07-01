@@ -11,7 +11,7 @@ nnd_thr(data, part_size, prob)
 
 \item{part_size}{partition for \code{\link{euc_pdf}}}
 
-\item{prob}{probability for quantile. See [stats::quantile].}
+\item{prob}{probability for quantile. See \link[stats]{quantile.default}.}
 }
 \value{
 double quantile value for the result of \code{\link{euc_pdf}}
@@ -25,7 +25,7 @@ Threshold is a tail of pdf, e.g. 0.99.
 }
 \seealso{
 \code{\link{euc_pdf}}
-   [stats::quantile]
+   \link[stats]{quantile.default}
    \code{\link{detect_nnd}}
    \code{\link{detect_nndvec}}
 }
