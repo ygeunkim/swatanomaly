@@ -49,11 +49,10 @@ NumericVector euc_pdf(NumericMatrix x, int partition) {
 
   for (int i = 0; i < nx; i += (int)partition) {
     for (int j = 0; j < nx; j += (int)partition) {
-      for (int k = 0; k < partition; k ++) {
-        nnd[k] = sqrt(sum_sq(x(i, i + partition - 1) - x(j, j + partition - 1)));
-      }
-      euc[i] = min(nnd);
+      nnd[j] = sqrt(sum_sq(x(i, i + partition - 1) - x(j, j + partition - 1)));
     }
+    nnd[i] = max(nnd);
+    euc[i] = min(nnd);
   }
 
   return euc;
