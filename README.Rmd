@@ -1,4 +1,5 @@
 ---
+bibliography: swatanomalyref.bib
 output: 
   github_document:
     pandoc_args: --webtex
@@ -21,7 +22,8 @@ pander::panderOptions("round", 3)
 
 Various algorithms for anomaly detection
 
-- NND
+- NND: @Yun:2018di
+    - used in @Cho:2019ji, (*not this package*)
 
 ## Installation
 
@@ -29,4 +31,8 @@ Various algorithms for anomaly detection
 devtools::install_github("ygeunkim/swatanomaly")
 ```
 
+
+***
+
+# References
 
