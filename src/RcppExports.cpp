@@ -17,15 +17,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // euc_pdf
-NumericVector euc_pdf(NumericMatrix x, NumericMatrix y, int partition);
-RcppExport SEXP _swatanomaly_euc_pdf(SEXP xSEXP, SEXP ySEXP, SEXP partitionSEXP) {
+NumericVector euc_pdf(NumericMatrix x, int partition);
+RcppExport SEXP _swatanomaly_euc_pdf(SEXP xSEXP, SEXP partitionSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type y(ySEXP);
     Rcpp::traits::input_parameter< int >::type partition(partitionSEXP);
-    rcpp_result_gen = Rcpp::wrap(euc_pdf(x, y, partition));
+    rcpp_result_gen = Rcpp::wrap(euc_pdf(x, partition));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -54,25 +53,39 @@ BEGIN_RCPP
 END_RCPP
 }
 // detect_nnd
-LogicalVector detect_nnd(NumericMatrix data, int win, NumericVector thr);
+LogicalVector detect_nnd(NumericMatrix data, int win, double thr);
 RcppExport SEXP _swatanomaly_detect_nnd(SEXP dataSEXP, SEXP winSEXP, SEXP thrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericMatrix >::type data(dataSEXP);
     Rcpp::traits::input_parameter< int >::type win(winSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type thr(thrSEXP);
+    Rcpp::traits::input_parameter< double >::type thr(thrSEXP);
     rcpp_result_gen = Rcpp::wrap(detect_nnd(data, win, thr));
+    return rcpp_result_gen;
+END_RCPP
+}
+// detect_nndvec
+LogicalVector detect_nndvec(NumericVector nnd, int win, double thr);
+RcppExport SEXP _swatanomaly_detect_nndvec(SEXP nndSEXP, SEXP winSEXP, SEXP thrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type nnd(nndSEXP);
+    Rcpp::traits::input_parameter< int >::type win(winSEXP);
+    Rcpp::traits::input_parameter< double >::type thr(thrSEXP);
+    rcpp_result_gen = Rcpp::wrap(detect_nndvec(nnd, win, thr));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
     {"_swatanomaly_sum_sq", (DL_FUNC) &_swatanomaly_sum_sq, 1},
-    {"_swatanomaly_euc_pdf", (DL_FUNC) &_swatanomaly_euc_pdf, 3},
+    {"_swatanomaly_euc_pdf", (DL_FUNC) &_swatanomaly_euc_pdf, 2},
     {"_swatanomaly_euc_dist", (DL_FUNC) &_swatanomaly_euc_dist, 2},
     {"_swatanomaly_nns_cpp", (DL_FUNC) &_swatanomaly_nns_cpp, 2},
     {"_swatanomaly_detect_nnd", (DL_FUNC) &_swatanomaly_detect_nnd, 3},
+    {"_swatanomaly_detect_nndvec", (DL_FUNC) &_swatanomaly_detect_nndvec, 3},
     {NULL, NULL, 0}
 };
 

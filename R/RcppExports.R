@@ -18,18 +18,23 @@ sum_sq <- function(x) {
 #' @description
 #' This function computes a euclidean NND pdf of two multivariate series using Rcpp. See details what it is.
 #' @param x NumericMatrix column should indicate variable
-#' @param y NumericMatrix column should indicate variable
-#' @param partition int partitioning equally the series
+#' @param partition int equally partitioning the series
 #' @return NumericVector NND for each block
 #' @details
 #' First partitioning the series equally.
 #' Next for each partitioned block, it calculates sqrt(sum((x_i - y_i)^2)) versus the other blocks.
 #' Find the minimum result for each block. This is NND of each block.
+#' Finally, you can get NND for every block and this is pdf for NND.
+#' For \code{\link{detect_nnd}}, this pdf is able to threshold.
+#' Threshold is a tail of pdf, e.g. 0.99.
+#' @seealso
+#'  \code{\link{euc_dist}}
+#'  \code{\link{detect_nnd}}
 #' @useDynLib swatanomaly
 #' @importFrom Rcpp sourceCpp
 #' @export
-euc_pdf <- function(x, y, partition) {
-    .Call('_swatanomaly_euc_pdf', PACKAGE = 'swatanomaly', x, y, partition)
+euc_pdf <- function(x, partition) {
+    .Call('_swatanomaly_euc_pdf', PACKAGE = 'swatanomaly', x, partition)
 }
 
 #' Euclidean distance between two matrices in Rcpp
@@ -69,9 +74,9 @@ nns_cpp <- function(data, win) {
 #'
 #' @description
 #' This function detects anomaly based on NND.
-#' @param data NumericMatrix multivariate data set
-#' @param win int window size for sliding window
-#' @param thr threshold for anomaly detection, in each window
+#' @param data NumericMatrix multivariate data set.
+#' @param win int window size for sliding window.
+#' @param thr double threshold that will be compared to nnd vector.
 #' @return LogicalVector,
 #' If NND is (strictly) larger than threshold then TRUE.
 #' Otherwise, FALSE
@@ -84,5 +89,26 @@ nns_cpp <- function(data, win) {
 #' @export
 detect_nnd <- function(data, win, thr) {
     .Call('_swatanomaly_detect_nnd', PACKAGE = 'swatanomaly', data, win, thr)
+}
+
+#' Anomaly detection after conducting NND
+#'
+#' @description
+#' This function detects anomaly based on NND, given \code{\link{nns_cpp}}.
+#' @param nnd NumericVector result of \code{\link{nns_cpp}}
+#' @param win int window size for sliding window
+#' @param thr threshold for anomaly detection, in each window
+#' @return LogicalVector,
+#' If NND is (strictly) larger than threshold then TRUE.
+#' Otherwise, FALSE
+#' @details
+#' Given n x p data, slide a window.
+#' Compute NND for each pair of moving window.
+#' For threshold, users can use tail value of \code{\link{euc_pdf}}.
+#' @useDynLib swatanomaly
+#' @importFrom Rcpp sourceCpp
+#' @export
+detect_nndvec <- function(nnd, win, thr) {
+    .Call('_swatanomaly_detect_nndvec', PACKAGE = 'swatanomaly', nnd, win, thr)
 }
 

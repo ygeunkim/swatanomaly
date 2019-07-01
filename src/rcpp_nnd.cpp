@@ -26,27 +26,31 @@ double sum_sq(NumericVector x) {
 //' @description
 //' This function computes a euclidean NND pdf of two multivariate series using Rcpp. See details what it is.
 //' @param x NumericMatrix column should indicate variable
-//' @param y NumericMatrix column should indicate variable
-//' @param partition int partitioning equally the series
+//' @param partition int equally partitioning the series
 //' @return NumericVector NND for each block
 //' @details
 //' First partitioning the series equally.
 //' Next for each partitioned block, it calculates sqrt(sum((x_i - y_i)^2)) versus the other blocks.
 //' Find the minimum result for each block. This is NND of each block.
+//' Finally, you can get NND for every block and this is pdf for NND.
+//' For \code{\link{detect_nnd}}, this pdf is able to threshold.
+//' Threshold is a tail of pdf, e.g. 0.99.
+//' @seealso
+//'  \code{\link{euc_dist}}
+//'  \code{\link{detect_nnd}}
 //' @useDynLib swatanomaly
 //' @importFrom Rcpp sourceCpp
 //' @export
 // [[Rcpp::export]]
-NumericVector euc_pdf(NumericMatrix x, NumericMatrix y, int partition) {
+NumericVector euc_pdf(NumericMatrix x, int partition) {
   NumericVector nnd(partition);
   NumericVector euc(partition);
   int nx = x.nrow();
-  int ny = y.nrow();
 
   for (int i = 0; i < nx; i += (int)partition) {
-    for (int j = 0; j < ny; j += (int)partition) {
+    for (int j = 0; j < nx; j += (int)partition) {
       for (int k = 0; k < partition; k ++) {
-        nnd[k] = sqrt(sum_sq(x(i, i + partition - 1) - y(j, j + partition - 1)));
+        nnd[k] = sqrt(sum_sq(x(i, i + partition - 1) - x(j, j + partition - 1)));
       }
       euc[i] = min(nnd);
     }
@@ -108,7 +112,7 @@ NumericVector nns_cpp(NumericMatrix data, int win) {
 
   for (int i = 0; i < n - win + 1; i++) {
     for (int j = 0; j < n - win + 1; j++) {
-      sliding(j) = euc_dist(data(Range(i, i + win - 1), _), data(Range(j, j + win - 1), _));
+      sliding[j] = euc_dist(data(Range(i, i + win - 1), _), data(Range(j, j + win - 1), _));
     }
     sliding[i] = max(sliding);
     distvec[i] = min(sliding);
@@ -121,7 +125,38 @@ NumericVector nns_cpp(NumericMatrix data, int win) {
 //'
 //' @description
 //' This function detects anomaly based on NND.
-//' @param data NumericMatrix multivariate data set
+//' @param data NumericMatrix multivariate data set.
+//' @param win int window size for sliding window.
+//' @param thr double threshold that will be compared to nnd vector.
+//' @return LogicalVector,
+//' If NND is (strictly) larger than threshold then TRUE.
+//' Otherwise, FALSE
+//' @details
+//' Given n x p data, slide a window.
+//' Compute NND for each pair of moving window.
+//' For threshold, users can use tail value of \code{\link{euc_pdf}}.
+//' @useDynLib swatanomaly
+//' @importFrom Rcpp sourceCpp
+//' @export
+// [[Rcpp::export]]
+LogicalVector detect_nnd(NumericMatrix data, int win, double thr) {
+  int n = data.nrow();
+  NumericVector distvec = nns_cpp(data, win);
+
+  LogicalVector x(n - win + 1);
+
+  for (int i = 0; i < n - win + 1; i++) {
+    x[i] = distvec[i] > thr;
+  }
+
+  return x;
+}
+
+//' Anomaly detection after conducting NND
+//'
+//' @description
+//' This function detects anomaly based on NND, given \code{\link{nns_cpp}}.
+//' @param nnd NumericVector result of \code{\link{nns_cpp}}
 //' @param win int window size for sliding window
 //' @param thr threshold for anomaly detection, in each window
 //' @return LogicalVector,
@@ -135,14 +170,14 @@ NumericVector nns_cpp(NumericMatrix data, int win) {
 //' @importFrom Rcpp sourceCpp
 //' @export
 // [[Rcpp::export]]
-LogicalVector detect_nnd(NumericMatrix data, int win, NumericVector thr) {
-  NumericVector distvec = nns_cpp(data, win);
-  int w = thr.length();
+LogicalVector detect_nndvec(NumericVector nnd, int win, double thr) {
+  int w = nnd.length();
   LogicalVector x(w);
 
   for (int i = 0; i < w; i++) {
-    x[i] = distvec[i] > thr[i];
+    x[i] = nnd[i] > thr;
   }
 
   return x;
 }
+
