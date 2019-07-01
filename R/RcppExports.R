@@ -17,19 +17,20 @@ sum_sq <- function(x) {
 #'
 #' @description
 #' This function computes a euclidean NND pdf of two multivariate series using Rcpp. See details what it is.
-#' @param x NumericMatrix column should indicate variable
-#' @param partition int equally partitioning the series
-#' @return NumericVector NND for each block
+#' @param x NumericMatrix, column should indicate variable.
+#' @param partition int, equally partitioning the series.
+#' @return NumericVector, NND pdf
 #' @details
 #' First partitioning the series equally.
-#' Next for each partitioned block, it calculates sqrt(sum((x_i - y_i)^2)) versus the other blocks.
+#' Next for each partitioned block, it calculates sqrt(sum((x_i - x_j)^2)) versus the other partioned ones.
 #' Find the minimum result for each block. This is NND of each block.
 #' Finally, you can get NND for every block and this is pdf for NND.
 #' For \code{\link{detect_nnd}}, this pdf is able to threshold.
 #' Threshold is a tail of pdf, e.g. 0.99.
 #' @seealso
-#'  \code{\link{euc_dist}}
-#'  \code{\link{detect_nnd}}
+#'    \code{\link{euc_dist}}
+#'    \code{\link{nnd_thr}}
+#'    \code{\link{detect_nnd}}
 #' @useDynLib swatanomaly
 #' @importFrom Rcpp sourceCpp
 #' @export

@@ -7,19 +7,19 @@
 euc_pdf(x, partition)
 }
 \arguments{
-\item{x}{NumericMatrix column should indicate variable}
+\item{x}{NumericMatrix, column should indicate variable.}
 
-\item{partition}{int equally partitioning the series}
+\item{partition}{int, equally partitioning the series.}
 }
 \value{
-NumericVector NND for each block
+NumericVector, NND pdf
 }
 \description{
 This function computes a euclidean NND pdf of two multivariate series using Rcpp. See details what it is.
 }
 \details{
 First partitioning the series equally.
-Next for each partitioned block, it calculates sqrt(sum((x_i - y_i)^2)) versus the other blocks.
+Next for each partitioned block, it calculates sqrt(sum((x_i - x_j)^2)) versus the other partioned ones.
 Find the minimum result for each block. This is NND of each block.
 Finally, you can get NND for every block and this is pdf for NND.
 For \code{\link{detect_nnd}}, this pdf is able to threshold.
@@ -27,5 +27,6 @@ Threshold is a tail of pdf, e.g. 0.99.
 }
 \seealso{
 \code{\link{euc_dist}}
- \code{\link{detect_nnd}}
+   \code{\link{nnd_thr}}
+   \code{\link{detect_nnd}}
 }
