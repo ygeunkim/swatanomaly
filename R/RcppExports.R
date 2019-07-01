@@ -13,6 +13,20 @@ sum_sq <- function(x) {
     .Call('_swatanomaly_sum_sq', PACKAGE = 'swatanomaly', x)
 }
 
+#' Euclidean distance between two matrices in Rcpp
+#'
+#' @description
+#' This function computes a euclidean distance between two multivariate series using Rcpp.
+#' @param x NumericMatrix column should indicate variable
+#' @param y NumericMatrix column should indicate variable
+#' @return double
+#' @useDynLib swatanomaly
+#' @importFrom Rcpp sourceCpp
+#' @export
+euc_dist <- function(x, y) {
+    .Call('_swatanomaly_euc_dist', PACKAGE = 'swatanomaly', x, y)
+}
+
 #' Euclidean pdf in Rcpp
 #'
 #' @description
@@ -36,20 +50,6 @@ sum_sq <- function(x) {
 #' @export
 euc_pdf <- function(x, partition) {
     .Call('_swatanomaly_euc_pdf', PACKAGE = 'swatanomaly', x, partition)
-}
-
-#' Euclidean distance between two matrices in Rcpp
-#'
-#' @description
-#' This function computes a euclidean distance between two multivariate series using Rcpp.
-#' @param x NumericMatrix column should indicate variable
-#' @param y NumericMatrix column should indicate variable
-#' @return double
-#' @useDynLib swatanomaly
-#' @importFrom Rcpp sourceCpp
-#' @export
-euc_dist <- function(x, y) {
-    .Call('_swatanomaly_euc_dist', PACKAGE = 'swatanomaly', x, y)
 }
 
 #' Windowed NNS in Rcpp

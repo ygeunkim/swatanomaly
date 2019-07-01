@@ -21,6 +21,36 @@ double sum_sq(NumericVector x) {
   return sum;
 }
 
+//' Euclidean distance between two matrices in Rcpp
+//'
+//' @description
+//' This function computes a euclidean distance between two multivariate series using Rcpp.
+//' @param x NumericMatrix column should indicate variable
+//' @param y NumericMatrix column should indicate variable
+//' @return double
+//' @useDynLib swatanomaly
+//' @importFrom Rcpp sourceCpp
+//' @export
+// [[Rcpp::export]]
+double euc_dist(NumericMatrix x, NumericMatrix y) {
+  int nx = x.nrow();
+  int px = x.ncol();
+  int ny = y.nrow();
+  int py = y.ncol();
+  double euc = 0;
+
+  if (nx != ny | px != py) {
+    stop("x and y should be have same dimension");
+  }
+
+  for (int i = 0; i < nx; i++) {
+    euc += sum_sq(x(i, _) - y(i, _));
+  }
+
+  euc = sqrt(euc);
+  return euc;
+}
+
 //' Euclidean pdf in Rcpp
 //'
 //' @description
@@ -50,42 +80,12 @@ NumericVector euc_pdf(NumericMatrix x, int partition) {
 
   for (int i = 0; i < nx; i += (int)partition) {
     for (int j = 0; j < nx; j += (int)partition) {
-      nnd[j] = sqrt(sum_sq(x(i, i + partition - 1) - x(j, j + partition - 1)));
+      nnd[j] = euc_dist(x(Range(i, i + partition - 1), _), x(Range(j, j + partition - 1), _));
     }
     nnd[i] = max(nnd);
     euc[i] = min(nnd);
   }
 
-  return euc;
-}
-
-//' Euclidean distance between two matrices in Rcpp
-//'
-//' @description
-//' This function computes a euclidean distance between two multivariate series using Rcpp.
-//' @param x NumericMatrix column should indicate variable
-//' @param y NumericMatrix column should indicate variable
-//' @return double
-//' @useDynLib swatanomaly
-//' @importFrom Rcpp sourceCpp
-//' @export
-// [[Rcpp::export]]
-double euc_dist(NumericMatrix x, NumericMatrix y) {
-  int nx = x.nrow();
-  int px = x.ncol();
-  int ny = y.nrow();
-  int py = y.ncol();
-  double euc = 0;
-
-  if (nx != ny | px != py) {
-    stop("x and y should be have same dimension");
-  }
-
-  for (int i = 0; i < nx; i++) {
-    euc += sum_sq(x(i, _) - y(i, _));
-  }
-
-  euc = sqrt(euc);
   return euc;
 }
 

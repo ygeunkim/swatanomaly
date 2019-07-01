@@ -16,18 +16,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// euc_pdf
-NumericVector euc_pdf(NumericMatrix x, int partition);
-RcppExport SEXP _swatanomaly_euc_pdf(SEXP xSEXP, SEXP partitionSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
-    Rcpp::traits::input_parameter< int >::type partition(partitionSEXP);
-    rcpp_result_gen = Rcpp::wrap(euc_pdf(x, partition));
-    return rcpp_result_gen;
-END_RCPP
-}
 // euc_dist
 double euc_dist(NumericMatrix x, NumericMatrix y);
 RcppExport SEXP _swatanomaly_euc_dist(SEXP xSEXP, SEXP ySEXP) {
@@ -37,6 +25,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type y(ySEXP);
     rcpp_result_gen = Rcpp::wrap(euc_dist(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// euc_pdf
+NumericVector euc_pdf(NumericMatrix x, int partition);
+RcppExport SEXP _swatanomaly_euc_pdf(SEXP xSEXP, SEXP partitionSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type partition(partitionSEXP);
+    rcpp_result_gen = Rcpp::wrap(euc_pdf(x, partition));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -81,8 +81,8 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_swatanomaly_sum_sq", (DL_FUNC) &_swatanomaly_sum_sq, 1},
-    {"_swatanomaly_euc_pdf", (DL_FUNC) &_swatanomaly_euc_pdf, 2},
     {"_swatanomaly_euc_dist", (DL_FUNC) &_swatanomaly_euc_dist, 2},
+    {"_swatanomaly_euc_pdf", (DL_FUNC) &_swatanomaly_euc_pdf, 2},
     {"_swatanomaly_nns_cpp", (DL_FUNC) &_swatanomaly_nns_cpp, 2},
     {"_swatanomaly_detect_nnd", (DL_FUNC) &_swatanomaly_detect_nnd, 3},
     {"_swatanomaly_detect_nndvec", (DL_FUNC) &_swatanomaly_detect_nndvec, 3},
