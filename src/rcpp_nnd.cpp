@@ -74,12 +74,14 @@ double euc_dist(NumericMatrix x, NumericMatrix y) {
 //' @export
 // [[Rcpp::export]]
 NumericVector euc_pdf(NumericMatrix x, int partition) {
-  NumericVector nnd(partition);
-  NumericVector euc(partition);
   int nx = x.nrow();
+  int div = nx / partition;
 
-  for (int i = 0; i < nx; i += (int)partition) {
-    for (int j = 0; j < nx; j += (int)partition) {
+  NumericVector nnd(div);
+  NumericVector euc(div);
+
+  for (int i = 0; i < div; i++) {
+    for (int j = 0; j < div; j ++) {
       nnd[j] = euc_dist(x(Range(i, i + partition - 1), _), x(Range(j, j + partition - 1), _));
     }
     nnd[i] = max(nnd);
