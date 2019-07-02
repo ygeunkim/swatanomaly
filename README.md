@@ -16,7 +16,9 @@ devtools::install_github("ygeunkim/swatanomaly")
 library(swatanomaly)
 ```
 
-## Euclidean Distance
+## Benchmark
+
+### Euclidean Distance
 
 ``` r
 set.seed(1)
@@ -29,6 +31,13 @@ euclidean_distance <- function(x, y) {
   sum(sqrt(colSums((x - y)^2)))
 }
 ```
+
+Using `swatanomaly::euc_dist(x, y)`, we try to compute
+
+  
+![\\sum\_i \\sqrt{\\sum\_j (x\_{ij} -
+y\_{ij})^2}](https://latex.codecogs.com/png.latex?%5Csum_i%20%5Csqrt%7B%5Csum_j%20%28x_%7Bij%7D%20-%20y_%7Bij%7D%29%5E2%7D
+"\\sum_i \\sqrt{\\sum_j (x_{ij} - y_{ij})^2}")  
 
 ``` r
 euclidean_distance(x1, x2)
@@ -48,6 +57,8 @@ ggplot2::autoplot(
 ```
 
 <img src="README_files/figure-gfm/unnamed-chunk-6-1.png" width="70%" style="display: block; margin: auto;" />
+
+It is obvious that `Rcpp` is faster than `R` solution.
 
 -----
 
