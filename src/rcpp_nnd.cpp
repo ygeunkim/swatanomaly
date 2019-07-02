@@ -28,6 +28,13 @@ double sum_sq(NumericVector x) {
 //' @param x NumericMatrix column should indicate variable
 //' @param y NumericMatrix column should indicate variable
 //' @return double
+//' @details
+//' For input x and y, compute
+//'
+//' \\sum \\sum \\sqrt{(x_{ij} - y_{ij})^2}
+//'
+//' At first, the function calculates Euclidean distance pairwisely.
+//' After that, sum over every observation.
 //' @useDynLib swatanomaly
 //' @importFrom Rcpp sourceCpp
 //' @export
@@ -37,18 +44,18 @@ double euc_dist(NumericMatrix x, NumericMatrix y) {
   int px = x.ncol();
   int ny = y.nrow();
   int py = y.ncol();
-  double euc = 0;
+  NumericVector euc(px);
 
   if (nx != ny | px != py) {
     stop("x and y should be have same dimension");
   }
 
-  for (int i = 0; i < nx; i++) {
-    euc += sum_sq(x(i, _) - y(i, _));
+  for (int j = 0; j < px; j++) {
+    euc[j] = sum_sq(x(_, j) - y(_, j));
   }
 
-  euc = sqrt(euc);
-  return euc;
+  double dist = sum(sqrt(euc));
+  return dist;
 }
 
 //' Euclidean pdf in Rcpp

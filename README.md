@@ -12,6 +12,43 @@ Various algorithms for anomaly detection
 devtools::install_github("ygeunkim/swatanomaly")
 ```
 
+``` r
+library(swatanomaly)
+```
+
+## Euclidean Distance
+
+``` r
+set.seed(1)
+x1 <- matrix(rnorm(100), nrow = 10)
+x2 <- matrix(rnorm(100), nrow = 10)
+```
+
+``` r
+euclidean_distance <- function(x, y) {
+  sum(sqrt(colSums((x - y)^2)))
+}
+```
+
+``` r
+euclidean_distance(x1, x2)
+#> [1] 40.6
+euc_dist(x1, x2)
+#> [1] 40.6
+```
+
+``` r
+ggplot2::autoplot(
+    microbenchmark::microbenchmark(
+      DISTR = euclidean_distance(x1, x2),
+      DISTCPP = euc_dist(x1, x2),
+      times = 10
+  )
+)
+```
+
+<img src="README_files/figure-gfm/unnamed-chunk-6-1.png" width="70%" style="display: block; margin: auto;" />
+
 -----
 
 # References

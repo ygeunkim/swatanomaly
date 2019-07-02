@@ -20,6 +20,13 @@ sum_sq <- function(x) {
 #' @param x NumericMatrix column should indicate variable
 #' @param y NumericMatrix column should indicate variable
 #' @return double
+#' @details
+#' For input x and y, compute
+#'
+#' \\sum \\sum \\sqrt{(x_{ij} - y_{ij})^2}
+#'
+#' At first, the function calculates Euclidean distance pairwisely.
+#' After that, sum over every observation.
 #' @useDynLib swatanomaly
 #' @importFrom Rcpp sourceCpp
 #' @export

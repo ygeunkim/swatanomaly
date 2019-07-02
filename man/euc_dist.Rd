@@ -17,3 +17,11 @@ double
 \description{
 This function computes a euclidean distance between two multivariate series using Rcpp.
 }
+\details{
+For input x and y, compute
+
+\\sum \\sum \\sqrt{(x_{ij} - y_{ij})^2}
+
+At first, the function calculates Euclidean distance pairwisely.
+After that, sum over every observation.
+}
