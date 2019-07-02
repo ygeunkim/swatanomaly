@@ -22,9 +22,7 @@ sum_sq <- function(x) {
 #' @return double
 #' @details
 #' For input x and y, compute
-#'
-#' \\sum \\sum \\sqrt{(x_{ij} - y_{ij})^2}
-#'
+#' \deqn{\sum \sqrt{\sum (x_{ij} - y_{ij})^2}}
 #' At first, the function calculates Euclidean distance pairwisely.
 #' After that, sum over every observation.
 #' @useDynLib swatanomaly
@@ -52,6 +50,8 @@ euc_dist <- function(x, y) {
 #'    \code{\link{euc_dist}}
 #'    \code{\link{nnd_thr}}
 #'    \code{\link{detect_nnd}}
+#' @references
+#' Yun, J.-H., Hwang, Y., Lee, W., Ahn, H.-K., & Kim, S.-K. (2018). \emph{Statistical Similarity of Critical Infrastructure Network Traffic Based on Nearest Neighbor Distances} (Vol. 11050, pp. 1–23). Presented at the Research in Attacks, Intrusions, and Defenses, Cham: Springer International Publishing. \url{http://doi.org/10.1007/978-3-030-00470-5_27}
 #' @useDynLib swatanomaly
 #' @importFrom Rcpp sourceCpp
 #' @export
@@ -71,6 +71,8 @@ euc_pdf <- function(x, partition) {
 #' Given n x p data, slide a window.
 #' Compute NND for each pair of moving window.
 #' Note that the number of windows is nrow - win + 1 given size of window win.
+#' @references
+#' Yun, J.-H., Hwang, Y., Lee, W., Ahn, H.-K., & Kim, S.-K. (2018). \emph{Statistical Similarity of Critical Infrastructure Network Traffic Based on Nearest Neighbor Distances} (Vol. 11050, pp. 1–23). Presented at the Research in Attacks, Intrusions, and Defenses, Cham: Springer International Publishing. \url{http://doi.org/10.1007/978-3-030-00470-5_27}
 #' @useDynLib swatanomaly
 #' @importFrom Rcpp sourceCpp
 #' @export
@@ -92,6 +94,10 @@ nns_cpp <- function(data, win) {
 #' Given n x p data, slide a window.
 #' Compute NND for each pair of moving window.
 #' For threshold, users can use tail value of \code{\link{euc_pdf}}.
+#' @references
+#' Filonov, P., Kitashov, F., & Lavrentyev, A. (2017). \emph{RNN-based Early Cyber-Attack Detection for the Tennessee Eastman Process}. CoRR.
+#'
+#' Yun, J.-H., Hwang, Y., Lee, W., Ahn, H.-K., & Kim, S.-K. (2018). \emph{Statistical Similarity of Critical Infrastructure Network Traffic Based on Nearest Neighbor Distances} (Vol. 11050, pp. 1–23). Presented at the Research in Attacks, Intrusions, and Defenses, Cham: Springer International Publishing. \url{http://doi.org/10.1007/978-3-030-00470-5_27}
 #' @useDynLib swatanomaly
 #' @importFrom Rcpp sourceCpp
 #' @export
@@ -113,6 +119,10 @@ detect_nnd <- function(data, win, thr) {
 #' Given n x p data, slide a window.
 #' Compute NND for each pair of moving window.
 #' For threshold, users can use tail value of \code{\link{euc_pdf}}.
+#' @references
+#' Filonov, P., Kitashov, F., & Lavrentyev, A. (2017). \emph{RNN-based Early Cyber-Attack Detection for the Tennessee Eastman Process}. CoRR.
+#'
+#' Yun, J.-H., Hwang, Y., Lee, W., Ahn, H.-K., & Kim, S.-K. (2018). \emph{Statistical Similarity of Critical Infrastructure Network Traffic Based on Nearest Neighbor Distances} (Vol. 11050, pp. 1–23). Presented at the Research in Attacks, Intrusions, and Defenses, Cham: Springer International Publishing. \url{http://doi.org/10.1007/978-3-030-00470-5_27}
 #' @useDynLib swatanomaly
 #' @importFrom Rcpp sourceCpp
 #' @export

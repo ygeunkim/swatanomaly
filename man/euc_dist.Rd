@@ -19,9 +19,7 @@ This function computes a euclidean distance between two multivariate series usin
 }
 \details{
 For input x and y, compute
-
-\\sum \\sum \\sqrt{(x_{ij} - y_{ij})^2}
-
+\deqn{\sum \sqrt{\sum (x_{ij} - y_{ij})^2}}
 At first, the function calculates Euclidean distance pairwisely.
 After that, sum over every observation.
 }

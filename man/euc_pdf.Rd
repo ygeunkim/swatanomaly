@@ -25,6 +25,9 @@ Finally, you can get NND for every block and this is pdf for NND.
 For \code{\link{detect_nnd}}, this pdf is able to threshold.
 Threshold is a tail of pdf, e.g. 0.99.
 }
+\references{
+Yun, J.-H., Hwang, Y., Lee, W., Ahn, H.-K., & Kim, S.-K. (2018). \emph{Statistical Similarity of Critical Infrastructure Network Traffic Based on Nearest Neighbor Distances} (Vol. 11050, pp. 1–23). Presented at the Research in Attacks, Intrusions, and Defenses, Cham: Springer International Publishing. \url{http://doi.org/10.1007/978-3-030-00470-5_27}
+}
 \seealso{
 \code{\link{euc_dist}}
    \code{\link{nnd_thr}}
