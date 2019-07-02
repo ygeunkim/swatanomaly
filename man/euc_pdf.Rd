@@ -4,12 +4,14 @@
 \alias{euc_pdf}
 \title{Euclidean pdf in Rcpp}
 \usage{
-euc_pdf(x, partition)
+euc_pdf(x, partition, display_progress = FALSE)
 }
 \arguments{
 \item{x}{NumericMatrix, column should indicate variable.}
 
 \item{partition}{int, equally partitioning the series.}
+
+\item{display_progress}{If TRUE, display a progress bar. By default, FALSE.}
 }
 \value{
 NumericVector, NND pdf

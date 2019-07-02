@@ -38,6 +38,7 @@ euc_dist <- function(x, y) {
 #' This function computes a euclidean NND pdf of two multivariate series using Rcpp. See details what it is.
 #' @param x NumericMatrix, column should indicate variable.
 #' @param partition int, equally partitioning the series.
+#' @param display_progress If TRUE, display a progress bar. By default, FALSE.
 #' @return NumericVector, NND pdf
 #' @details
 #' First partitioning the series equally.
@@ -55,8 +56,8 @@ euc_dist <- function(x, y) {
 #' @useDynLib swatanomaly
 #' @importFrom Rcpp sourceCpp
 #' @export
-euc_pdf <- function(x, partition) {
-    .Call('_swatanomaly_euc_pdf', PACKAGE = 'swatanomaly', x, partition)
+euc_pdf <- function(x, partition, display_progress = FALSE) {
+    .Call('_swatanomaly_euc_pdf', PACKAGE = 'swatanomaly', x, partition, display_progress)
 }
 
 #' Windowed NNS in Rcpp
@@ -66,6 +67,7 @@ euc_pdf <- function(x, partition) {
 #' Compute NND sliding window across given series.
 #' @param data NumericMatrix multivariate data set
 #' @param win int window size for sliding window
+#' @param display_progress If TRUE, display a progress bar. By default, FALSE.
 #' @return NumericVector, NND for each window index (index represented by its starting point)
 #' @details
 #' Given n x p data, slide a window.
@@ -76,8 +78,8 @@ euc_pdf <- function(x, partition) {
 #' @useDynLib swatanomaly
 #' @importFrom Rcpp sourceCpp
 #' @export
-nns_cpp <- function(data, win) {
-    .Call('_swatanomaly_nns_cpp', PACKAGE = 'swatanomaly', data, win)
+nns_cpp <- function(data, win, display_progress = FALSE) {
+    .Call('_swatanomaly_nns_cpp', PACKAGE = 'swatanomaly', data, win, display_progress)
 }
 
 #' Anomaly detection using NND

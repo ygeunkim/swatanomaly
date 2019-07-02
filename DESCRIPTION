@@ -10,6 +10,10 @@ License: MIT + file LICENSE
 URL: https://github.com/ygeunkim
 Encoding: UTF-8
 LazyData: true
-Imports: Rcpp (>= 1.0.1)
-LinkingTo: Rcpp
+Imports:
+    Rcpp (>= 1.0.1),
+    RcppProgress
+LinkingTo:
+    Rcpp,
+    RcppProgress
 RoxygenNote: 6.1.1

@@ -1,4 +1,5 @@
 #include <Rcpp.h>
+#include <progress.hpp>
 using namespace Rcpp;
 
 //' Sums of squares in C++
@@ -62,6 +63,7 @@ double euc_dist(NumericMatrix x, NumericMatrix y) {
 //' This function computes a euclidean NND pdf of two multivariate series using Rcpp. See details what it is.
 //' @param x NumericMatrix, column should indicate variable.
 //' @param partition int, equally partitioning the series.
+//' @param display_progress If TRUE, display a progress bar. By default, FALSE.
 //' @return NumericVector, NND pdf
 //' @details
 //' First partitioning the series equally.
@@ -80,15 +82,22 @@ double euc_dist(NumericMatrix x, NumericMatrix y) {
 //' @importFrom Rcpp sourceCpp
 //' @export
 // [[Rcpp::export]]
-NumericVector euc_pdf(NumericMatrix x, int partition) {
+NumericVector euc_pdf(NumericMatrix x, int partition, bool display_progress = false) {
   int nx = x.nrow();
   int div = nx / partition;
 
   NumericVector nnd(div);
   NumericVector euc(div);
 
+  Progress p(div * div, display_progress);
+
   for (int i = 0; i < div; i++) {
+
+    if (Progress::check_abort())
+      return -1.0;
+
     for (int j = 0; j < div; j ++) {
+      p.increment();
       nnd[j] = euc_dist(x(Range(i, i + partition - 1), _), x(Range(j, j + partition - 1), _));
     }
     nnd[i] = max(nnd);
@@ -105,6 +114,7 @@ NumericVector euc_pdf(NumericMatrix x, int partition) {
 //' Compute NND sliding window across given series.
 //' @param data NumericMatrix multivariate data set
 //' @param win int window size for sliding window
+//' @param display_progress If TRUE, display a progress bar. By default, FALSE.
 //' @return NumericVector, NND for each window index (index represented by its starting point)
 //' @details
 //' Given n x p data, slide a window.
@@ -116,13 +126,20 @@ NumericVector euc_pdf(NumericMatrix x, int partition) {
 //' @importFrom Rcpp sourceCpp
 //' @export
 // [[Rcpp::export]]
-NumericVector nns_cpp(NumericMatrix data, int win) {
+NumericVector nns_cpp(NumericMatrix data, int win, bool display_progress = false) {
   int n = data.nrow();
   NumericVector sliding(n - win + 1);
   NumericVector distvec(n - win + 1);
 
+  Progress p((n - win + 1) * (n - win + 1), display_progress);
+
   for (int i = 0; i < n - win + 1; i++) {
+
+    if (Progress::check_abort())
+      return -1.0;
+
     for (int j = 0; j < n - win + 1; j++) {
+      p.increment();
       sliding[j] = euc_dist(data(Range(i, i + win - 1), _), data(Range(j, j + win - 1), _));
     }
     sliding[i] = max(sliding);

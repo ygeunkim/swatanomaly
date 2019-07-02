@@ -4,12 +4,14 @@
 \alias{nns_cpp}
 \title{Windowed NNS in Rcpp}
 \usage{
-nns_cpp(data, win)
+nns_cpp(data, win, display_progress = FALSE)
 }
 \arguments{
 \item{data}{NumericMatrix multivariate data set}
 
 \item{win}{int window size for sliding window}
+
+\item{display_progress}{If TRUE, display a progress bar. By default, FALSE.}
 }
 \value{
 NumericVector, NND for each window index (index represented by its starting point)

@@ -4,7 +4,7 @@
 \alias{nnd_thr}
 \title{NND pdf Threshold}
 \usage{
-nnd_thr(data, part_size, prob)
+nnd_thr(data, part_size, prob, display_progress)
 }
 \arguments{
 \item{data}{NumericMatrix multivariate data set}
@@ -12,6 +12,8 @@ nnd_thr(data, part_size, prob)
 \item{part_size}{partition for \code{\link{euc_pdf}}}
 
 \item{prob}{probability for quantile. See \link[stats]{quantile.default}.}
+
+\item{display_progress}{If TRUE, display a progress bar. By default, FALSE.}
 }
 \value{
 double quantile value for the result of \code{\link{euc_pdf}}
