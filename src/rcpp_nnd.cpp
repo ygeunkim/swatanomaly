@@ -1,10 +1,10 @@
+// [[Rcpp::plugins(openmp)]]
 #include <Rcpp.h>
 #include <progress.hpp>
 using namespace Rcpp;
 
 #ifdef _OPENMP
   #include <omp.h>
-// [[Rcpp::plugins(openmp)]]
 #endif
 
 //' Sums of squares in C++
@@ -139,34 +139,22 @@ NumericVector nns_cpp(NumericMatrix data, int win, int ncores = 1, bool display_
   Progress p(win_num * win_num, display_progress);
 
   #ifdef _OPENMP
-    omp_set_num_threads(ncores);
-    #pragma omp parallel for shared(p, distvec)
-    for (int i = 0; i < win_num; i++) {
-
-      if (Progress::check_abort())
-        return -1.0;
-
-      for (int j = 0; j < win_num; j++) {
-        p.increment();
-        sliding[j] = euc_dist(data(Range(i * win, i * win + win - 1), _), data(Range(j * win, j * win + win - 1), _));
-      }
-      sliding[i] = max(sliding);
-      distvec[i] = min(sliding);
-    }
-  #else
-    for (int i = 0; i < win_num; i++) {
-
-      if (Progress::check_abort())
-        return -1.0;
-
-      for (int j = 0; j < win_num; j++) {
-        p.increment();
-        sliding[j] = euc_dist(data(Range(i * win, i * win + win - 1), _), data(Range(j * win, j * win + win - 1), _));
-      }
-      sliding[i] = max(sliding);
-      distvec[i] = min(sliding);
-    }
+    if (ncores > 0) omp_set_num_threads(ncores);
   #endif
+
+  #pragma omp parallel for private(i, j, sliding) schedule(dynamic)
+  for (int i = 0; i < win_num; i++) {
+
+    if (Progress::check_abort())
+      return -1.0;
+
+    for (int j = 0; j < win_num; j++) {
+      p.increment();
+      sliding[j] = euc_dist(data(Range(i * win, i * win + win - 1), _), data(Range(j * win, j * win + win - 1), _));
+    }
+    sliding[i] = max(sliding);
+    distvec[i] = min(sliding);
+  }
 
   return distvec;
 }
