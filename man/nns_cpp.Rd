@@ -4,12 +4,14 @@
 \alias{nns_cpp}
 \title{Windowed NNS in Rcpp}
 \usage{
-nns_cpp(data, win, display_progress = FALSE)
+nns_cpp(data, win, ncores = 1L, display_progress = FALSE)
 }
 \arguments{
 \item{data}{NumericMatrix multivariate data set}
 
 \item{win}{int window size for sliding window}
+
+\item{ncores}{number of cores to use. Default to be 1 which is non-parallel operation.}
 
 \item{display_progress}{If TRUE, display a progress bar. By default, FALSE.}
 }

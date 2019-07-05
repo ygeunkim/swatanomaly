@@ -67,6 +67,7 @@ euc_pdf <- function(x, partition, display_progress = FALSE) {
 #' Compute NND sliding window across given series.
 #' @param data NumericMatrix multivariate data set
 #' @param win int window size for sliding window
+#' @param ncores number of cores to use. Default to be 1 which is non-parallel operation.
 #' @param display_progress If TRUE, display a progress bar. By default, FALSE.
 #' @return NumericVector, NND for each window index (index represented by its starting point)
 #' @details
@@ -78,8 +79,8 @@ euc_pdf <- function(x, partition, display_progress = FALSE) {
 #' @useDynLib swatanomaly
 #' @importFrom Rcpp sourceCpp
 #' @export
-nns_cpp <- function(data, win, display_progress = FALSE) {
-    .Call('_swatanomaly_nns_cpp', PACKAGE = 'swatanomaly', data, win, display_progress)
+nns_cpp <- function(data, win, ncores = 1L, display_progress = FALSE) {
+    .Call('_swatanomaly_nns_cpp', PACKAGE = 'swatanomaly', data, win, ncores, display_progress)
 }
 
 #' Anomaly detection using NND

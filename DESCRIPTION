@@ -12,9 +12,9 @@ Encoding: UTF-8
 LazyData: true
 Imports:
     Rcpp (>= 1.0.1),
-    RcppProgress
+    RcppProgress,
+    dplyr
 LinkingTo:
     Rcpp,
     RcppProgress
-Suggests: dplyr
 RoxygenNote: 6.1.1

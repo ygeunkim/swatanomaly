@@ -2,6 +2,11 @@
 #include <progress.hpp>
 using namespace Rcpp;
 
+#ifdef _OPENMP
+  #include <omp.h>
+// [[Rcpp::plugins(openmp)]]
+#endif
+
 //' Sums of squares in C++
 //'
 //' @description Compute a SS in C++
@@ -111,6 +116,7 @@ NumericVector euc_pdf(NumericMatrix x, int partition, bool display_progress = fa
 //' Compute NND sliding window across given series.
 //' @param data NumericMatrix multivariate data set
 //' @param win int window size for sliding window
+//' @param ncores number of cores to use. Default to be 1 which is non-parallel operation.
 //' @param display_progress If TRUE, display a progress bar. By default, FALSE.
 //' @return NumericVector, NND for each window index (index represented by its starting point)
 //' @details
@@ -123,7 +129,7 @@ NumericVector euc_pdf(NumericMatrix x, int partition, bool display_progress = fa
 //' @importFrom Rcpp sourceCpp
 //' @export
 // [[Rcpp::export]]
-NumericVector nns_cpp(NumericMatrix data, int win, bool display_progress = false) {
+NumericVector nns_cpp(NumericMatrix data, int win, int ncores = 1, bool display_progress = false) {
   int n = data.nrow();
   int win_num = n / win;
 
@@ -132,18 +138,35 @@ NumericVector nns_cpp(NumericMatrix data, int win, bool display_progress = false
 
   Progress p(win_num * win_num, display_progress);
 
-  for (int i = 0; i < win_num; i++) {
+  #ifdef _OPENMP
+    omp_set_num_threads(ncores);
+    #pragma omp parallel for shared(p, distvec)
+    for (int i = 0; i < win_num; i++) {
 
-    if (Progress::check_abort())
-      return -1.0;
+      if (Progress::check_abort())
+        return -1.0;
 
-    for (int j = 0; j < win_num; j++) {
-      p.increment();
-      sliding[j] = euc_dist(data(Range(i * win, i * win + win - 1), _), data(Range(j * win, j * win + win - 1), _));
+      for (int j = 0; j < win_num; j++) {
+        p.increment();
+        sliding[j] = euc_dist(data(Range(i * win, i * win + win - 1), _), data(Range(j * win, j * win + win - 1), _));
+      }
+      sliding[i] = max(sliding);
+      distvec[i] = min(sliding);
     }
-    sliding[i] = max(sliding);
-    distvec[i] = min(sliding);
-  }
+  #else
+    for (int i = 0; i < win_num; i++) {
+
+      if (Progress::check_abort())
+        return -1.0;
+
+      for (int j = 0; j < win_num; j++) {
+        p.increment();
+        sliding[j] = euc_dist(data(Range(i * win, i * win + win - 1), _), data(Range(j * win, j * win + win - 1), _));
+      }
+      sliding[i] = max(sliding);
+      distvec[i] = min(sliding);
+    }
+  #endif
 
   return distvec;
 }

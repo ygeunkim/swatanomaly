@@ -17,7 +17,7 @@
 #'    \code{\link{detect_nnd}}
 #'    \code{\link{detect_nndvec}}
 #' @export
-nnd_thr <- function(data, part_size, prob, display_progress) {
+nnd_thr <- function(data, part_size, prob, display_progress = FALSE) {
   quantile(
     euc_pdf(data, part_size, display_progress),
     probs = prob
