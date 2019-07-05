@@ -67,19 +67,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// detect_nndvec
-LogicalVector detect_nndvec(NumericVector nnd, int win, double thr);
-RcppExport SEXP _swatanomaly_detect_nndvec(SEXP nndSEXP, SEXP winSEXP, SEXP thrSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type nnd(nndSEXP);
-    Rcpp::traits::input_parameter< int >::type win(winSEXP);
-    Rcpp::traits::input_parameter< double >::type thr(thrSEXP);
-    rcpp_result_gen = Rcpp::wrap(detect_nndvec(nnd, win, thr));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_swatanomaly_sum_sq", (DL_FUNC) &_swatanomaly_sum_sq, 1},
@@ -87,7 +74,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_swatanomaly_euc_pdf", (DL_FUNC) &_swatanomaly_euc_pdf, 3},
     {"_swatanomaly_nns_cpp", (DL_FUNC) &_swatanomaly_nns_cpp, 3},
     {"_swatanomaly_detect_nnd", (DL_FUNC) &_swatanomaly_detect_nnd, 3},
-    {"_swatanomaly_detect_nndvec", (DL_FUNC) &_swatanomaly_detect_nndvec, 3},
     {NULL, NULL, 0}
 };
 

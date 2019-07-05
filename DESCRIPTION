@@ -16,4 +16,5 @@ Imports:
 LinkingTo:
     Rcpp,
     RcppProgress
+Suggests: dplyr
 RoxygenNote: 6.1.1

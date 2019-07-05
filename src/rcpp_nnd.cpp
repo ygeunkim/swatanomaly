@@ -83,22 +83,19 @@ double euc_dist(NumericMatrix x, NumericMatrix y) {
 //' @export
 // [[Rcpp::export]]
 NumericVector euc_pdf(NumericMatrix x, int partition, bool display_progress = false) {
-  int nx = x.nrow();
-  int div = nx / partition;
+  NumericVector nnd(partition);
+  NumericVector euc(partition);
 
-  NumericVector nnd(div);
-  NumericVector euc(div);
+  Progress p(partition * partition, display_progress);
 
-  Progress p(div * div, display_progress);
-
-  for (int i = 0; i < div; i++) {
+  for (int i = 0; i < partition; i++) {
 
     if (Progress::check_abort())
       return -1.0;
 
-    for (int j = 0; j < div; j ++) {
+    for (int j = 0; j < partition; j++) {
       p.increment();
-      nnd[j] = euc_dist(x(Range(i, i + partition - 1), _), x(Range(j, j + partition - 1), _));
+      nnd[j] = euc_dist(x(Range(i * partition, i * partition + partition - 1), _), x(Range(j * partition, j * partition + partition - 1), _));
     }
     nnd[i] = max(nnd);
     euc[i] = min(nnd);
@@ -128,19 +125,21 @@ NumericVector euc_pdf(NumericMatrix x, int partition, bool display_progress = fa
 // [[Rcpp::export]]
 NumericVector nns_cpp(NumericMatrix data, int win, bool display_progress = false) {
   int n = data.nrow();
-  NumericVector sliding(n - win + 1);
-  NumericVector distvec(n - win + 1);
+  int win_num = n / win;
 
-  Progress p((n - win + 1) * (n - win + 1), display_progress);
+  NumericVector sliding(win_num);
+  NumericVector distvec(win_num);
 
-  for (int i = 0; i < n - win + 1; i++) {
+  Progress p(win_num * win_num, display_progress);
+
+  for (int i = 0; i < win_num; i++) {
 
     if (Progress::check_abort())
       return -1.0;
 
-    for (int j = 0; j < n - win + 1; j++) {
+    for (int j = 0; j < win_num; j++) {
       p.increment();
-      sliding[j] = euc_dist(data(Range(i, i + win - 1), _), data(Range(j, j + win - 1), _));
+      sliding[j] = euc_dist(data(Range(i * win, i * win + win - 1), _), data(Range(j * win, j * win + win - 1), _));
     }
     sliding[i] = max(sliding);
     distvec[i] = min(sliding);
@@ -179,39 +178,6 @@ LogicalVector detect_nnd(NumericMatrix data, int win, double thr) {
 
   for (int i = 0; i < n - win + 1; i++) {
     x[i] = distvec[i] > thr;
-  }
-
-  return x;
-}
-
-//' Anomaly detection after conducting NND
-//'
-//' @description
-//' This function detects anomaly based on NND, given \code{\link{nns_cpp}}.
-//' @param nnd NumericVector result of \code{\link{nns_cpp}}
-//' @param win int window size for sliding window
-//' @param thr threshold for anomaly detection, in each window
-//' @return LogicalVector,
-//' If NND is (strictly) larger than threshold then TRUE.
-//' Otherwise, FALSE
-//' @details
-//' Given n x p data, slide a window.
-//' Compute NND for each pair of moving window.
-//' For threshold, users can use tail value of \code{\link{euc_pdf}}.
-//' @references
-//' Filonov, P., Kitashov, F., & Lavrentyev, A. (2017). \emph{RNN-based Early Cyber-Attack Detection for the Tennessee Eastman Process}. CoRR.
-//'
-//' Yun, J.-H., Hwang, Y., Lee, W., Ahn, H.-K., & Kim, S.-K. (2018). \emph{Statistical Similarity of Critical Infrastructure Network Traffic Based on Nearest Neighbor Distances} (Vol. 11050, pp. 1–23). Presented at the Research in Attacks, Intrusions, and Defenses, Cham: Springer International Publishing. \url{http://doi.org/10.1007/978-3-030-00470-5_27}
-//' @useDynLib swatanomaly
-//' @importFrom Rcpp sourceCpp
-//' @export
-// [[Rcpp::export]]
-LogicalVector detect_nndvec(NumericVector nnd, int win, double thr) {
-  int w = nnd.length();
-  LogicalVector x(w);
-
-  for (int i = 0; i < w; i++) {
-    x[i] = nnd[i] > thr;
   }
 
   return x;

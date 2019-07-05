@@ -107,28 +107,3 @@ detect_nnd <- function(data, win, thr) {
     .Call('_swatanomaly_detect_nnd', PACKAGE = 'swatanomaly', data, win, thr)
 }
 
-#' Anomaly detection after conducting NND
-#'
-#' @description
-#' This function detects anomaly based on NND, given \code{\link{nns_cpp}}.
-#' @param nnd NumericVector result of \code{\link{nns_cpp}}
-#' @param win int window size for sliding window
-#' @param thr threshold for anomaly detection, in each window
-#' @return LogicalVector,
-#' If NND is (strictly) larger than threshold then TRUE.
-#' Otherwise, FALSE
-#' @details
-#' Given n x p data, slide a window.
-#' Compute NND for each pair of moving window.
-#' For threshold, users can use tail value of \code{\link{euc_pdf}}.
-#' @references
-#' Filonov, P., Kitashov, F., & Lavrentyev, A. (2017). \emph{RNN-based Early Cyber-Attack Detection for the Tennessee Eastman Process}. CoRR.
-#'
-#' Yun, J.-H., Hwang, Y., Lee, W., Ahn, H.-K., & Kim, S.-K. (2018). \emph{Statistical Similarity of Critical Infrastructure Network Traffic Based on Nearest Neighbor Distances} (Vol. 11050, pp. 1–23). Presented at the Research in Attacks, Intrusions, and Defenses, Cham: Springer International Publishing. \url{http://doi.org/10.1007/978-3-030-00470-5_27}
-#' @useDynLib swatanomaly
-#' @importFrom Rcpp sourceCpp
-#' @export
-detect_nndvec <- function(nnd, win, thr) {
-    .Call('_swatanomaly_detect_nndvec', PACKAGE = 'swatanomaly', nnd, win, thr)
-}
-
