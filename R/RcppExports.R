@@ -32,6 +32,55 @@ euc_dist <- function(x, y) {
     .Call('_swatanomaly_euc_dist', PACKAGE = 'swatanomaly', x, y)
 }
 
+#' Euclidean NND between validation and training blocks
+#'
+#' @description
+#' This function computes NND corresponding to euclidean distance between validation sets and training sets built by cross-validation.
+#' @param x NumericMatrix validation set.
+#' @param y NumericMatrix training set.
+#' @return NumericVector length identical to the validation set
+#' @details
+#' Consider input x and y. Compute
+#' \deqn{\sqrt{\sum (x_{ij} - y_{ij})^2}}
+#' for each observation.
+#' Calculate Euclidean distance between a point in validation series versus each point in training series.
+#' Find minimum value. It is NND.
+#' @useDynLib swatanomaly
+#' @importFrom Rcpp sourceCpp
+#' @export
+euc_nnd <- function(x, y) {
+    .Call('_swatanomaly_euc_nnd', PACKAGE = 'swatanomaly', x, y)
+}
+
+#' Remove row index of a matrix in C++
+#'
+#' @description
+#' This function removes a row index of NumericMatrix in Rcpp.
+#' @param x NumericMatrix
+#' @param rowID IntegerVector row ids to be removed.
+#' @return NumericMatrix
+#' @useDynLib swatanomaly
+#' @references \url{https://stackoverflow.com/questions/33507695/rcpp-numericmatrix-how-to-erase-a-row-column}
+#' @importFrom Rcpp sourceCpp
+#' @export
+row_erase <- function(x, rowID) {
+    .Call('_swatanomaly_row_erase', PACKAGE = 'swatanomaly', x, rowID)
+}
+
+#' Sequence by 1 in Rcpp
+#'
+#' @description
+#' This function generates a integer sequence with increment of 1 in Rcpp.
+#' @param from int the starting value of the sequence.
+#' @param to int the end value of the sequence.
+#' @return IntegerVector
+#' @useDynLib swatanomaly
+#' @importFrom Rcpp sourceCpp
+#' @export
+seq_rcpp <- function(from, to) {
+    .Call('_swatanomaly_seq_rcpp', PACKAGE = 'swatanomaly', from, to)
+}
+
 #' Euclidean pdf in Rcpp
 #'
 #' @description
@@ -41,9 +90,11 @@ euc_dist <- function(x, y) {
 #' @param display_progress If TRUE, display a progress bar. By default, FALSE.
 #' @return NumericVector, NND pdf
 #' @details
+#' Implement k-fold cross-validation. Here, k is partition.
 #' First partitioning the series equally.
-#' Next for each partitioned block, it calculates sqrt(sum((x_i - x_j)^2)) versus the other partioned ones.
-#' Find the minimum result for each block. This is NND of each block.
+#' One block is validation set, and the others are trainig.
+#' Next for each validation series, it calculates sqrt(sum((x_i - x_j)^2)) versus training series.
+#' Find the minimum result for each validation block. This is NND of each block.
 #' Finally, you can get NND for every block and this is pdf for NND.
 #' For \code{\link{detect_nnd}}, this pdf is able to threshold.
 #' Threshold is a tail of pdf, e.g. 0.99.
@@ -67,20 +118,20 @@ euc_pdf <- function(x, partition, display_progress = FALSE) {
 #' Compute NND sliding window across given series.
 #' @param data NumericMatrix multivariate data set
 #' @param win int window size for sliding window
-#' @param ncores number of cores to use. Default to be 1 which is non-parallel operation.
 #' @param display_progress If TRUE, display a progress bar. By default, FALSE.
 #' @return NumericVector, NND for each window index (index represented by its starting point)
 #' @details
-#' Given n x p data, slide a window.
-#' Compute NND for each pair of moving window.
-#' Note that the number of windows is nrow - win + 1 given size of window win.
+#' Given n x p data, partition a window.
+#' Compute NND for each pair of window.
+#' The method is similar to \code{\link{euc_pdf}}.
+#' Note that the number of windows is nrow - win + 1 given size of window, win.
 #' @references
 #' Yun, J.-H., Hwang, Y., Lee, W., Ahn, H.-K., & Kim, S.-K. (2018). \emph{Statistical Similarity of Critical Infrastructure Network Traffic Based on Nearest Neighbor Distances} (Vol. 11050, pp. 1–23). Presented at the Research in Attacks, Intrusions, and Defenses, Cham: Springer International Publishing. \url{http://doi.org/10.1007/978-3-030-00470-5_27}
 #' @useDynLib swatanomaly
 #' @importFrom Rcpp sourceCpp
 #' @export
-nns_cpp <- function(data, win, ncores = 1L, display_progress = FALSE) {
-    .Call('_swatanomaly_nns_cpp', PACKAGE = 'swatanomaly', data, win, ncores, display_progress)
+nns_cpp <- function(data, win, display_progress = FALSE) {
+    .Call('_swatanomaly_nns_cpp', PACKAGE = 'swatanomaly', data, win, display_progress)
 }
 
 #' Anomaly detection using NND

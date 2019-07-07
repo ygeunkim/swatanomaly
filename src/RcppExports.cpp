@@ -28,6 +28,42 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// euc_nnd
+NumericVector euc_nnd(NumericMatrix x, NumericMatrix y);
+RcppExport SEXP _swatanomaly_euc_nnd(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(euc_nnd(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// row_erase
+NumericMatrix row_erase(NumericMatrix x, IntegerVector rowID);
+RcppExport SEXP _swatanomaly_row_erase(SEXP xSEXP, SEXP rowIDSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type rowID(rowIDSEXP);
+    rcpp_result_gen = Rcpp::wrap(row_erase(x, rowID));
+    return rcpp_result_gen;
+END_RCPP
+}
+// seq_rcpp
+IntegerVector seq_rcpp(int from, int to);
+RcppExport SEXP _swatanomaly_seq_rcpp(SEXP fromSEXP, SEXP toSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type from(fromSEXP);
+    Rcpp::traits::input_parameter< int >::type to(toSEXP);
+    rcpp_result_gen = Rcpp::wrap(seq_rcpp(from, to));
+    return rcpp_result_gen;
+END_RCPP
+}
 // euc_pdf
 NumericVector euc_pdf(NumericMatrix x, int partition, bool display_progress);
 RcppExport SEXP _swatanomaly_euc_pdf(SEXP xSEXP, SEXP partitionSEXP, SEXP display_progressSEXP) {
@@ -42,16 +78,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // nns_cpp
-NumericVector nns_cpp(NumericMatrix data, int win, int ncores, bool display_progress);
-RcppExport SEXP _swatanomaly_nns_cpp(SEXP dataSEXP, SEXP winSEXP, SEXP ncoresSEXP, SEXP display_progressSEXP) {
+NumericVector nns_cpp(NumericMatrix data, int win, bool display_progress);
+RcppExport SEXP _swatanomaly_nns_cpp(SEXP dataSEXP, SEXP winSEXP, SEXP display_progressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericMatrix >::type data(dataSEXP);
     Rcpp::traits::input_parameter< int >::type win(winSEXP);
-    Rcpp::traits::input_parameter< int >::type ncores(ncoresSEXP);
     Rcpp::traits::input_parameter< bool >::type display_progress(display_progressSEXP);
-    rcpp_result_gen = Rcpp::wrap(nns_cpp(data, win, ncores, display_progress));
+    rcpp_result_gen = Rcpp::wrap(nns_cpp(data, win, display_progress));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -72,8 +107,11 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_swatanomaly_sum_sq", (DL_FUNC) &_swatanomaly_sum_sq, 1},
     {"_swatanomaly_euc_dist", (DL_FUNC) &_swatanomaly_euc_dist, 2},
+    {"_swatanomaly_euc_nnd", (DL_FUNC) &_swatanomaly_euc_nnd, 2},
+    {"_swatanomaly_row_erase", (DL_FUNC) &_swatanomaly_row_erase, 2},
+    {"_swatanomaly_seq_rcpp", (DL_FUNC) &_swatanomaly_seq_rcpp, 2},
     {"_swatanomaly_euc_pdf", (DL_FUNC) &_swatanomaly_euc_pdf, 3},
-    {"_swatanomaly_nns_cpp", (DL_FUNC) &_swatanomaly_nns_cpp, 4},
+    {"_swatanomaly_nns_cpp", (DL_FUNC) &_swatanomaly_nns_cpp, 3},
     {"_swatanomaly_detect_nnd", (DL_FUNC) &_swatanomaly_detect_nnd, 3},
     {NULL, NULL, 0}
 };

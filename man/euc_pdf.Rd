@@ -20,9 +20,11 @@ NumericVector, NND pdf
 This function computes a euclidean NND pdf of two multivariate series using Rcpp. See details what it is.
 }
 \details{
+Implement k-fold cross-validation. Here, k is partition.
 First partitioning the series equally.
-Next for each partitioned block, it calculates sqrt(sum((x_i - x_j)^2)) versus the other partioned ones.
-Find the minimum result for each block. This is NND of each block.
+One block is validation set, and the others are trainig.
+Next for each validation series, it calculates sqrt(sum((x_i - x_j)^2)) versus training series.
+Find the minimum result for each validation block. This is NND of each block.
 Finally, you can get NND for every block and this is pdf for NND.
 For \code{\link{detect_nnd}}, this pdf is able to threshold.
 Threshold is a tail of pdf, e.g. 0.99.

@@ -4,14 +4,12 @@
 \alias{nns_cpp}
 \title{Windowed NNS in Rcpp}
 \usage{
-nns_cpp(data, win, ncores = 1L, display_progress = FALSE)
+nns_cpp(data, win, display_progress = FALSE)
 }
 \arguments{
 \item{data}{NumericMatrix multivariate data set}
 
 \item{win}{int window size for sliding window}
-
-\item{ncores}{number of cores to use. Default to be 1 which is non-parallel operation.}
 
 \item{display_progress}{If TRUE, display a progress bar. By default, FALSE.}
 }
@@ -23,9 +21,10 @@ This function computes a windowed NNS.
 Compute NND sliding window across given series.
 }
 \details{
-Given n x p data, slide a window.
-Compute NND for each pair of moving window.
-Note that the number of windows is nrow - win + 1 given size of window win.
+Given n x p data, partition a window.
+Compute NND for each pair of window.
+The method is similar to \code{\link{euc_pdf}}.
+Note that the number of windows is nrow - win + 1 given size of window, win.
 }
 \references{
 Yun, J.-H., Hwang, Y., Lee, W., Ahn, H.-K., & Kim, S.-K. (2018). \emph{Statistical Similarity of Critical Infrastructure Network Traffic Based on Nearest Neighbor Distances} (Vol. 11050, pp. 1–23). Presented at the Research in Attacks, Intrusions, and Defenses, Cham: Springer International Publishing. \url{http://doi.org/10.1007/978-3-030-00470-5_27}
