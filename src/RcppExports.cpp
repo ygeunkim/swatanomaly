@@ -90,16 +90,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// detect_nnd
-LogicalVector detect_nnd(NumericMatrix data, int win, double thr);
-RcppExport SEXP _swatanomaly_detect_nnd(SEXP dataSEXP, SEXP winSEXP, SEXP thrSEXP) {
+// rep_bool
+LogicalVector rep_bool(bool x, int n);
+RcppExport SEXP _swatanomaly_rep_bool(SEXP xSEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< bool >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(rep_bool(x, n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// detect_nnd
+LogicalVector detect_nnd(NumericVector nnd, int win, double thr);
+RcppExport SEXP _swatanomaly_detect_nnd(SEXP nndSEXP, SEXP winSEXP, SEXP thrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type nnd(nndSEXP);
     Rcpp::traits::input_parameter< int >::type win(winSEXP);
     Rcpp::traits::input_parameter< double >::type thr(thrSEXP);
-    rcpp_result_gen = Rcpp::wrap(detect_nnd(data, win, thr));
+    rcpp_result_gen = Rcpp::wrap(detect_nnd(nnd, win, thr));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -112,6 +124,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_swatanomaly_seq_rcpp", (DL_FUNC) &_swatanomaly_seq_rcpp, 2},
     {"_swatanomaly_euc_pdf", (DL_FUNC) &_swatanomaly_euc_pdf, 3},
     {"_swatanomaly_nns_cpp", (DL_FUNC) &_swatanomaly_nns_cpp, 3},
+    {"_swatanomaly_rep_bool", (DL_FUNC) &_swatanomaly_rep_bool, 2},
     {"_swatanomaly_detect_nnd", (DL_FUNC) &_swatanomaly_detect_nnd, 3},
     {NULL, NULL, 0}
 };

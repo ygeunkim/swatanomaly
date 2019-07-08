@@ -28,6 +28,5 @@ Threshold is a tail of pdf, e.g. 0.99.
 \seealso{
 \code{\link{euc_pdf}}
    \link[stats]{quantile.default}
-   \code{\link{detect_nnd}}
    \code{\link{detect_nndvec}}
 }

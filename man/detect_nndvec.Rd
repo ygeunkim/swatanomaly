@@ -4,7 +4,7 @@
 \alias{detect_nndvec}
 \title{Anomaly detection after conducting NND}
 \usage{
-detect_nndvec(nnd, win, thr, anom = c(TRUE, FALSE))
+detect_nndvec(nnd, win, thr, label = c(TRUE, FALSE))
 }
 \arguments{
 \item{nnd}{NumericVector result of \code{\link{nns_cpp}}}
@@ -13,7 +13,7 @@ detect_nndvec(nnd, win, thr, anom = c(TRUE, FALSE))
 
 \item{thr}{threshold for anomaly detection, in each window}
 
-\item{anom}{vector represents anomaly and normal. By default, TRUE and FALSE.}
+\item{label}{vector represents anomaly and normal. By default, TRUE and FALSE, respectively.}
 }
 \value{
 LogicalVector,
@@ -24,9 +24,10 @@ Otherwise, FALSE
 This function detects anomaly based on NND, given \code{\link{nns_cpp}}.
 }
 \details{
-Given n x p data, slide a window.
-Compute NND for each pair of moving window.
-For threshold, users can use tail value of \code{\link{euc_pdf}}.
+Large NND represents distinct pattern from the other windows.
+Given pre-specified threshold \eqn{t}, we find the points such that
+\deqn{d_i > t}
+If at least one point in the window is determined to be an anomaly, this function will output the whole window as anomaly.
 }
 \references{
 Filonov, P., Kitashov, F., & Lavrentyev, A. (2017). \emph{RNN-based Early Cyber-Attack Detection for the Tennessee Eastman Process}. CoRR.

@@ -26,7 +26,7 @@ One block is validation set, and the others are trainig.
 Next for each validation series, it calculates sqrt(sum((x_i - x_j)^2)) versus training series.
 Find the minimum result for each validation block. This is NND of each block.
 Finally, you can get NND for every block and this is pdf for NND.
-For \code{\link{detect_nnd}}, this pdf is able to threshold.
+For \code{\link{detect_nndvec}}, this pdf is able to threshold.
 Threshold is a tail of pdf, e.g. 0.99.
 }
 \references{
@@ -35,5 +35,5 @@ Yun, J.-H., Hwang, Y., Lee, W., Ahn, H.-K., & Kim, S.-K. (2018). \emph{Statistic
 \seealso{
 \code{\link{euc_dist}}
    \code{\link{nnd_thr}}
-   \code{\link{detect_nnd}}
+   \code{\link{detect_nndvec}}
 }

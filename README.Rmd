@@ -23,7 +23,6 @@ pander::panderOptions("round", 3)
 Various algorithms for anomaly detection
 
 - NND: @Yun:2018di
-    - used in @Cho:2019ji, (*not this package*)
 
 ## Installation
 
@@ -34,44 +33,6 @@ devtools::install_github("ygeunkim/swatanomaly")
 ```{r}
 library(swatanomaly)
 ```
-
-
-## Benchmark
-
-### Euclidean Distance
-
-```{r}
-set.seed(1)
-x1 <- matrix(rnorm(100), nrow = 10)
-x2 <- matrix(rnorm(100), nrow = 10)
-```
-
-```{r}
-euclidean_distance <- function(x, y) {
-  sum(sqrt(colSums((x - y)^2)))
-}
-```
-
-Using `swatanomaly::euc_dist(x, y)`, we try to compute
-
-$$\sum_i \sqrt{\sum_j (x_{ij} - y_{ij})^2}$$
-
-```{r}
-euclidean_distance(x1, x2)
-euc_dist(x1, x2)
-```
-
-```{r, message=FALSE}
-ggplot2::autoplot(
-    microbenchmark::microbenchmark(
-      DISTR = euclidean_distance(x1, x2),
-      DISTCPP = euc_dist(x1, x2),
-      times = 10
-  )
-)
-```
-
-It is obvious that `Rcpp` is faster than `R` solution.
 
 
 ***

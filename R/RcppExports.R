@@ -96,12 +96,12 @@ seq_rcpp <- function(from, to) {
 #' Next for each validation series, it calculates sqrt(sum((x_i - x_j)^2)) versus training series.
 #' Find the minimum result for each validation block. This is NND of each block.
 #' Finally, you can get NND for every block and this is pdf for NND.
-#' For \code{\link{detect_nnd}}, this pdf is able to threshold.
+#' For \code{\link{detect_nndvec}}, this pdf is able to threshold.
 #' Threshold is a tail of pdf, e.g. 0.99.
 #' @seealso
 #'    \code{\link{euc_dist}}
 #'    \code{\link{nnd_thr}}
-#'    \code{\link{detect_nnd}}
+#'    \code{\link{detect_nndvec}}
 #' @references
 #' Yun, J.-H., Hwang, Y., Lee, W., Ahn, H.-K., & Kim, S.-K. (2018). \emph{Statistical Similarity of Critical Infrastructure Network Traffic Based on Nearest Neighbor Distances} (Vol. 11050, pp. 1–23). Presented at the Research in Attacks, Intrusions, and Defenses, Cham: Springer International Publishing. \url{http://doi.org/10.1007/978-3-030-00470-5_27}
 #' @useDynLib swatanomaly
@@ -134,28 +134,11 @@ nns_cpp <- function(data, win, display_progress = FALSE) {
     .Call('_swatanomaly_nns_cpp', PACKAGE = 'swatanomaly', data, win, display_progress)
 }
 
-#' Anomaly detection using NND
-#'
-#' @description
-#' This function detects anomaly based on NND.
-#' @param data NumericMatrix multivariate data set.
-#' @param win int window size for sliding window.
-#' @param thr double threshold that will be compared to nnd vector.
-#' @return LogicalVector,
-#' If NND is (strictly) larger than threshold then TRUE.
-#' Otherwise, FALSE
-#' @details
-#' Given n x p data, slide a window.
-#' Compute NND for each pair of moving window.
-#' For threshold, users can use tail value of \code{\link{euc_pdf}}.
-#' @references
-#' Filonov, P., Kitashov, F., & Lavrentyev, A. (2017). \emph{RNN-based Early Cyber-Attack Detection for the Tennessee Eastman Process}. CoRR.
-#'
-#' Yun, J.-H., Hwang, Y., Lee, W., Ahn, H.-K., & Kim, S.-K. (2018). \emph{Statistical Similarity of Critical Infrastructure Network Traffic Based on Nearest Neighbor Distances} (Vol. 11050, pp. 1–23). Presented at the Research in Attacks, Intrusions, and Defenses, Cham: Springer International Publishing. \url{http://doi.org/10.1007/978-3-030-00470-5_27}
-#' @useDynLib swatanomaly
-#' @importFrom Rcpp sourceCpp
-#' @export
-detect_nnd <- function(data, win, thr) {
-    .Call('_swatanomaly_detect_nnd', PACKAGE = 'swatanomaly', data, win, thr)
+rep_bool <- function(x, n) {
+    .Call('_swatanomaly_rep_bool', PACKAGE = 'swatanomaly', x, n)
+}
+
+detect_nnd <- function(nnd, win, thr) {
+    .Call('_swatanomaly_detect_nnd', PACKAGE = 'swatanomaly', nnd, win, thr)
 }
 
