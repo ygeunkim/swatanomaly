@@ -20,9 +20,11 @@ pander::panderOptions("round", 3)
 
 # `swatanomaly`
 
-Various algorithms for anomaly detection
+Various anomaly detection algorithms studied in *NSR anomaly detection project*
 
 - NND: @Yun:2018di
+- K-L divergence: @Cho:2019ji
+- SOM
 
 ## Installation
 
