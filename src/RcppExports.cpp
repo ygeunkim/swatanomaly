@@ -5,6 +5,60 @@
 
 using namespace Rcpp;
 
+// density_cpp
+NumericMatrix density_cpp(NumericVector x);
+RcppExport SEXP _swatanomaly_density_cpp(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(density_cpp(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// compute_kl
+double compute_kl(NumericMatrix f1, NumericMatrix f2);
+RcppExport SEXP _swatanomaly_compute_kl(SEXP f1SEXP, SEXP f2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type f1(f1SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type f2(f2SEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_kl(f1, f2));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kl_fix
+NumericVector kl_fix(NumericVector x, int win, int jump, double lambda, bool display_progress);
+RcppExport SEXP _swatanomaly_kl_fix(SEXP xSEXP, SEXP winSEXP, SEXP jumpSEXP, SEXP lambdaSEXP, SEXP display_progressSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type win(winSEXP);
+    Rcpp::traits::input_parameter< int >::type jump(jumpSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< bool >::type display_progress(display_progressSEXP);
+    rcpp_result_gen = Rcpp::wrap(kl_fix(x, win, jump, lambda, display_progress));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kl_dynamic
+NumericVector kl_dynamic(NumericVector x, int win, int jump, double lambda_p, double eps, bool display_progress);
+RcppExport SEXP _swatanomaly_kl_dynamic(SEXP xSEXP, SEXP winSEXP, SEXP jumpSEXP, SEXP lambda_pSEXP, SEXP epsSEXP, SEXP display_progressSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type win(winSEXP);
+    Rcpp::traits::input_parameter< int >::type jump(jumpSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda_p(lambda_pSEXP);
+    Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
+    Rcpp::traits::input_parameter< bool >::type display_progress(display_progressSEXP);
+    rcpp_result_gen = Rcpp::wrap(kl_dynamic(x, win, jump, lambda_p, eps, display_progress));
+    return rcpp_result_gen;
+END_RCPP
+}
 // sum_sq
 double sum_sq(NumericVector x);
 RcppExport SEXP _swatanomaly_sum_sq(SEXP xSEXP) {
@@ -117,6 +171,10 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_swatanomaly_density_cpp", (DL_FUNC) &_swatanomaly_density_cpp, 1},
+    {"_swatanomaly_compute_kl", (DL_FUNC) &_swatanomaly_compute_kl, 2},
+    {"_swatanomaly_kl_fix", (DL_FUNC) &_swatanomaly_kl_fix, 5},
+    {"_swatanomaly_kl_dynamic", (DL_FUNC) &_swatanomaly_kl_dynamic, 6},
     {"_swatanomaly_sum_sq", (DL_FUNC) &_swatanomaly_sum_sq, 1},
     {"_swatanomaly_euc_dist", (DL_FUNC) &_swatanomaly_euc_dist, 2},
     {"_swatanomaly_euc_nnd", (DL_FUNC) &_swatanomaly_euc_nnd, 2},
