@@ -169,6 +169,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// win_mat
+NumericMatrix win_mat(NumericVector x, int win, int jump);
+RcppExport SEXP _swatanomaly_win_mat(SEXP xSEXP, SEXP winSEXP, SEXP jumpSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type win(winSEXP);
+    Rcpp::traits::input_parameter< int >::type jump(jumpSEXP);
+    rcpp_result_gen = Rcpp::wrap(win_mat(x, win, jump));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_swatanomaly_density_cpp", (DL_FUNC) &_swatanomaly_density_cpp, 1},
@@ -184,6 +197,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_swatanomaly_nns_cpp", (DL_FUNC) &_swatanomaly_nns_cpp, 3},
     {"_swatanomaly_rep_bool", (DL_FUNC) &_swatanomaly_rep_bool, 2},
     {"_swatanomaly_detect_nnd", (DL_FUNC) &_swatanomaly_detect_nnd, 3},
+    {"_swatanomaly_win_mat", (DL_FUNC) &_swatanomaly_win_mat, 3},
     {NULL, NULL, 0}
 };
 

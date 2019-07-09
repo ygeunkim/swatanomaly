@@ -253,3 +253,21 @@ detect_nnd <- function(nnd, win, thr) {
     .Call('_swatanomaly_detect_nnd', PACKAGE = 'swatanomaly', nnd, win, thr)
 }
 
+#' Matrix Representation of Sliding Windows
+#'
+#' @description Bind every window by row.
+#' @param x NumericVector univariate data.
+#' @param win int window size.
+#' @param jump int jump size of sliding window.
+#' @return NumericMatrix
+#' @details
+#' Each column represents an observation in each window.
+#' Each row represents an distinct window.
+#' Given the size of window win and the jump size jump, the number of the row becomes (nrow - win) / jump + 1.
+#' @useDynLib swatanomaly
+#' @importFrom Rcpp sourceCpp
+#' @export
+win_mat <- function(x, win, jump) {
+    .Call('_swatanomaly_win_mat', PACKAGE = 'swatanomaly', x, win, jump)
+}
+
