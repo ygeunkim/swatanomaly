@@ -32,7 +32,6 @@ NumericVector aggregate_mts(NumericMatrix x) {
   return y;
 }
 
-
 //' Gaussian Kernel Density Estimation in C++
 //'
 //' @description

@@ -12,9 +12,11 @@ Encoding: UTF-8
 LazyData: true
 Imports:
     Rcpp (>= 1.0.1),
+    RcppArmadillo,
     RcppProgress,
     dplyr
 LinkingTo:
     Rcpp,
+    RcppArmadillo,
     RcppProgress
 RoxygenNote: 6.1.1
