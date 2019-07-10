@@ -24,7 +24,7 @@ NumericVector aggregate_mts(NumericMatrix x) {
   NumericVector y(x.nrow());
 
   for (int i = 0; i < p; i++) {
-    for (int j = 0; j < p; j++) {
+    for (int j = 0; j < i; j++) {
       y += abs(x(_, i) - x(_, j));
     }
   }
