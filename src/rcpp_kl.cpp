@@ -72,7 +72,7 @@ double compute_kl(NumericMatrix f1, NumericMatrix f2) {
   double qx = 0;
 
   for (int i = 0; i < f2.nrow() - 1; i++) {
-    if (is_true( all(f1(0, _) < f2(0, _)) )) {
+    if (is_true( all(f1(_, 0) < f2(i, 0)) )) {
       sum_kl = 0;
     } else {
       qx = f1(1, i) * abs(f2(0, i + 1) - f2(0, i));
@@ -188,6 +188,7 @@ NumericVector kl_dynamic(NumericVector x, int win, int jump, double lambda_p, do
   Progress p(win_num - 3, display_progress);
 
   NumericVector kl(win_num - 1);
+
   // i = 1
   f1 = density_cpp(x[Range(0, win - 1)]);
   f2 = density_cpp(x[Range(1, win)]);
@@ -203,16 +204,15 @@ NumericVector kl_dynamic(NumericVector x, int win, int jump, double lambda_p, do
 
     p.increment();
 
-    if (kl_s < lambda) {
-      f1 = density_cpp(x[Range(i, i + win - 1)]);
-      f2 = density_cpp(x[Range(i + 1, i + win)]);
-      kl[i] = compute_kl(f1, f2);
+    f1 = density_cpp(x[Range(i, i + win - 1)]);
+    f2 = density_cpp(x[Range(i + 1, i + win)]);
+    kl[i] = compute_kl(f1, f2);
 
+    if (kl_s < lambda) {
       kl_s = kl[i];
       lambda = lambda_p * (kl[i - 2] + eps);
     } else {
-      f2 = density_cpp(x[Range(i + 1, i + win)]);
-      kl[i] = compute_kl(f1, f2); // f1 = of normal
+      // f1 = of normal
       kl_s = kl[i];
     }
   }
