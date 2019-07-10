@@ -2,6 +2,37 @@
 #include <progress.hpp>
 using namespace Rcpp;
 
+//' Aggregate Multivariate Time Series for K-L divergence
+//'
+//' @description
+//' This functions aggregates multivariate times series into univariate time series.
+//' See details.
+//' @param x NumericMatrix multivariate time series
+//' @return NumericVector
+//' @details
+//' To eliminate local spikes, compute usual distance.
+//' \deqn{\sum_{i \neq j}^p \lvert x_{ti} - x_{tj}}
+//' where p is the number of variables, and t is the index of time.
+//' This enables to explain the correlation between the series.
+//' @references Cho, J., Tariq, S., Lee, S., Kim, Y. G., & Woo, S. (2019). \emph{Contextual Anomaly Detection by Correlated Probability Distributions using Kullback-Leibler Divergence}. Workshop on Mining and Learning From Time Series. \url{http://doi.org/10.1145/nnnnnnn.nnnnnnn}
+//' @useDynLib swatanomaly
+//' @importFrom Rcpp sourceCpp
+//' @export
+// [[Rcpp::export]]
+NumericVector aggregate_mts(NumericMatrix x) {
+  int p = x.ncol();
+  NumericVector y(x.nrow());
+
+  for (int i = 0; i < p; i++) {
+    for (int j = 0; j < p; j++) {
+      y += abs(x(_, i) - x(_, j));
+    }
+  }
+
+  return y;
+}
+
+
 //' Gaussian Kernel Density Estimation in C++
 //'
 //' @description

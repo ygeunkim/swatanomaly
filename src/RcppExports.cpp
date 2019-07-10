@@ -5,6 +5,17 @@
 
 using namespace Rcpp;
 
+// aggregate_mts
+NumericVector aggregate_mts(NumericMatrix x);
+RcppExport SEXP _swatanomaly_aggregate_mts(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(aggregate_mts(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 // density_cpp
 NumericMatrix density_cpp(NumericVector x);
 RcppExport SEXP _swatanomaly_density_cpp(SEXP xSEXP) {
@@ -184,6 +195,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_swatanomaly_aggregate_mts", (DL_FUNC) &_swatanomaly_aggregate_mts, 1},
     {"_swatanomaly_density_cpp", (DL_FUNC) &_swatanomaly_density_cpp, 1},
     {"_swatanomaly_compute_kl", (DL_FUNC) &_swatanomaly_compute_kl, 2},
     {"_swatanomaly_kl_fix", (DL_FUNC) &_swatanomaly_kl_fix, 5},
