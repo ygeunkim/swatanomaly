@@ -36,6 +36,69 @@ devtools::install_github("ygeunkim/swatanomaly")
 library(swatanomaly)
 ```
 
+## Kullback-Leibler Divergence Algorithm
+
+This algorithm implements neighboring-window method. Using `stats::density()`, we first estimate each probability mass. Then we can compute K-L divergence from $p$ to $q$ by
+
+$$D_{KL} = \sum_{x \in \mathcal{X}} p(x) \ln \frac{p(x)}{q(x)}$$
+
+where $\mathcal{X}$ is the support of $p$ ($f_1$).
+
+The algorithm uses a threshold $\lambda$ and check if $D < \lambda$. If this holds, two windows can be said that they are derived from the same gaussian distribution.
+
+### Fixed lambda algorithm
+
+- Data: univariate series of size $n$
+- Input: window size $win$, jump size for sliding window $jump$, threshold $\lambda$
+
+Note that the number of window is
+
+$$\frac{n - win}{jump} + 1 \equiv w$$
+
+
+1. For $i \leftarrow 1$ to $w - 1$ do
+    1. if $D < \lambda$ then
+        1. $f_1$ be the pdf of $i$-th window and $f_2$ be the pdf of $(i + 1)$-th window
+        2. K-L divergence $d_i$ from $f_2$ to $f_1$
+        3. Set $D = d_i$.
+        4. $f^{\prime} = f_1$
+    2. else
+        1. $f^{\prime}$ be the pdf of normal and $f_2$ be the pdf of $(i + 1)$-th window
+        2. K-L divergence $d_i$ from $f_2$ to $f^{\prime}$
+        3. Set $D = d_i$.
+2. output: $d_1, \ldots, d_{w - 1}$
+
+
+### Dynamic lambda algorithm
+
+- Data: univariate series of size $n$
+- Input: window size $win$, jump size for sliding window $jump$, threshold increment $\lambda^{\prime}$, threshold updating constant $\epsilon$
+
+The threshold is initialized by
+
+$$\lambda = \lambda^{\prime} \epsilon$$
+
+If $D < \lambda$, it is updated by
+
+$$\lambda = \lambda^{\prime} (d_{j - 2} + \epsilon)$$
+
+
+1. $\lambda = \lambda^{\prime} \epsilon$
+2. $d_1$ K-L from $1$-st to $2$-nd window
+3. $d_2$ K-L from $2$-nd to $3$-rd window
+4. For $i \leftarrow 3$ to $w - 1$ do
+    1. if $D < \lambda$ then
+        1. $f_1$ be the pdf of $i$-th window and $f_2$ be the pdf of $(i + 1)$-th window
+        2. K-L divergence $d_i$ from $f_2$ to $f_1$
+        3. $\lambda = \lambda^{\prime} (d_{j - 2} + \epsilon)$
+        4. Set $D = d_i$.
+        5. $f^{\prime} = f_1$
+    2. else
+        1. $f^{\prime}$ be the pdf of normal and $f_2$ be the pdf of $(i + 1)$-th window
+        2. K-L divergence $d_i$ from $f_2$ to $f^{\prime}$
+        3. Set $D = d_i$.
+5. output: $d_1, \ldots, d_{w - 1}$
+
 
 ***
 
