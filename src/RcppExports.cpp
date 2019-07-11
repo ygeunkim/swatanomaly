@@ -181,32 +181,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// reduce_pca
-arma::mat reduce_pca(arma::mat x, int win, int jump);
-RcppExport SEXP _swatanomaly_reduce_pca(SEXP xSEXP, SEXP winSEXP, SEXP jumpSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
-    Rcpp::traits::input_parameter< int >::type win(winSEXP);
-    Rcpp::traits::input_parameter< int >::type jump(jumpSEXP);
-    rcpp_result_gen = Rcpp::wrap(reduce_pca(x, win, jump));
-    return rcpp_result_gen;
-END_RCPP
-}
-// reduce_mds
-arma::mat reduce_mds(arma::mat x, int win, int jump);
-RcppExport SEXP _swatanomaly_reduce_mds(SEXP xSEXP, SEXP winSEXP, SEXP jumpSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
-    Rcpp::traits::input_parameter< int >::type win(winSEXP);
-    Rcpp::traits::input_parameter< int >::type jump(jumpSEXP);
-    rcpp_result_gen = Rcpp::wrap(reduce_mds(x, win, jump));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_swatanomaly_aggregate_mts", (DL_FUNC) &_swatanomaly_aggregate_mts, 1},
@@ -223,8 +197,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_swatanomaly_nns_cpp", (DL_FUNC) &_swatanomaly_nns_cpp, 3},
     {"_swatanomaly_rep_bool", (DL_FUNC) &_swatanomaly_rep_bool, 2},
     {"_swatanomaly_detect_nnd", (DL_FUNC) &_swatanomaly_detect_nnd, 3},
-    {"_swatanomaly_reduce_pca", (DL_FUNC) &_swatanomaly_reduce_pca, 3},
-    {"_swatanomaly_reduce_mds", (DL_FUNC) &_swatanomaly_reduce_mds, 3},
     {NULL, NULL, 0}
 };
 
