@@ -22,41 +22,6 @@ double sum_sq(NumericVector x) {
   return sum;
 }
 
-//' Euclidean distance between two matrices in Rcpp
-//'
-//' @description
-//' This function computes a euclidean distance between two multivariate series using Rcpp.
-//' @param x NumericMatrix column should indicate variable
-//' @param y NumericMatrix column should indicate variable
-//' @return double
-//' @details
-//' For input x and y, compute
-//' \deqn{\sum \sqrt{\sum (x_{ij} - y_{ij})^2}}
-//' At first, the function calculates Euclidean distance pairwisely.
-//' After that, sum over every observation.
-//' @useDynLib swatanomaly
-//' @importFrom Rcpp sourceCpp
-//' @export
-// [[Rcpp::export]]
-double euc_dist(NumericMatrix x, NumericMatrix y) {
-  int nx = x.nrow();
-  int px = x.ncol();
-  int ny = y.nrow();
-  int py = y.ncol();
-  NumericVector euc(px);
-
-  if (nx != ny | px != py) {
-    stop("x and y should be have same dimension");
-  }
-
-  for (int j = 0; j < px; j++) {
-    euc[j] = sum_sq(x(_, j) - y(_, j));
-  }
-
-  double dist = sum(sqrt(euc));
-  return dist;
-}
-
 //' Euclidean NND between validation and training blocks
 //'
 //' @description
@@ -168,7 +133,7 @@ IntegerVector seq_rcpp(int from, int to) {
 //' For \code{\link{detect_nndvec}}, this pdf is able to threshold.
 //' Threshold is a tail of pdf, e.g. 0.99.
 //' @seealso
-//'    \code{\link{euc_dist}}
+//'    \code{\link{euc_nnd}}
 //'    \code{\link{nnd_thr}}
 //'    \code{\link{detect_nndvec}}
 //' @references

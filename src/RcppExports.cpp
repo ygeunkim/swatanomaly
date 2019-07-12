@@ -82,18 +82,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// euc_dist
-double euc_dist(NumericMatrix x, NumericMatrix y);
-RcppExport SEXP _swatanomaly_euc_dist(SEXP xSEXP, SEXP ySEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type y(ySEXP);
-    rcpp_result_gen = Rcpp::wrap(euc_dist(x, y));
-    return rcpp_result_gen;
-END_RCPP
-}
 // euc_nnd
 NumericVector euc_nnd(NumericMatrix x, NumericMatrix y);
 RcppExport SEXP _swatanomaly_euc_nnd(SEXP xSEXP, SEXP ySEXP) {
@@ -189,7 +177,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_swatanomaly_kl_fix", (DL_FUNC) &_swatanomaly_kl_fix, 5},
     {"_swatanomaly_kl_dynamic", (DL_FUNC) &_swatanomaly_kl_dynamic, 6},
     {"_swatanomaly_sum_sq", (DL_FUNC) &_swatanomaly_sum_sq, 1},
-    {"_swatanomaly_euc_dist", (DL_FUNC) &_swatanomaly_euc_dist, 2},
     {"_swatanomaly_euc_nnd", (DL_FUNC) &_swatanomaly_euc_nnd, 2},
     {"_swatanomaly_row_erase", (DL_FUNC) &_swatanomaly_row_erase, 2},
     {"_swatanomaly_seq_rcpp", (DL_FUNC) &_swatanomaly_seq_rcpp, 2},

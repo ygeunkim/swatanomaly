@@ -144,25 +144,6 @@ sum_sq <- function(x) {
     .Call('_swatanomaly_sum_sq', PACKAGE = 'swatanomaly', x)
 }
 
-#' Euclidean distance between two matrices in Rcpp
-#'
-#' @description
-#' This function computes a euclidean distance between two multivariate series using Rcpp.
-#' @param x NumericMatrix column should indicate variable
-#' @param y NumericMatrix column should indicate variable
-#' @return double
-#' @details
-#' For input x and y, compute
-#' \deqn{\sum \sqrt{\sum (x_{ij} - y_{ij})^2}}
-#' At first, the function calculates Euclidean distance pairwisely.
-#' After that, sum over every observation.
-#' @useDynLib swatanomaly
-#' @importFrom Rcpp sourceCpp
-#' @export
-euc_dist <- function(x, y) {
-    .Call('_swatanomaly_euc_dist', PACKAGE = 'swatanomaly', x, y)
-}
-
 #' Euclidean NND between validation and training blocks
 #'
 #' @description
@@ -230,7 +211,7 @@ seq_rcpp <- function(from, to) {
 #' For \code{\link{detect_nndvec}}, this pdf is able to threshold.
 #' Threshold is a tail of pdf, e.g. 0.99.
 #' @seealso
-#'    \code{\link{euc_dist}}
+#'    \code{\link{euc_nnd}}
 #'    \code{\link{nnd_thr}}
 #'    \code{\link{detect_nndvec}}
 #' @references
