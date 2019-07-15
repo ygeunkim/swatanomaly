@@ -107,8 +107,8 @@ double compute_kl(NumericMatrix f1, NumericMatrix f2) {
     if (f2(i, 1) <= f1(i, 1)) {
       sum_kl = 0;
     } else {
-      qx = f1(i, 1) * abs(f2(i + 1, 0) - f2(i, 0));
-      px = f2(i, 1) * abs(f2(i + 1, 0) - f2(i, 0));
+      px = f1(i, 1) * abs(f1(i + 1, 0) - f1(i, 0));
+      qx = f2(i, 1) * abs(f2(i + 1, 0) - f2(i, 0));
       if (px == 0 | qx == 0) {
         sum_kl = 0;
       } else {
