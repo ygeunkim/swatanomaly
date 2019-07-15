@@ -97,6 +97,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// match_kl
+NumericVector match_kl(NumericVector d, int win, int jump, bool last_win);
+RcppExport SEXP _swatanomaly_match_kl(SEXP dSEXP, SEXP winSEXP, SEXP jumpSEXP, SEXP last_winSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type d(dSEXP);
+    Rcpp::traits::input_parameter< int >::type win(winSEXP);
+    Rcpp::traits::input_parameter< int >::type jump(jumpSEXP);
+    Rcpp::traits::input_parameter< bool >::type last_win(last_winSEXP);
+    rcpp_result_gen = Rcpp::wrap(match_kl(d, win, jump, last_win));
+    return rcpp_result_gen;
+END_RCPP
+}
 // sum_sq
 double sum_sq(NumericVector x);
 RcppExport SEXP _swatanomaly_sum_sq(SEXP xSEXP) {
@@ -179,6 +193,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_swatanomaly_compute_kl", (DL_FUNC) &_swatanomaly_compute_kl, 2},
     {"_swatanomaly_kl_fix", (DL_FUNC) &_swatanomaly_kl_fix, 5},
     {"_swatanomaly_kl_dynamic", (DL_FUNC) &_swatanomaly_kl_dynamic, 6},
+    {"_swatanomaly_match_kl", (DL_FUNC) &_swatanomaly_match_kl, 4},
     {"_swatanomaly_sum_sq", (DL_FUNC) &_swatanomaly_sum_sq, 1},
     {"_swatanomaly_euc_nnd", (DL_FUNC) &_swatanomaly_euc_nnd, 2},
     {"_swatanomaly_row_erase", (DL_FUNC) &_swatanomaly_row_erase, 2},

@@ -144,6 +144,25 @@ kl_dynamic <- function(x, win, jump, lambda_p, eps, display_progress = FALSE) {
     .Call('_swatanomaly_kl_dynamic', PACKAGE = 'swatanomaly', x, win, jump, lambda_p, eps, display_progress)
 }
 
+#' Matching KL divergence to individual observation
+#'
+#' @description
+#' Give KL divergence values of each window to individual observation.
+#' @param d NumeriVector kl divergence vector.
+#' @param win int window size.
+#' @param jump int jump size for sliding window.
+#' @param last_win Fill last window? If TRUE, fill the last window with same value with the KL of the former window. Otherwise, leave them. By default, FALSE.
+#' @return NumericVector of number identical to the original series except the last window.
+#' @seealso
+#'     \code{\link{kl_fix}}
+#'     \code{\link{kl_dynamic}}
+#' @useDynLib swatanomaly
+#' @importFrom Rcpp sourceCpp
+#' @export
+match_kl <- function(d, win, jump, last_win = FALSE) {
+    .Call('_swatanomaly_match_kl', PACKAGE = 'swatanomaly', d, win, jump, last_win)
+}
+
 #' Sums of squares in C++
 #'
 #' @description Compute a SS in C++

@@ -181,7 +181,6 @@ NumericVector kl_fix(NumericVector x, int win, int jump, double lambda, bool dis
   return kl;
 }
 
-
 //' Dynamic lambda Algorithm
 //'
 //' @description
@@ -262,6 +261,41 @@ List kl_dynamic(NumericVector x, int win, int jump, double lambda_p, double eps,
   return kl_alg;
 }
 
+//' Matching KL divergence to individual observation
+//'
+//' @description
+//' Give KL divergence values of each window to individual observation.
+//' @param d NumeriVector kl divergence vector.
+//' @param win int window size.
+//' @param jump int jump size for sliding window.
+//' @param last_win Fill last window? If TRUE, fill the last window with same value with the KL of the former window. Otherwise, leave them. By default, FALSE.
+//' @return NumericVector of number identical to the original series except the last window.
+//' @seealso
+//'     \code{\link{kl_fix}}
+//'     \code{\link{kl_dynamic}}
+//' @useDynLib swatanomaly
+//' @importFrom Rcpp sourceCpp
+//' @export
+// [[Rcpp::export]]
+NumericVector match_kl(NumericVector d, int win, int jump, bool last_win = false) {
+  int win_num = d.size();
+  int n = win_num * jump + win;
+  NumericVector x(n);
 
+  for (int i = 0; i < win_num; i++) {
+    for (int j = 0; j < win; j++) {
+      x[i * win + j] = d[i];
+    }
+  }
 
+  NumericVector x2(n + win);
+  x2[Range(0, n)] = x;
 
+  if (last_win) {
+    for (int i = 0; i < win; i++) {
+      x[n + i] = d[win_num];
+    }
+  }
+
+  return x;
+}
