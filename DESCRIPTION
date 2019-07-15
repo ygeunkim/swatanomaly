@@ -17,6 +17,5 @@ Imports:
     foreach
 LinkingTo:
     Rcpp,
-    RcppArmadillo,
     RcppProgress
 RoxygenNote: 6.1.1
