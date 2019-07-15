@@ -192,7 +192,9 @@ NumericVector kl_fix(NumericVector x, int win, int jump, double lambda, bool dis
 //' @param lambda_p double initializing lambda_p for the threshold.
 //' @param eps double initializing epsilon for the threshold.
 //' @param display_progress If TRUE, display a progress bar. By default, FALSE.
-//' @return NumericVector
+//' @return List,
+//' First element is kl divergence named divergence.
+//' Second element is threshold (lambda) for detecting anomaly named threshold.
 //' @details
 //' Basically, this algorithm use neighboring-window method.
 //' Slide windows. In each window, estimate a density based on \link[stats]{density.default}.
@@ -212,7 +214,7 @@ NumericVector kl_fix(NumericVector x, int win, int jump, double lambda, bool dis
 //' @importFrom Rcpp sourceCpp
 //' @export
 // [[Rcpp::export]]
-NumericVector kl_dynamic(NumericVector x, int win, int jump, double lambda_p, double eps, bool display_progress = false) {
+List kl_dynamic(NumericVector x, int win, int jump, double lambda_p, double eps, bool display_progress = false) {
   int n = x.size();
   int win_num = (n - win) / jump + 1;
   NumericMatrix f1(512, 2);
@@ -255,7 +257,9 @@ NumericVector kl_dynamic(NumericVector x, int win, int jump, double lambda_p, do
     }
   }
 
-  return kl;
+  List kl_alg = List::create(Named("divergence") = kl, Named("threshold") = lambda);
+
+  return kl_alg;
 }
 
 

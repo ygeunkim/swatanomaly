@@ -56,7 +56,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // kl_dynamic
-NumericVector kl_dynamic(NumericVector x, int win, int jump, double lambda_p, double eps, bool display_progress);
+List kl_dynamic(NumericVector x, int win, int jump, double lambda_p, double eps, bool display_progress);
 RcppExport SEXP _swatanomaly_kl_dynamic(SEXP xSEXP, SEXP winSEXP, SEXP jumpSEXP, SEXP lambda_pSEXP, SEXP epsSEXP, SEXP display_progressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

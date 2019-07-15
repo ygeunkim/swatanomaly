@@ -20,7 +20,9 @@ kl_dynamic(x, win, jump, lambda_p, eps, display_progress = FALSE)
 \item{display_progress}{If TRUE, display a progress bar. By default, FALSE.}
 }
 \value{
-NumericVector
+List,
+First element is kl divergence named divergence.
+Second element is threshold (lambda) for detecting anomaly named threshold.
 }
 \description{
 This function implement dynamic \eqn{\lambda} algorithm for K-L divergence based on gaussianity.

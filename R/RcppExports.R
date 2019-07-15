@@ -111,7 +111,9 @@ kl_fix <- function(x, win, jump, lambda, display_progress = FALSE) {
 #' @param lambda_p double initializing lambda_p for the threshold.
 #' @param eps double initializing epsilon for the threshold.
 #' @param display_progress If TRUE, display a progress bar. By default, FALSE.
-#' @return NumericVector
+#' @return List,
+#' First element is kl divergence named divergence.
+#' Second element is threshold (lambda) for detecting anomaly named threshold.
 #' @details
 #' Basically, this algorithm use neighboring-window method.
 #' Slide windows. In each window, estimate a density based on \link[stats]{density.default}.
