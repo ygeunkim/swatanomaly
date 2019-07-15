@@ -72,6 +72,19 @@ NumericMatrix density_cpp(NumericVector x) {
   return den_xy;
 }
 
+// [[Rcpp::export]]
+int find_support(double x1, NumericVector x2) {
+  int x_supp = 0;
+
+  for (int i = 0; i < x2.size(); i++) {
+    if (x2[i] > x1)
+      break;
+    x_supp++;
+  }
+
+  return x_supp;
+}
+
 //' Kullback-Leibler divergence estimation between two densities
 //'
 //' @description
@@ -102,21 +115,35 @@ double compute_kl(NumericMatrix f1, NumericMatrix f2) {
 
   double px = 0;
   double qx = 0;
+  int x1_supp = 0;
 
-  for (int i = 0; i < f2.nrow() - 1; i++) {
-    px = f1(i, 1) * abs(f2(i + 1, 0) - f2(i, 0));
-    qx = f2(i, 1) * abs(f2(i + 1, 0) - f2(i, 0));
+  for (int i = 0; i < f1.nrow() - 1; i++) {
 
-    if (px <= qx) {
+    x1_supp = find_support(f1(i, 0), f2(_, 1));
+
+    if (x1_supp == 0) {
       sum_kl = 0;
     } else {
-      if (px == 0 | qx == 0) {
+      px = f1(i, 1) * abs(f1(i + 1, 0) - f1(i, 0));
+      qx = f2(x1_supp - 1, 1) * abs(f1(i + 1, 0) - f1(i, 0));
+
+      if (px <= qx) {
+
         sum_kl = 0;
+
       } else {
-        sum_kl = px * log(px / qx);
+
+        if (px == 0 | qx == 0) {
+          sum_kl = 0;
+        } else {
+          sum_kl = px * log(px / qx);
+        }
       }
+
     }
+
     kl += sum_kl;
+
   }
 
   return kl;

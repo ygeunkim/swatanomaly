@@ -53,6 +53,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// find_support
+int find_support(double x1, NumericVector x2);
+RcppExport SEXP _swatanomaly_find_support(SEXP x1SEXP, SEXP x2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type x1(x1SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type x2(x2SEXP);
+    rcpp_result_gen = Rcpp::wrap(find_support(x1, x2));
+    return rcpp_result_gen;
+END_RCPP
+}
 // compute_kl
 double compute_kl(NumericMatrix f1, NumericMatrix f2);
 RcppExport SEXP _swatanomaly_compute_kl(SEXP f1SEXP, SEXP f2SEXP) {
@@ -189,6 +201,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_swatanomaly_detect", (DL_FUNC) &_swatanomaly_detect, 4},
     {"_swatanomaly_aggregate_mts", (DL_FUNC) &_swatanomaly_aggregate_mts, 1},
     {"_swatanomaly_density_cpp", (DL_FUNC) &_swatanomaly_density_cpp, 1},
+    {"_swatanomaly_find_support", (DL_FUNC) &_swatanomaly_find_support, 2},
     {"_swatanomaly_compute_kl", (DL_FUNC) &_swatanomaly_compute_kl, 2},
     {"_swatanomaly_kl_fix", (DL_FUNC) &_swatanomaly_kl_fix, 5},
     {"_swatanomaly_kl_dynamic", (DL_FUNC) &_swatanomaly_kl_dynamic, 6},

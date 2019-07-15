@@ -55,6 +55,10 @@ density_cpp <- function(x) {
     .Call('_swatanomaly_density_cpp', PACKAGE = 'swatanomaly', x)
 }
 
+find_support <- function(x1, x2) {
+    .Call('_swatanomaly_find_support', PACKAGE = 'swatanomaly', x1, x2)
+}
+
 #' Kullback-Leibler divergence estimation between two densities
 #'
 #' @description
