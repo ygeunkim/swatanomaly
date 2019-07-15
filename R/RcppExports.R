@@ -58,7 +58,9 @@ density_cpp <- function(x) {
 #' @details
 #' Let \eqn{\mathcal{X}} be the support of f1. Then K-L divergence from f2 to f1 is defined by
 #' \deqn{E_{X_1} \log \frac{f_1 (x)}{f_2 (x)}}
-#' Thus, given probability mass p and q, we can compute this K-L divergence by
+#' Probability mass is estimated from density by
+#' \deqn{f \Delta x}
+#' In turn, we can compute K-L divergence using mass p and q by
 #' \deqn{\sum_{\mathcal{X}} p(x) \log \frac{p (x)}{q (x)}}
 #' To estimate this value, first use \code{\link{est_density}} or \code{\link{density_cpp}}, and estimate density of each window.
 #' @seealso

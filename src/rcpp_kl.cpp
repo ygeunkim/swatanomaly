@@ -83,7 +83,9 @@ NumericMatrix density_cpp(NumericVector x) {
 //' @details
 //' Let \eqn{\mathcal{X}} be the support of f1. Then K-L divergence from f2 to f1 is defined by
 //' \deqn{E_{X_1} \log \frac{f_1 (x)}{f_2 (x)}}
-//' Thus, given probability mass p and q, we can compute this K-L divergence by
+//' Probability mass is estimated from density by
+//' \deqn{f \Delta x}
+//' In turn, we can compute K-L divergence using mass p and q by
 //' \deqn{\sum_{\mathcal{X}} p(x) \log \frac{p (x)}{q (x)}}
 //' To estimate this value, first use \code{\link{est_density}} or \code{\link{density_cpp}}, and estimate density of each window.
 //' @seealso
@@ -113,7 +115,7 @@ double compute_kl(NumericMatrix f1, NumericMatrix f2) {
         sum_kl = px * log(px / qx);
       }
     }
-    kl = kl + sum_kl;
+    kl += sum_kl;
   }
 
   return kl;
@@ -163,13 +165,13 @@ NumericVector kl_fix(NumericVector x, int win, int jump, double lambda, bool dis
     p.increment();
 
     if (kl_s < lambda) {
-      f1 = density_cpp(x[Range(i, i + win - 1)]);
-      f2 = density_cpp(x[Range(i + 1, i + win)]);
+      f1 = density_cpp(x[Range(i * jump, i * jump + win - 1)]);
+      f2 = density_cpp(x[Range((i + 1) * jump, (i + 1) * jump + win - 1)]);
 
       kl[i] = compute_kl(f1, f2);
       kl_s = kl[i];
     } else {
-      f2 = density_cpp(x[Range(i + 1, i + win)]);
+      f2 = density_cpp(x[Range((i + 1) * jump, (i + 1) * jump + win - 1)]);
 
       kl[i] = compute_kl(f1, f2); // f1 = of normal
       kl_s = kl[i];
@@ -225,10 +227,10 @@ NumericVector kl_dynamic(NumericVector x, int win, int jump, double lambda_p, do
 
   // i = 1
   f1 = density_cpp(x[Range(0, win - 1)]);
-  f2 = density_cpp(x[Range(1, win)]);
+  f2 = density_cpp(x[Range(jump, jump + win - 1)]);
   kl[0] = compute_kl(f1, f2);
   // i = 2
-  f1 = density_cpp(x[Range(2, win + 1)]);
+  f1 = density_cpp(x[Range(2 * jump, 2 * jump + win - 1)]);
   kl[1] = compute_kl(f2, f1);
 
   for (int i = 2; i < win_num - 1; i++) {
@@ -239,14 +241,14 @@ NumericVector kl_dynamic(NumericVector x, int win, int jump, double lambda_p, do
     p.increment();
 
     if (kl_s < lambda) {
-      f1 = density_cpp(x[Range(i, i + win - 1)]);
-      f2 = density_cpp(x[Range(i + 1, i + win)]);
+      f1 = density_cpp(x[Range(i * jump, i * jump + win - 1)]);
+      f2 = density_cpp(x[Range((i + 1) * jump, (i + 1) * jump + win - 1)]);
 
       kl[i] = compute_kl(f1, f2);
       kl_s = kl[i];
       lambda = lambda_p * (kl[i - 2] + eps);
     } else {
-      f2 = density_cpp(x[Range(i + 1, i + win)]);
+      f2 = density_cpp(x[Range((i + 1) * jump, (i + 1) * jump + win - 1)]);
 
       kl[i] = compute_kl(f1, f2); // f1 = of normal
       kl_s = kl[i];
