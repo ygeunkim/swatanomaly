@@ -3,7 +3,7 @@
 export(aggregate_mts)
 export(compute_kl)
 export(density_cpp)
-export(detect_nndvec)
+export(detect_anomaly)
 export(est_density)
 export(euc_nnd)
 export(euc_pdf)
