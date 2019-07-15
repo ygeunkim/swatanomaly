@@ -104,7 +104,7 @@ double compute_kl(NumericMatrix f1, NumericMatrix f2) {
   double qx = 0;
 
   for (int i = 0; i < f2.nrow() - 1; i++) {
-    if (is_true( all(f1(_, 0) < f2(i, 0)) )) {
+    if (f2(i, 1) <= f1(i, 1)) {
       sum_kl = 0;
     } else {
       qx = f1(i, 1) * abs(f2(i + 1, 0) - f2(i, 0));
