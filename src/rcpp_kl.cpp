@@ -104,11 +104,12 @@ double compute_kl(NumericMatrix f1, NumericMatrix f2) {
   double qx = 0;
 
   for (int i = 0; i < f2.nrow() - 1; i++) {
-    if (f2(i, 1) <= f1(i, 1)) {
+    px = f1(i, 1) * abs(f2(i + 1, 0) - f2(i, 0));
+    qx = f2(i, 1) * abs(f2(i + 1, 0) - f2(i, 0));
+
+    if (px <= qx) {
       sum_kl = 0;
     } else {
-      px = f1(i, 1) * abs(f2(i + 1, 0) - f2(i, 0));
-      qx = f2(i, 1) * abs(f2(i + 1, 0) - f2(i, 0));
       if (px == 0 | qx == 0) {
         sum_kl = 0;
       } else {
