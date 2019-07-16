@@ -12,9 +12,9 @@ Encoding: UTF-8
 LazyData: true
 Imports:
     Rcpp (>= 1.0.1),
-    RcppProgress,
-    dplyr,
-    foreach
+    RcppProgress (>= 0.4.0),
+    dplyr (>= 0.7.8),
+    foreach (>= 1.4.0)
 LinkingTo:
     Rcpp,
     RcppProgress

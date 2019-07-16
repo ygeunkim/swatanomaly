@@ -253,14 +253,17 @@ List kl_dynamic(NumericVector x, int win, int jump, double lambda_p, double eps,
   Progress p(win_num - 3, display_progress);
 
   NumericVector kl(win_num - 1);
+  LogicalVector anomaly(win_num - 1);
 
   // i = 1
   f1 = density_cpp(x[Range(0, win - 1)]);
   f2 = density_cpp(x[Range(jump, jump + win - 1)]);
   kl[0] = compute_kl(f1, f2);
+  anomaly[0] = kl[0] > lambda_p;
   // i = 2
   f1 = density_cpp(x[Range(2 * jump, 2 * jump + win - 1)]);
   kl[1] = compute_kl(f2, f1);
+  anomaly[1] = kl[1] > lambda_p;
 
   for (int i = 2; i < win_num - 1; i++) {
 
@@ -276,15 +279,19 @@ List kl_dynamic(NumericVector x, int win, int jump, double lambda_p, double eps,
       kl[i] = compute_kl(f1, f2);
       kl_s = kl[i];
       lambda = lambda_p * (kl[i - 2] + eps);
+
+      anomaly[i] = kl[i] > lambda;
     } else {
       f2 = density_cpp(x[Range((i + 1) * jump, (i + 1) * jump + win - 1)]);
 
       kl[i] = compute_kl(f1, f2); // f1 = of normal
       kl_s = kl[i];
+
+      anomaly[i] = kl[i] > lambda;
     }
   }
 
-  List kl_alg = List::create(Named("divergence") = kl, Named("threshold") = lambda);
+  List kl_alg = List::create(Named("divergence") = kl, Named("threshold") = lambda, Named("anomaly") = anomaly);
 
   return kl_alg;
 }
