@@ -25,7 +25,7 @@ LogicalVector detect(NumericVector y, int win, int jump, double thr) {
 
   for (int i = 0; i < win_num; i++) {
     for (int j = 0; j < win; j++) {
-      win_out[j] = y[i * j + j] > thr;
+      win_out[j] = y[i * jump + j] > thr;
     }
 
     if ( is_true(any(win_out)) ) {
