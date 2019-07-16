@@ -2,24 +2,24 @@
 % Please edit documentation in R/RcppExports.R
 \name{match_kl}
 \alias{match_kl}
-\title{Matching KL divergence to individual observation}
+\title{Matching KL divergence label to individual observation}
 \usage{
-match_kl(d, win, jump, last_win = FALSE)
+match_kl(d, win)
 }
 \arguments{
-\item{d}{NumeriVector kl divergence vector.}
+\item{d}{LogicalVector anomaly of \code{\link{kl_dynamic}} or the result of detection by fixed algorithm}
 
 \item{win}{int window size.}
-
-\item{jump}{int jump size for sliding window.}
-
-\item{last_win}{Fill last window? If TRUE, fill the last window with same value with the KL of the former window. Otherwise, leave them. By default, FALSE.}
 }
 \value{
 NumericVector of number identical to the original series except the last window.
 }
 \description{
-Give KL divergence values of each window to individual observation.
+Give KL divergence anomaly prediction of each window to individual observation.
+}
+\details{
+This function is not appropriate when jump option is used.
+In other words, use only when the series has been partitioned.
 }
 \seealso{
 \code{\link{kl_fix}}

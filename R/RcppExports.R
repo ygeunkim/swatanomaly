@@ -148,23 +148,24 @@ kl_dynamic <- function(x, win, jump, lambda_p, eps, display_progress = FALSE) {
     .Call('_swatanomaly_kl_dynamic', PACKAGE = 'swatanomaly', x, win, jump, lambda_p, eps, display_progress)
 }
 
-#' Matching KL divergence to individual observation
+#' Matching KL divergence label to individual observation
 #'
 #' @description
-#' Give KL divergence values of each window to individual observation.
-#' @param d NumeriVector kl divergence vector.
+#' Give KL divergence anomaly prediction of each window to individual observation.
+#' @param d LogicalVector anomaly of \code{\link{kl_dynamic}} or the result of detection by fixed algorithm
 #' @param win int window size.
-#' @param jump int jump size for sliding window.
-#' @param last_win Fill last window? If TRUE, fill the last window with same value with the KL of the former window. Otherwise, leave them. By default, FALSE.
 #' @return NumericVector of number identical to the original series except the last window.
+#' @details
+#' This function is not appropriate when jump option is used.
+#' In other words, use only when the series has been partitioned.
 #' @seealso
 #'     \code{\link{kl_fix}}
 #'     \code{\link{kl_dynamic}}
 #' @useDynLib swatanomaly
 #' @importFrom Rcpp sourceCpp
 #' @export
-match_kl <- function(d, win, jump, last_win = FALSE) {
-    .Call('_swatanomaly_match_kl', PACKAGE = 'swatanomaly', d, win, jump, last_win)
+match_kl <- function(d, win) {
+    .Call('_swatanomaly_match_kl', PACKAGE = 'swatanomaly', d, win)
 }
 
 #' Sums of squares in C++

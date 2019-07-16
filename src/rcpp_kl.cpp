@@ -247,7 +247,8 @@ List kl_dynamic(NumericVector x, int win, int jump, double lambda_p, double eps,
   NumericMatrix f1(512, 2);
   NumericMatrix f2(512, 2);
 
-  double lambda = lambda_p * eps;
+  // double lambda = lambda_p * eps;
+  NumericVector lambda = rep(lambda_p * eps, win_num - 1);
   double kl_s = 0;
 
   Progress p(win_num - 3, display_progress);
@@ -259,11 +260,11 @@ List kl_dynamic(NumericVector x, int win, int jump, double lambda_p, double eps,
   f1 = density_cpp(x[Range(0, win - 1)]);
   f2 = density_cpp(x[Range(jump, jump + win - 1)]);
   kl[0] = compute_kl(f1, f2);
-  anomaly[0] = kl[0] > lambda_p;
+  anomaly[0] = kl[0] > lambda[0];
   // i = 2
   f1 = density_cpp(x[Range(2 * jump, 2 * jump + win - 1)]);
   kl[1] = compute_kl(f2, f1);
-  anomaly[1] = kl[1] > lambda_p;
+  anomaly[1] = kl[1] > lambda[0];
 
   for (int i = 2; i < win_num - 1; i++) {
 
@@ -272,22 +273,22 @@ List kl_dynamic(NumericVector x, int win, int jump, double lambda_p, double eps,
 
     p.increment();
 
-    if (kl_s < lambda) {
+    if (kl_s < lambda[i]) {
       f1 = density_cpp(x[Range(i * jump, i * jump + win - 1)]);
       f2 = density_cpp(x[Range((i + 1) * jump, (i + 1) * jump + win - 1)]);
 
       kl[i] = compute_kl(f1, f2);
       kl_s = kl[i];
-      lambda = lambda_p * (kl[i - 2] + eps);
+      lambda[Range(i + 1, win_num - 1)] = rep(lambda_p * (kl[i - 2] + eps), win_num - 1 - i);
 
-      anomaly[i] = kl[i] > lambda;
+      anomaly[i] = kl[i] > lambda[i];
     } else {
       f2 = density_cpp(x[Range((i + 1) * jump, (i + 1) * jump + win - 1)]);
 
       kl[i] = compute_kl(f1, f2); // f1 = of normal
       kl_s = kl[i];
 
-      anomaly[i] = kl[i] > lambda;
+      anomaly[i] = kl[i] > lambda[i];
     }
   }
 
@@ -296,15 +297,16 @@ List kl_dynamic(NumericVector x, int win, int jump, double lambda_p, double eps,
   return kl_alg;
 }
 
-//' Matching KL divergence to individual observation
+//' Matching KL divergence label to individual observation
 //'
 //' @description
-//' Give KL divergence values of each window to individual observation.
-//' @param d NumeriVector kl divergence vector.
+//' Give KL divergence anomaly prediction of each window to individual observation.
+//' @param d LogicalVector anomaly of \code{\link{kl_dynamic}} or the result of detection by fixed algorithm
 //' @param win int window size.
-//' @param jump int jump size for sliding window.
-//' @param last_win Fill last window? If TRUE, fill the last window with same value with the KL of the former window. Otherwise, leave them. By default, FALSE.
 //' @return NumericVector of number identical to the original series except the last window.
+//' @details
+//' This function is not appropriate when jump option is used.
+//' In other words, use only when the series has been partitioned.
 //' @seealso
 //'     \code{\link{kl_fix}}
 //'     \code{\link{kl_dynamic}}
@@ -312,23 +314,16 @@ List kl_dynamic(NumericVector x, int win, int jump, double lambda_p, double eps,
 //' @importFrom Rcpp sourceCpp
 //' @export
 // [[Rcpp::export]]
-NumericVector match_kl(NumericVector d, int win, int jump, bool last_win = false) {
-  int win_num = d.size();
-  int n = win_num * jump + win;
-  NumericVector x(n);
+LogicalVector match_kl(LogicalVector d, int win) {
+  int dlen = d.size();
+  int n = dlen * (win - 1);
+  LogicalVector x(n);
 
-  for (int i = 0; i < win_num; i++) {
+  for (int i = 0; i < dlen; i++) {
+    // window loop
     for (int j = 0; j < win; j++) {
+      // in window
       x[i * win + j] = d[i];
-    }
-  }
-
-  NumericVector x2(n + win);
-  x2[Range(0, n)] = x;
-
-  if (last_win) {
-    for (int i = 0; i < win; i++) {
-      x[n + i] = d[win_num];
     }
   }
 
