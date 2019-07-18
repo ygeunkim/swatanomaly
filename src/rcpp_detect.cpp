@@ -38,4 +38,33 @@ LogicalVector detect(NumericVector y, int win, int jump, double thr) {
   return x;
 }
 
+//' Expand Label into Window
+//'
+//' @description
+//' When detection label is given only one value per window,
+//' this function expands it.
+//'
+//' Warning: Do not use jump parameter against confusion.
+//' @param x LogicalVector detected label
+//' @param win int Window size
+//' @return LogicalVector
+//' @details
+//' In the window, the values are the same.
+//' @useDynLib swatanomaly
+//' @importFrom Rcpp sourceCpp
+//' @export
+// [[Rcpp::export]]
+LogicalVector expand_label(LogicalVector x, int win) {
+  int win_num = x.size();
+  int n = win_num * win;
 
+  LogicalVector y(n);
+
+  for (int i = 0; i < win_num; i++) {
+    for (int j = 0; j < win; j++) {
+      y[i * win + j] = x[i];
+    }
+  }
+
+  return y;
+}

@@ -31,6 +31,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// expand_label
+LogicalVector expand_label(LogicalVector x, int win);
+RcppExport SEXP _swatanomaly_expand_label(SEXP xSEXP, SEXP winSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< LogicalVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type win(winSEXP);
+    rcpp_result_gen = Rcpp::wrap(expand_label(x, win));
+    return rcpp_result_gen;
+END_RCPP
+}
 // aggregate_mts
 NumericVector aggregate_mts(NumericMatrix x);
 RcppExport SEXP _swatanomaly_aggregate_mts(SEXP xSEXP) {
@@ -197,6 +209,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_swatanomaly_rep_bool", (DL_FUNC) &_swatanomaly_rep_bool, 2},
     {"_swatanomaly_detect", (DL_FUNC) &_swatanomaly_detect, 4},
+    {"_swatanomaly_expand_label", (DL_FUNC) &_swatanomaly_expand_label, 2},
     {"_swatanomaly_aggregate_mts", (DL_FUNC) &_swatanomaly_aggregate_mts, 1},
     {"_swatanomaly_density_cpp", (DL_FUNC) &_swatanomaly_density_cpp, 1},
     {"_swatanomaly_find_support", (DL_FUNC) &_swatanomaly_find_support, 2},

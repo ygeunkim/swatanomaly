@@ -9,6 +9,25 @@ detect <- function(y, win, jump, thr) {
     .Call('_swatanomaly_detect', PACKAGE = 'swatanomaly', y, win, jump, thr)
 }
 
+#' Expand Label into Window
+#'
+#' @description
+#' When detection label is given only one value per window,
+#' this function expands it.
+#'
+#' Warning: Do not use jump parameter against confusion.
+#' @param x LogicalVector detected label
+#' @param win int Window size
+#' @return LogicalVector
+#' @details
+#' In the window, the values are the same.
+#' @useDynLib swatanomaly
+#' @importFrom Rcpp sourceCpp
+#' @export
+expand_label <- function(x, win) {
+    .Call('_swatanomaly_expand_label', PACKAGE = 'swatanomaly', x, win)
+}
+
 #' Aggregate Multivariate Time Series for K-L divergence
 #'
 #' @description
