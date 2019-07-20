@@ -1,16 +1,6 @@
 #include <Rcpp.h>
 using namespace Rcpp;
-
-// [[Rcpp::export]]
-LogicalVector rep_bool(bool x, int n) {
-  LogicalVector y(n);
-
-  for (int i = 0; i < n; i++) {
-    y[i] = x;
-  }
-
-  return y;
-}
+#include "misc.h"
 
 // [[Rcpp::export]]
 LogicalVector detect(NumericVector y, int win, int jump, double thr) {

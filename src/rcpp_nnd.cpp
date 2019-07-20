@@ -1,135 +1,26 @@
 #include <Rcpp.h>
 #include <progress.hpp>
 using namespace Rcpp;
+#include "misc.h"
 
-//' Sums of squares in C++
-//'
-//' @description Compute a SS in C++
-//' @param x NumericVector
-//' @return double
-//' @useDynLib swatanomaly
-//' @importFrom Rcpp sourceCpp
-//' @export
-// [[Rcpp::export]]
-double sum_sq(NumericVector x) {
-  int n = x.size();
-  double sum = 0;
-
-  for (int i = 0; i < n; i ++) {
-    sum += pow(x[i], 2.0);
-  }
-
-  return sum;
-}
-
-//' Remove row index of a matrix in C++
+//' Sliding window for NND
 //'
 //' @description
-//' This function removes a row index of NumericMatrix in Rcpp.
-//' @param x NumericMatrix
-//' @param rowID IntegerVector row ids to be removed.
-//' @return NumericMatrix
-//' @useDynLib swatanomaly
-//' @references \url{https://stackoverflow.com/questions/33507695/rcpp-numericmatrix-how-to-erase-a-row-column}
-//' @importFrom Rcpp sourceCpp
-//' @export
-// [[Rcpp::export]]
-NumericMatrix row_erase(NumericMatrix x, IntegerVector rowID) {
-  // rowID = rowID.sort();
-
-  NumericMatrix x2(Dimension(x.nrow() - rowID.size(), x.ncol()));
-
-  int iter = 0;
-  int del = 1; // to count deleted elements
-
-  for (int i = 0; i < x.nrow(); i++) {
-    if (i != rowID[del - 1]) {
-      x2.row(iter) = x.row(i);
-      iter++;
-    } else {
-      del++;
-    }
-  }
-  return x2;
-}
-
-//' Sequence by 1 in Rcpp
-//'
-//' @description
-//' This function generates a integer sequence with increment of 1 in Rcpp.
-//' @param from int the starting value of the sequence.
-//' @param to int the end value of the sequence.
-//' @return IntegerVector
+//' For the chosen partition, get NND for every pair of window.
+//' This function is constructed for the other function.
+//' @param data NumericMatrix. data to be calculated NND.
+//' @param win int. window size.
+//' @param jump int. shift size.
+//' @param partition NumericVector. indices that can indicate partitions.
+//' @param base_id int. An index of chosen partition among partiton vector.
+//' @param d Function. distance function.
+//' @return NumericVector. NND vector for each window in the chosen partition.
+//' @seealso
+//'     \code{\link{nnd_normal}}
+//'     \code{\link{pred_nnd}}
 //' @useDynLib swatanomaly
 //' @importFrom Rcpp sourceCpp
 //' @export
-// [[Rcpp::export]]
-IntegerVector seq_rcpp(int from, int to) {
-  IntegerVector x(to - from + 1);
-
-  for (int i = 0; i < x.size(); i++) {
-    x[i] = from + i;
-  }
-
-  return x;
-}
-
-//' Squared l2 Distance between two windows
-//'
-//' @description
-//' This function gives distance matrix between two windows in multivariate time series
-//' @param x NumericMatrix. first window.
-//' @param y NumericMatrix. second window.
-//' @return double. squared l2 distance matrix form.
-//' @details
-//' Compute
-//' \deqn{d = x_{ij} - y_{kl}}
-//' element-wise. After that,
-//' \deqn{\frac{\sqrt{\sum{d}}}{wp}}
-//' where w is the wize of window, and p is the number of variables.
-//' @references
-//' Yun, J.-H., Hwang, Y., Lee, W., Ahn, H.-K., & Kim, S.-K. (2018). \emph{Statistical Similarity of Critical Infrastructure Network Traffic Based on Nearest Neighbor Distances} (Vol. 11050, pp. 1–23). Presented at the Research in Attacks, Intrusions, and Defenses, Cham: Springer International Publishing. \url{http://doi.org/10.1007/978-3-030-00470-5_27}
-//' @useDynLib swatanomaly
-//' @importFrom Rcpp sourceCpp
-//' @export
-// [[Rcpp::export]]
-double compute_euc(NumericMatrix x, NumericMatrix y) {
-  int win = x.nrow();
-  int px = x.ncol();
-  double dist = 0;
-
-  if (win != y.nrow())
-    stop("x and y should have same column number");
-
-  if (px != y.ncol())
-    stop("x and y should have same row number");
-
-  NumericVector l2(win * px);
-
-  for (int i = 0; i < win; i++) {
-    for (int j = 0; j < px; j++) {
-      l2[i * win + j] = pow(x(i, j) - y(i, j), 2);
-    }
-  }
-
-  dist = sqrt(sum(l2)) / (win * px);
-
-  return dist;
-}
-
-// [[Rcpp::export]]
-NumericMatrix sub_mat(NumericMatrix x, NumericVector row, NumericVector col) {
-  NumericMatrix y(row.size(), col.size());
-
-  for (int r = 0; r < row.size(); r++) {
-    for (int c = 0; c < col.size(); c++) {
-      y(r, c) = x(row[r], col[c]);
-    }
-  }
-
-  return y;
-}
-
 // [[Rcpp::export]]
 NumericVector partnnd(
   NumericMatrix data,
@@ -189,7 +80,7 @@ NumericVector nnd_normal(
   int part,
   int win,
   int jump,
-  Function d = compute_euc,
+  Function d,
   bool display_progress = false
 ) {
   int n = data.nrow();
@@ -227,9 +118,10 @@ NumericVector nnd_normal(
 //' @param d Function. distance function. By default, \code{\link{compute_euc}}. Arguments must be two matrices and the output double.
 //' @param display_progress If TRUE, display a progress bar. By default, FALSE.
 //' @return NumericVector. NND for each window.
-//' @details.
-//' Measure a distance between windows in new data set and normal data set.
-//' For this, slide windows in both set. Compute the distances and record them.
+//' @details
+//' In the window in new data set, scan the original set sliding window.
+//' Minimum distance is the NND of that window.
+//' Repeat for every window.
 //' @useDynLib swatanomaly
 //' @importFrom Rcpp sourceCpp
 //' @export
@@ -239,15 +131,23 @@ NumericVector pred_nnd(
   NumericMatrix newdata,
   int win,
   int jump,
-  Function d = compute_euc,
+  Function d,
   bool display_progress = false
 ) {
   int n = data.nrow();
+  int new_win = (newdata.nrow() - win) / jump + 1;
   NumericMatrix dat_new(n + win, data.ncol());
-  NumericVector nnd_new((newdata.nrow() - win) / jump + 1);
+  NumericVector nnd_new(new_win);
 
   IntegerVector id(n + win);
   id[Range(0, n - 1)] = rep(0, n);
   id[Range(n, n + win - 1)] = rep(1, win);
+
+  for (int i = 0; i < new_win; i++) {
+    dat_new = rbind_mat(data, newdata(Range(i * jump, i * jump + win - 1), _));
+    nnd_new[i] = as<double>(partnnd(dat_new, win, jump, id, rep(1, win), d));
+  }
+
+  return nnd_new;
 }
 
