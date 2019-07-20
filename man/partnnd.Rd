@@ -4,7 +4,7 @@
 \alias{partnnd}
 \title{Sliding window for NND}
 \usage{
-partnnd(data, win, jump, partition, base_id, d)
+partnnd(data, win, jump, partition, base_id)
 }
 \arguments{
 \item{data}{NumericMatrix. data to be calculated NND.}
@@ -16,8 +16,6 @@ partnnd(data, win, jump, partition, base_id, d)
 \item{partition}{NumericVector. indices that can indicate partitions.}
 
 \item{base_id}{int. An index of chosen partition among partiton vector.}
-
-\item{d}{Function. distance function.}
 }
 \value{
 NumericVector. NND vector for each window in the chosen partition.

@@ -16,7 +16,7 @@
 #' \deqn{d_i > t}
 #' If at least one point in the window is determined to be an anomaly, this function will output the whole window as anomaly.
 #' @seealso
-#'     \code{\link{nns_cpp}}
+#'     \code{\link{pred_nnd}}
 #'     \code{\link{kl_fix}}
 #'     \code{\link{kl_dynamic}}
 #' @references

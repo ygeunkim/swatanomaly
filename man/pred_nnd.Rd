@@ -4,7 +4,7 @@
 \alias{pred_nnd}
 \title{Compute NND for Online Data-set}
 \usage{
-pred_nnd(data, newdata, win, jump, d, display_progress = FALSE)
+pred_nnd(data, newdata, win, jump, display_progress = FALSE)
 }
 \arguments{
 \item{data}{NumericMatrix. original data set.}
@@ -14,8 +14,6 @@ pred_nnd(data, newdata, win, jump, d, display_progress = FALSE)
 \item{win}{int. window size.}
 
 \item{jump}{int. shift size.}
-
-\item{d}{Function. distance function. By default, \code{\link{compute_euc}}. Arguments must be two matrices and the output double.}
 
 \item{display_progress}{If TRUE, display a progress bar. By default, FALSE.}
 }

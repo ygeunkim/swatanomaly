@@ -4,29 +4,34 @@
 \alias{nnd_thr}
 \title{NND pdf Threshold}
 \usage{
-nnd_thr(data, part_size, prob, display_progress = FALSE)
+nnd_thr(data, part_size, win_size, jump_size, prob,
+  display_progress = FALSE)
 }
 \arguments{
 \item{data}{NumericMatrix multivariate data set}
 
-\item{part_size}{partition for \code{\link{euc_pdf}}}
+\item{part_size}{part for \code{\link{nnd_normal}}}
+
+\item{win_size}{win for \code{\link{nnd_normal}}}
+
+\item{jump_size}{jump for \code{\link{nnd_normal}}}
 
 \item{prob}{probability for quantile. See \link[stats]{quantile.default}.}
 
 \item{display_progress}{If TRUE, display a progress bar. By default, FALSE.}
 }
 \value{
-double quantile value for the result of \code{\link{euc_pdf}}
+double quantile value for the result of \code{\link{nnd_normal}}
 }
 \description{
-This function computes threshold using \code{\link{euc_pdf}}
+This function computes threshold using \code{\link{nnd_normal}}
 }
 \details{
 Sometimes you might use NND pdf for threshold.
 Threshold is a tail of pdf, e.g. 0.99.
 }
 \seealso{
-\code{\link{euc_pdf}}
+\code{\link{nnd_normal}}
    \link[stats]{quantile.default}
    \code{\link{detect_anomaly}}
 }

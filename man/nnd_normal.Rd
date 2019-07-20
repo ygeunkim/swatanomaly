@@ -4,7 +4,7 @@
 \alias{nnd_normal}
 \title{Compute NND of normal data given window distance function}
 \usage{
-nnd_normal(data, part, win, jump, d, display_progress = FALSE)
+nnd_normal(data, part, win, jump, display_progress = FALSE)
 }
 \arguments{
 \item{data}{NumericMatrix. data to be calculated NND.}
@@ -14,8 +14,6 @@ nnd_normal(data, part, win, jump, d, display_progress = FALSE)
 \item{win}{int. window size.}
 
 \item{jump}{int. shift size.}
-
-\item{d}{Function. distance function. By default, \code{\link{compute_euc}}. Arguments must be two matrices and the output double.}
 
 \item{display_progress}{If TRUE, display a progress bar. By default, FALSE.}
 }

@@ -3,8 +3,6 @@
 
 double sum_sq(NumericVector x);
 
-double compute_euc(NumericMatrix x, NumericMatrix y);
-
 NumericMatrix row_erase(NumericMatrix x, IntegerVector rowID);
 
 IntegerVector seq_rcpp(int from, int to);

@@ -1,7 +1,11 @@
 #include <Rcpp.h>
 #include <progress.hpp>
 using namespace Rcpp;
+#include <iostream>
+#include <functional>
+#include <type_traits>
 #include "misc.h"
+#include "distnnd.h"
 
 //' Sliding window for NND
 //'
@@ -13,7 +17,6 @@ using namespace Rcpp;
 //' @param jump int. shift size.
 //' @param partition NumericVector. indices that can indicate partitions.
 //' @param base_id int. An index of chosen partition among partiton vector.
-//' @param d Function. distance function.
 //' @return NumericVector. NND vector for each window in the chosen partition.
 //' @seealso
 //'     \code{\link{nnd_normal}}
@@ -27,8 +30,7 @@ NumericVector partnnd(
   int win,
   int jump,
   NumericVector partition,
-  int base_id,
-  Rcpp::Function d
+  int base_id
 ) {
   IntegerVector id = seq_len(data.nrow()) - 1;
   IntegerVector x_id = id[partition == base_id];
@@ -49,8 +51,12 @@ NumericVector partnnd(
 
   for (int i = 0; i < x_win; i++) {
     for (int j = 0; j < y_win; j++) {
-      y_nnd[j] = as<double>( d(sub_mat(x, seq(i * jump, i * jump + win - 1), seq_len(px) - 1),
-                               sub_mat(y, seq(j * jump, j * jump + win - 1), seq_len(px) - 1)) );
+      // y_nnd[j] = as<double>( d(sub_mat(x, seq(i * jump, i * jump + win - 1), seq_len(px) - 1),
+      //                          sub_mat(y, seq(j * jump, j * jump + win - 1), seq_len(px) - 1)) );
+      // y_nnd[j] = d(sub_mat(x, seq(i * jump, i * jump + win - 1), seq_len(px) - 1),
+      //                          sub_mat(y, seq(j * jump, j * jump + win - 1), seq_len(px) - 1));
+      y_nnd[j] = compute_euc(sub_mat(x, seq(i * jump, i * jump + win - 1), seq_len(px) - 1),
+                             sub_mat(y, seq(j * jump, j * jump + win - 1), seq_len(px) - 1));
     }
     x_nnd[i] = min(y_nnd);
   }
@@ -66,7 +72,6 @@ NumericVector partnnd(
 //' @param part int. the number of partition.
 //' @param win int. window size.
 //' @param jump int. shift size.
-//' @param d Function. distance function. By default, \code{\link{compute_euc}}. Arguments must be two matrices and the output double.
 //' @param display_progress If TRUE, display a progress bar. By default, FALSE.
 //' @return NumericVector. NND for each window. Its size is affected by "jump".
 //' @details
@@ -86,7 +91,6 @@ NumericVector nnd_normal(
   int part,
   int win,
   int jump,
-  Rcpp::Function d,
   bool display_progress = false
 ) {
   int n = data.nrow();
@@ -114,10 +118,9 @@ NumericVector nnd_normal(
 
   for (int i = 0; i < (part - 1); i++) {
     p.increment();
-    nnd[Range(i * win_num, (i + 1) * win_num - 1)] = as<NumericVector>(partnnd(data, win, jump, idy, i, d));
+    nnd[Range(i * win_num, (i + 1) * win_num - 1)] = as<NumericVector>(partnnd(data, win, jump, idy, i));
   }
-
-  nnd[Range(nnd.size() - win_last, nnd.size() - 1)] = as<NumericVector>(partnnd(data, win, jump, idy, part, d));
+  nnd[Range(nnd.size() - win_last, nnd.size() - 1)] = as<NumericVector>(partnnd(data, win, jump, idy, part));
 
   return nnd;
 }
@@ -130,7 +133,6 @@ NumericVector nnd_normal(
 //' @param newdata NumericMatrix. updated data set.
 //' @param win int. window size.
 //' @param jump int. shift size.
-//' @param d Function. distance function. By default, \code{\link{compute_euc}}. Arguments must be two matrices and the output double.
 //' @param display_progress If TRUE, display a progress bar. By default, FALSE.
 //' @return NumericVector. NND for each window.
 //' @details
@@ -146,7 +148,6 @@ NumericVector pred_nnd(
   NumericMatrix newdata,
   int win,
   int jump,
-  Function d,
   bool display_progress = false
 ) {
   int n = data.nrow();
@@ -161,7 +162,7 @@ NumericVector pred_nnd(
 
   for (int i = 0; i < new_win; i++) {
     dat_new = rbind_mat(data, newdata(Range(i * jump, i * jump + win - 1), _));
-    nnd_new[i] = as<double>(partnnd(dat_new, win, jump, id, rep(1, win), d));
+    nnd_new[i] = as<double>(partnnd(dat_new, win, jump, id, rep(1, win)));
   }
 
   return nnd_new;

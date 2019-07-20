@@ -5,6 +5,18 @@
 
 using namespace Rcpp;
 
+// compute_euc
+double compute_euc(NumericMatrix x, NumericMatrix y);
+RcppExport SEXP _swatanomaly_compute_euc(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_euc(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
 // detect
 LogicalVector detect(NumericVector y, int win, int jump, double thr);
 RcppExport SEXP _swatanomaly_detect(SEXP ySEXP, SEXP winSEXP, SEXP jumpSEXP, SEXP thrSEXP) {
@@ -131,18 +143,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// compute_euc
-double compute_euc(NumericMatrix x, NumericMatrix y);
-RcppExport SEXP _swatanomaly_compute_euc(SEXP xSEXP, SEXP ySEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type y(ySEXP);
-    rcpp_result_gen = Rcpp::wrap(compute_euc(x, y));
-    return rcpp_result_gen;
-END_RCPP
-}
 // row_erase
 NumericMatrix row_erase(NumericMatrix x, IntegerVector rowID);
 RcppExport SEXP _swatanomaly_row_erase(SEXP xSEXP, SEXP rowIDSEXP) {
@@ -205,8 +205,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // partnnd
-NumericVector partnnd(NumericMatrix data, int win, int jump, NumericVector partition, int base_id, Rcpp::Function d);
-RcppExport SEXP _swatanomaly_partnnd(SEXP dataSEXP, SEXP winSEXP, SEXP jumpSEXP, SEXP partitionSEXP, SEXP base_idSEXP, SEXP dSEXP) {
+NumericVector partnnd(NumericMatrix data, int win, int jump, NumericVector partition, int base_id);
+RcppExport SEXP _swatanomaly_partnnd(SEXP dataSEXP, SEXP winSEXP, SEXP jumpSEXP, SEXP partitionSEXP, SEXP base_idSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -215,14 +215,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type jump(jumpSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type partition(partitionSEXP);
     Rcpp::traits::input_parameter< int >::type base_id(base_idSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Function >::type d(dSEXP);
-    rcpp_result_gen = Rcpp::wrap(partnnd(data, win, jump, partition, base_id, d));
+    rcpp_result_gen = Rcpp::wrap(partnnd(data, win, jump, partition, base_id));
     return rcpp_result_gen;
 END_RCPP
 }
 // nnd_normal
-NumericVector nnd_normal(NumericMatrix data, int part, int win, int jump, Rcpp::Function d, bool display_progress);
-RcppExport SEXP _swatanomaly_nnd_normal(SEXP dataSEXP, SEXP partSEXP, SEXP winSEXP, SEXP jumpSEXP, SEXP dSEXP, SEXP display_progressSEXP) {
+NumericVector nnd_normal(NumericMatrix data, int part, int win, int jump, bool display_progress);
+RcppExport SEXP _swatanomaly_nnd_normal(SEXP dataSEXP, SEXP partSEXP, SEXP winSEXP, SEXP jumpSEXP, SEXP display_progressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -230,15 +229,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type part(partSEXP);
     Rcpp::traits::input_parameter< int >::type win(winSEXP);
     Rcpp::traits::input_parameter< int >::type jump(jumpSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Function >::type d(dSEXP);
     Rcpp::traits::input_parameter< bool >::type display_progress(display_progressSEXP);
-    rcpp_result_gen = Rcpp::wrap(nnd_normal(data, part, win, jump, d, display_progress));
+    rcpp_result_gen = Rcpp::wrap(nnd_normal(data, part, win, jump, display_progress));
     return rcpp_result_gen;
 END_RCPP
 }
 // pred_nnd
-NumericVector pred_nnd(NumericMatrix data, NumericMatrix newdata, int win, int jump, Function d, bool display_progress);
-RcppExport SEXP _swatanomaly_pred_nnd(SEXP dataSEXP, SEXP newdataSEXP, SEXP winSEXP, SEXP jumpSEXP, SEXP dSEXP, SEXP display_progressSEXP) {
+NumericVector pred_nnd(NumericMatrix data, NumericMatrix newdata, int win, int jump, bool display_progress);
+RcppExport SEXP _swatanomaly_pred_nnd(SEXP dataSEXP, SEXP newdataSEXP, SEXP winSEXP, SEXP jumpSEXP, SEXP display_progressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -246,14 +244,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericMatrix >::type newdata(newdataSEXP);
     Rcpp::traits::input_parameter< int >::type win(winSEXP);
     Rcpp::traits::input_parameter< int >::type jump(jumpSEXP);
-    Rcpp::traits::input_parameter< Function >::type d(dSEXP);
     Rcpp::traits::input_parameter< bool >::type display_progress(display_progressSEXP);
-    rcpp_result_gen = Rcpp::wrap(pred_nnd(data, newdata, win, jump, d, display_progress));
+    rcpp_result_gen = Rcpp::wrap(pred_nnd(data, newdata, win, jump, display_progress));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_swatanomaly_compute_euc", (DL_FUNC) &_swatanomaly_compute_euc, 2},
     {"_swatanomaly_detect", (DL_FUNC) &_swatanomaly_detect, 4},
     {"_swatanomaly_expand_label", (DL_FUNC) &_swatanomaly_expand_label, 2},
     {"_swatanomaly_aggregate_mts", (DL_FUNC) &_swatanomaly_aggregate_mts, 1},
@@ -264,15 +262,14 @@ static const R_CallMethodDef CallEntries[] = {
     {"_swatanomaly_kl_dynamic", (DL_FUNC) &_swatanomaly_kl_dynamic, 6},
     {"_swatanomaly_match_kl", (DL_FUNC) &_swatanomaly_match_kl, 2},
     {"_swatanomaly_sum_sq", (DL_FUNC) &_swatanomaly_sum_sq, 1},
-    {"_swatanomaly_compute_euc", (DL_FUNC) &_swatanomaly_compute_euc, 2},
     {"_swatanomaly_row_erase", (DL_FUNC) &_swatanomaly_row_erase, 2},
     {"_swatanomaly_seq_rcpp", (DL_FUNC) &_swatanomaly_seq_rcpp, 2},
     {"_swatanomaly_sub_mat", (DL_FUNC) &_swatanomaly_sub_mat, 3},
     {"_swatanomaly_rep_bool", (DL_FUNC) &_swatanomaly_rep_bool, 2},
     {"_swatanomaly_rbind_mat", (DL_FUNC) &_swatanomaly_rbind_mat, 2},
-    {"_swatanomaly_partnnd", (DL_FUNC) &_swatanomaly_partnnd, 6},
-    {"_swatanomaly_nnd_normal", (DL_FUNC) &_swatanomaly_nnd_normal, 6},
-    {"_swatanomaly_pred_nnd", (DL_FUNC) &_swatanomaly_pred_nnd, 6},
+    {"_swatanomaly_partnnd", (DL_FUNC) &_swatanomaly_partnnd, 5},
+    {"_swatanomaly_nnd_normal", (DL_FUNC) &_swatanomaly_nnd_normal, 5},
+    {"_swatanomaly_pred_nnd", (DL_FUNC) &_swatanomaly_pred_nnd, 5},
     {NULL, NULL, 0}
 };
 
