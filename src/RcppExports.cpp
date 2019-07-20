@@ -168,14 +168,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // sub_mat
-NumericMatrix sub_mat(NumericMatrix x, NumericVector row, NumericVector col);
+NumericMatrix sub_mat(NumericMatrix x, IntegerVector row, IntegerVector col);
 RcppExport SEXP _swatanomaly_sub_mat(SEXP xSEXP, SEXP rowSEXP, SEXP colSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type row(rowSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type col(colSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type row(rowSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type col(colSEXP);
     rcpp_result_gen = Rcpp::wrap(sub_mat(x, row, col));
     return rcpp_result_gen;
 END_RCPP
@@ -205,7 +205,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // partnnd
-NumericVector partnnd(NumericMatrix data, int win, int jump, NumericVector partition, int base_id, Function d);
+NumericVector partnnd(NumericMatrix data, int win, int jump, NumericVector partition, int base_id, Rcpp::Function d);
 RcppExport SEXP _swatanomaly_partnnd(SEXP dataSEXP, SEXP winSEXP, SEXP jumpSEXP, SEXP partitionSEXP, SEXP base_idSEXP, SEXP dSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -215,13 +215,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type jump(jumpSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type partition(partitionSEXP);
     Rcpp::traits::input_parameter< int >::type base_id(base_idSEXP);
-    Rcpp::traits::input_parameter< Function >::type d(dSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Function >::type d(dSEXP);
     rcpp_result_gen = Rcpp::wrap(partnnd(data, win, jump, partition, base_id, d));
     return rcpp_result_gen;
 END_RCPP
 }
 // nnd_normal
-NumericVector nnd_normal(NumericMatrix data, int part, int win, int jump, Function d, bool display_progress);
+NumericVector nnd_normal(NumericMatrix data, int part, int win, int jump, Rcpp::Function d, bool display_progress);
 RcppExport SEXP _swatanomaly_nnd_normal(SEXP dataSEXP, SEXP partSEXP, SEXP winSEXP, SEXP jumpSEXP, SEXP dSEXP, SEXP display_progressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -230,7 +230,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type part(partSEXP);
     Rcpp::traits::input_parameter< int >::type win(winSEXP);
     Rcpp::traits::input_parameter< int >::type jump(jumpSEXP);
-    Rcpp::traits::input_parameter< Function >::type d(dSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Function >::type d(dSEXP);
     Rcpp::traits::input_parameter< bool >::type display_progress(display_progressSEXP);
     rcpp_result_gen = Rcpp::wrap(nnd_normal(data, part, win, jump, d, display_progress));
     return rcpp_result_gen;

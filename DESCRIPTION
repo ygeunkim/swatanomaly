@@ -1,7 +1,7 @@
 Package: swatanomaly
 Type: Package
 Title: Various algorithms for anomaly detection
-Version: 0.1.0
+Version: 1.0.0
 Author: person("Young-geun", "Kim", email = "dudrmshub@gmail.com", role = c("aut", "cre"))
 Maintainer: Young-geun Kim <dudrms33@g.skku.edu>
 Description: Provides some algorithms used by NSR anomaly detection projects.

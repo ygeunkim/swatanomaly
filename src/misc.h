@@ -9,7 +9,7 @@ NumericMatrix row_erase(NumericMatrix x, IntegerVector rowID);
 
 IntegerVector seq_rcpp(int from, int to);
 
-NumericMatrix sub_mat(NumericMatrix x, NumericVector row, NumericVector col);
+NumericMatrix sub_mat(NumericMatrix x, IntegerVector row, IntegerVector col);
 
 LogicalVector rep_bool(bool x, int n);
 

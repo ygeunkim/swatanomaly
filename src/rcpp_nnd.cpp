@@ -28,23 +28,29 @@ NumericVector partnnd(
   int jump,
   NumericVector partition,
   int base_id,
-  Function d
+  Rcpp::Function d
 ) {
-  NumericVector x_id = partition[partition == base_id];
-  NumericVector y_id = partition[partition != base_id];
+  IntegerVector id = seq_len(data.nrow()) - 1;
+  IntegerVector x_id = id[partition == base_id];
+  IntegerVector y_id = id[partition != base_id];
+
+  int px = data.ncol();
+
+  NumericMatrix x(x_id.size(), px);
+  NumericMatrix y(y_id.size(), px);
+
+  x = sub_mat(data, x_id, seq_len(px) - 1);
+  y = sub_mat(data, y_id, seq_len(px) - 1);
 
   int x_win = (x_id.size() - win) / jump + 1;
   NumericVector x_nnd(x_win);
-
   int y_win = (y_id.size() - win) / jump + 1;
   NumericVector y_nnd(y_win);
 
-  NumericMatrix x(x_id.size(), data.ncol());
-  NumericMatrix y(y_id.size(), data.ncol());
-
   for (int i = 0; i < x_win; i++) {
     for (int j = 0; j < y_win; j++) {
-      y_nnd[j] = as<double>(d(x(Range(i * jump, i * jump + win - 1), _), y(Range(j * jump, j * jump + win - 1), _)));
+      y_nnd[j] = as<double>( d(sub_mat(x, seq(i * jump, i * jump + win - 1), seq_len(px) - 1),
+                               sub_mat(y, seq(j * jump, j * jump + win - 1), seq_len(px) - 1)) );
     }
     x_nnd[i] = min(y_nnd);
   }
@@ -80,29 +86,38 @@ NumericVector nnd_normal(
   int part,
   int win,
   int jump,
-  Function d,
+  Rcpp::Function d,
   bool display_progress = false
 ) {
   int n = data.nrow();
   int part_num = n / part;
   int part_rem = n % part;
 
+  Progress p(part - 1, display_progress);
+
   NumericMatrix x(win, data.ncol()); // window
   NumericMatrix y(win, data.ncol()); // versus window
 
-  Progress p(part, display_progress);
-
   IntegerVector id = seq_len(part) - 1;
   IntegerVector idx = rep_each(id, part_num); // partition index
+
   IntegerVector idy(idx.size() + part_rem);
   idy[Range(0, idx.size() - 1)] = idx;
   if (part_rem != 0)
-    idy[Range(idx.size(), idx.size() + part_rem - 1)] = rep(part - 1, part_rem);
+    idy[Range(idx.size(), idy.size() - 1)] = rep(part - 1, part_rem);
 
-  NumericVector nnd(idy.size());
+  int win_num = (part_num - win) / jump + 1; // window in partition
+  int win_last = (part_num + part_rem - win) / jump + 1; // window in last partition
 
-  for (int i = 0; i < part; i++)
-    nnd[Range(i * jump, i * jump + win - 1)] = partnnd(data, win, jump, idy, i, d);
+  NumericVector nnd(win_num * (part_num - 1) + win_last);
+  Function partnnd("partnnd");
+
+  for (int i = 0; i < (part - 1); i++) {
+    p.increment();
+    nnd[Range(i * win_num, (i + 1) * win_num - 1)] = as<NumericVector>(partnnd(data, win, jump, idy, i, d));
+  }
+
+  nnd[Range(nnd.size() - win_last, nnd.size() - 1)] = as<NumericVector>(partnnd(data, win, jump, idy, part, d));
 
   return nnd;
 }
@@ -138,6 +153,7 @@ NumericVector pred_nnd(
   int new_win = (newdata.nrow() - win) / jump + 1;
   NumericMatrix dat_new(n + win, data.ncol());
   NumericVector nnd_new(new_win);
+  Function partnnd("partnnd");
 
   IntegerVector id(n + win);
   id[Range(0, n - 1)] = rep(0, n);

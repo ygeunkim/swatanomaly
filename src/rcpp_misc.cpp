@@ -117,7 +117,7 @@ IntegerVector seq_rcpp(int from, int to) {
 }
 
 // [[Rcpp::export]]
-NumericMatrix sub_mat(NumericMatrix x, NumericVector row, NumericVector col) {
+NumericMatrix sub_mat(NumericMatrix x, IntegerVector row, IntegerVector col) {
   NumericMatrix y(row.size(), col.size());
 
   for (int r = 0; r < row.size(); r++) {
