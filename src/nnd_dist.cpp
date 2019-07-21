@@ -26,16 +26,16 @@ double compute_euc(NumericMatrix x, NumericMatrix y) {
   double dist = 0;
 
   if (win != y.nrow())
-    stop("x and y should have same column number");
+    stop("x and y should have same row number");
 
   if (px != y.ncol())
-    stop("x and y should have same row number");
+    stop("x and y should have same column number");
 
   NumericVector l2(win * px);
 
   for (int i = 0; i < win; i++) {
     for (int j = 0; j < px; j++) {
-      l2[i * win + j] = pow(x(i, j) - y(i, j), 2);
+      l2[i * px + j] = pow(x(i, j) - y(i, j), 2);
     }
   }
 

@@ -266,8 +266,8 @@ rbind_mat <- function(x, y) {
 #' @param data NumericMatrix. data to be calculated NND.
 #' @param win int. window size.
 #' @param jump int. shift size.
-#' @param partition NumericVector. indices that can indicate partitions.
-#' @param base_id int. An index of chosen partition among partiton vector.
+#' @param from int. First index of chosen partition.
+#' @param to int. Last index of chosen partition.
 #' @return NumericVector. NND vector for each window in the chosen partition.
 #' @seealso
 #'     \code{\link{nnd_normal}}
@@ -275,8 +275,8 @@ rbind_mat <- function(x, y) {
 #' @useDynLib swatanomaly
 #' @importFrom Rcpp sourceCpp
 #' @export
-partnnd <- function(data, win, jump, partition, base_id) {
-    .Call('_swatanomaly_partnnd', PACKAGE = 'swatanomaly', data, win, jump, partition, base_id)
+partnnd <- function(data, win, jump, from, to) {
+    .Call('_swatanomaly_partnnd', PACKAGE = 'swatanomaly', data, win, jump, from, to)
 }
 
 #' Compute NND of normal data given window distance function

@@ -205,17 +205,17 @@ BEGIN_RCPP
 END_RCPP
 }
 // partnnd
-NumericVector partnnd(NumericMatrix data, int win, int jump, NumericVector partition, int base_id);
-RcppExport SEXP _swatanomaly_partnnd(SEXP dataSEXP, SEXP winSEXP, SEXP jumpSEXP, SEXP partitionSEXP, SEXP base_idSEXP) {
+NumericVector partnnd(NumericMatrix data, int win, int jump, int from, int to);
+RcppExport SEXP _swatanomaly_partnnd(SEXP dataSEXP, SEXP winSEXP, SEXP jumpSEXP, SEXP fromSEXP, SEXP toSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericMatrix >::type data(dataSEXP);
     Rcpp::traits::input_parameter< int >::type win(winSEXP);
     Rcpp::traits::input_parameter< int >::type jump(jumpSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type partition(partitionSEXP);
-    Rcpp::traits::input_parameter< int >::type base_id(base_idSEXP);
-    rcpp_result_gen = Rcpp::wrap(partnnd(data, win, jump, partition, base_id));
+    Rcpp::traits::input_parameter< int >::type from(fromSEXP);
+    Rcpp::traits::input_parameter< int >::type to(toSEXP);
+    rcpp_result_gen = Rcpp::wrap(partnnd(data, win, jump, from, to));
     return rcpp_result_gen;
 END_RCPP
 }
