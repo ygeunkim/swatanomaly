@@ -1,6 +1,7 @@
 #include <Rcpp.h>
 #include <progress.hpp>
 using namespace Rcpp;
+#include "misc.h"
 
 //' Aggregate Multivariate Time Series for K-L divergence
 //'
@@ -329,3 +330,103 @@ LogicalVector match_kl(LogicalVector d, int win) {
 
   return x;
 }
+
+//' Online KL Algorithm
+//'
+//' @description
+//' This function implement Dynamic lambda algorithm by online.
+//' @param x NumericVector. univariate data set that consits of non-anomaly.
+//' @param newx NumericVector. univariate data set that has possibility of anomaly.
+//' @param win int window size.
+//' @param jump int jump size for sliding window.
+//' @param lambda_p double initializing lambda_p for the threshold.
+//' @param eps double initializing epsilon for the threshold.
+//' @param display_progress If TRUE, display a progress bar. By default, FALSE.
+//' @return List,
+//' First element is kl divergence named divergence.
+//' Second element is threshold (lambda) for detecting anomaly named threshold.
+//' @details
+//' This is an online version for dynamic lambda algorithm.
+//' In this setting, normal data set is given. We keep updating new data set that has possibility of anomaly.
+//' This function tries to detect anomaly in this updated set.
+//' First, estimate kernel in the normal set.
+//' Next, estimate kernel in the first window of new data set.
+//' Compute the KL and see if the window is anomaly.
+//' If it is normal, estimate kernel in the normal set including the first window.
+//' Otherwise, just keep the former kernel.
+//' Compute the KL from second window and see if this window is anomaly.
+//' Repeat this procedure while updating lambda.
+//' @seealso
+//'    \link[stats]{density.default}
+//'     \code{\link{est_density}}
+//'     \code{\link{density_cpp}}
+//'     \code{\link{compute_kl}}
+//'     \code{\link{kl_dynamic}}
+//' @references Cho, J., Tariq, S., Lee, S., Kim, Y. G., & Woo, S. (2019). \emph{Contextual Anomaly Detection by Correlated Probability Distributions using Kullback-Leibler Divergence}. Workshop on Mining and Learning From Time Series. \url{http://doi.org/10.1145/nnnnnnn.nnnnnnn}
+//' @useDynLib swatanomaly
+//' @importFrom Rcpp sourceCpp
+//' @export
+// [[Rcpp::export]]
+List kl_online(
+  NumericVector x,
+  NumericVector newx,
+  int win,
+  int jump,
+  double lambda_p,
+  double eps,
+  bool display_progress
+) {
+  int n = x.size();
+  int n_new = newx.size();
+  int win_num = (n - win) / jump + 1;
+  int win_new = (n_new - win) / jump + 1;
+
+  NumericMatrix f1(512, 2);
+  NumericMatrix f2(512, 2);
+
+  // double lambda = lambda_p * eps;
+  NumericVector lambda = rep(lambda_p * eps, win_new);
+  // double kl_s = 0;
+
+  Progress p(win_num - 1, display_progress);
+
+  NumericVector kl(win_new);
+  LogicalVector anomaly(win_new);
+  NumericVector normal_win(n + n_new);
+  normal_win[Range(0, n - 1)] = x;
+  normal_win[Range(n, n + n_new - 1)] = newx;
+  int test = 0;
+
+  // i = 1
+  f1 = density_cpp(normal_win[Range(0, n - 1)]);
+  f2 = density_cpp(newx[Range(0, win - 1)]);
+  kl[0] = compute_kl(f1, f2);
+  anomaly[0] = kl[0] > lambda[0];
+
+  for(int i = 1; i < win_new; i++) {
+
+    if (Progress::check_abort())
+      return -1.0;
+
+    p.increment();
+
+    if (!anomaly[i - 1]) {
+      normal_win[Range(n + test * win, n + test * win + win - 1)] = newx[Range((i - 1) * jump, (i - 1) * jump + win - 1)];
+      f1 = density_cpp(normal_win[Range(0, n + test * win + win - 1)]);
+      test++;
+    }
+
+    if (kl[i - 1] < lambda[i - 1])
+      lambda[Range(i, win_new)] = rep(lambda_p * (kl[i - 2] + eps), win_new - i + 1);
+
+    f2 = density_cpp(newx[Range(i * jump, i * jump + win - 1)]);
+    kl[i] = compute_kl(f1, f2);
+    anomaly[i] = kl[i] > lambda[i];
+  }
+
+  List kl_alg = List::create(Named("divergence") = kl, Named("threshold") = lambda, Named("anomaly") = anomaly);
+
+  return kl_alg;
+}
+
+

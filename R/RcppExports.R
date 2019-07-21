@@ -205,6 +205,45 @@ match_kl <- function(d, win) {
     .Call('_swatanomaly_match_kl', PACKAGE = 'swatanomaly', d, win)
 }
 
+#' Online KL Algorithm
+#'
+#' @description
+#' This function implement Dynamic lambda algorithm by online.
+#' @param x NumericVector. univariate data set that consits of non-anomaly.
+#' @param newx NumericVector. univariate data set that has possibility of anomaly.
+#' @param win int window size.
+#' @param jump int jump size for sliding window.
+#' @param lambda_p double initializing lambda_p for the threshold.
+#' @param eps double initializing epsilon for the threshold.
+#' @param display_progress If TRUE, display a progress bar. By default, FALSE.
+#' @return List,
+#' First element is kl divergence named divergence.
+#' Second element is threshold (lambda) for detecting anomaly named threshold.
+#' @details
+#' This is an online version for dynamic lambda algorithm.
+#' In this setting, normal data set is given. We keep updating new data set that has possibility of anomaly.
+#' This function tries to detect anomaly in this updated set.
+#' First, estimate kernel in the normal set.
+#' Next, estimate kernel in the first window of new data set.
+#' Compute the KL and see if the window is anomaly.
+#' If it is normal, estimate kernel in the normal set including the first window.
+#' Otherwise, just keep the former kernel.
+#' Compute the KL from second window and see if this window is anomaly.
+#' Repeat this procedure while updating lambda.
+#' @seealso
+#'    \link[stats]{density.default}
+#'     \code{\link{est_density}}
+#'     \code{\link{density_cpp}}
+#'     \code{\link{compute_kl}}
+#'     \code{\link{kl_dynamic}}
+#' @references Cho, J., Tariq, S., Lee, S., Kim, Y. G., & Woo, S. (2019). \emph{Contextual Anomaly Detection by Correlated Probability Distributions using Kullback-Leibler Divergence}. Workshop on Mining and Learning From Time Series. \url{http://doi.org/10.1145/nnnnnnn.nnnnnnn}
+#' @useDynLib swatanomaly
+#' @importFrom Rcpp sourceCpp
+#' @export
+kl_online <- function(x, newx, win, jump, lambda_p, eps, display_progress) {
+    .Call('_swatanomaly_kl_online', PACKAGE = 'swatanomaly', x, newx, win, jump, lambda_p, eps, display_progress)
+}
+
 #' Sums of squares in C++
 #'
 #' @description Compute a SS in C++
@@ -256,6 +295,10 @@ rep_bool <- function(x, n) {
 
 rbind_mat <- function(x, y) {
     .Call('_swatanomaly_rbind_mat', PACKAGE = 'swatanomaly', x, y)
+}
+
+concat_vec <- function(x, y) {
+    .Call('_swatanomaly_concat_vec', PACKAGE = 'swatanomaly', x, y)
 }
 
 #' Sliding window for NND

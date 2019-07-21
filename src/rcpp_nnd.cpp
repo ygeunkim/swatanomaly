@@ -31,11 +31,7 @@ NumericVector partnnd(
   int to
 ) {
   IntegerVector id = seq_len(data.nrow()) - 1;
-  // IntegerVector base = seq(from, to);
-
-  // IntegerVector x_id = id[id == base];
   IntegerVector x_id = id[id >= from & id <= to];
-  // IntegerVector y_id = id[id != base];
   IntegerVector y_id = id[id < from | id > to];
 
   int px = data.ncol();
@@ -102,7 +98,6 @@ NumericVector nnd_normal(
   int win_last = (part_num + part_rem - win) / jump + 1; // window in last partition
 
   NumericVector nnd(win_num * (part - 1) + win_last);
-  // Function partnnd("partnnd");
 
   for (int i = 0; i < (part - 1); i++) {
     if (Progress::check_abort())
@@ -152,8 +147,6 @@ NumericVector pred_nnd(
   NumericVector nnd_new(new_win);
 
   Progress p(new_win, display_progress);
-
-  // Function partnnd("partnnd");
 
   int start = n;
   int end = n + win - 1;

@@ -112,6 +112,17 @@ NumericMatrix rbind_mat(NumericMatrix x, NumericMatrix y) {
   return out;
 }
 
+// [[Rcpp::export]]
+NumericVector concat_vec(NumericVector x, NumericVector y) {
+  int nx = x.size();
+  int ny = y.size();
+  NumericVector out(nx + ny);
+
+  out[Range(0, nx - 1)] = x;
+  out[Range(nx, ny - 1)] = y;
+
+  return out;
+}
 
 
 

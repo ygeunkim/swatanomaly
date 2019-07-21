@@ -132,6 +132,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// kl_online
+List kl_online(NumericVector x, NumericVector newx, int win, int jump, double lambda_p, double eps, bool display_progress);
+RcppExport SEXP _swatanomaly_kl_online(SEXP xSEXP, SEXP newxSEXP, SEXP winSEXP, SEXP jumpSEXP, SEXP lambda_pSEXP, SEXP epsSEXP, SEXP display_progressSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type newx(newxSEXP);
+    Rcpp::traits::input_parameter< int >::type win(winSEXP);
+    Rcpp::traits::input_parameter< int >::type jump(jumpSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda_p(lambda_pSEXP);
+    Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
+    Rcpp::traits::input_parameter< bool >::type display_progress(display_progressSEXP);
+    rcpp_result_gen = Rcpp::wrap(kl_online(x, newx, win, jump, lambda_p, eps, display_progress));
+    return rcpp_result_gen;
+END_RCPP
+}
 // sum_sq
 double sum_sq(NumericVector x);
 RcppExport SEXP _swatanomaly_sum_sq(SEXP xSEXP) {
@@ -204,6 +221,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// concat_vec
+NumericVector concat_vec(NumericVector x, NumericVector y);
+RcppExport SEXP _swatanomaly_concat_vec(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(concat_vec(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
 // partnnd
 NumericVector partnnd(NumericMatrix data, int win, int jump, int from, int to);
 RcppExport SEXP _swatanomaly_partnnd(SEXP dataSEXP, SEXP winSEXP, SEXP jumpSEXP, SEXP fromSEXP, SEXP toSEXP) {
@@ -261,12 +290,14 @@ static const R_CallMethodDef CallEntries[] = {
     {"_swatanomaly_kl_fix", (DL_FUNC) &_swatanomaly_kl_fix, 5},
     {"_swatanomaly_kl_dynamic", (DL_FUNC) &_swatanomaly_kl_dynamic, 6},
     {"_swatanomaly_match_kl", (DL_FUNC) &_swatanomaly_match_kl, 2},
+    {"_swatanomaly_kl_online", (DL_FUNC) &_swatanomaly_kl_online, 7},
     {"_swatanomaly_sum_sq", (DL_FUNC) &_swatanomaly_sum_sq, 1},
     {"_swatanomaly_row_erase", (DL_FUNC) &_swatanomaly_row_erase, 2},
     {"_swatanomaly_seq_rcpp", (DL_FUNC) &_swatanomaly_seq_rcpp, 2},
     {"_swatanomaly_sub_mat", (DL_FUNC) &_swatanomaly_sub_mat, 3},
     {"_swatanomaly_rep_bool", (DL_FUNC) &_swatanomaly_rep_bool, 2},
     {"_swatanomaly_rbind_mat", (DL_FUNC) &_swatanomaly_rbind_mat, 2},
+    {"_swatanomaly_concat_vec", (DL_FUNC) &_swatanomaly_concat_vec, 2},
     {"_swatanomaly_partnnd", (DL_FUNC) &_swatanomaly_partnnd, 5},
     {"_swatanomaly_nnd_normal", (DL_FUNC) &_swatanomaly_nnd_normal, 5},
     {"_swatanomaly_pred_nnd", (DL_FUNC) &_swatanomaly_pred_nnd, 5},
