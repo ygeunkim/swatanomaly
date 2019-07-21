@@ -159,7 +159,7 @@ NumericVector pred_nnd(
 
     dat_new = rbind_mat(data,
                         sub_mat(newdata, seq(i * jump, i * jump + win - 1), seq_len(newdata.ncol()) - 1));
-    nnd_new[i] = as<double>(partnnd(dat_new, win, jump, start, end));
+    nnd_new[i] = partnnd(dat_new, win, jump, start, end)[0];
   }
 
   return nnd_new;
