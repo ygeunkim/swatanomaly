@@ -4,7 +4,7 @@
 \alias{kl_online}
 \title{Online KL Algorithm}
 \usage{
-kl_online(x, newx, win, jump, lambda_p, eps, display_progress)
+kl_online(x, newx, win, jump, lambda_p, eps, display_progress = FALSE)
 }
 \arguments{
 \item{x}{NumericVector. univariate data set that consits of non-anomaly.}

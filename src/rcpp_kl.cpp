@@ -374,7 +374,7 @@ List kl_online(
   int jump,
   double lambda_p,
   double eps,
-  bool display_progress
+  bool display_progress = false
 ) {
   int n = x.size();
   int n_new = newx.size();

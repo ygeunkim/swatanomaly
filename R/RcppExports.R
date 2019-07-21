@@ -240,7 +240,7 @@ match_kl <- function(d, win) {
 #' @useDynLib swatanomaly
 #' @importFrom Rcpp sourceCpp
 #' @export
-kl_online <- function(x, newx, win, jump, lambda_p, eps, display_progress) {
+kl_online <- function(x, newx, win, jump, lambda_p, eps, display_progress = FALSE) {
     .Call('_swatanomaly_kl_online', PACKAGE = 'swatanomaly', x, newx, win, jump, lambda_p, eps, display_progress)
 }
 
