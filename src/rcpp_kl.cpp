@@ -378,7 +378,7 @@ List kl_online(
 ) {
   int n = x.size();
   int n_new = newx.size();
-  int win_num = (n - win) / jump + 1;
+  // int win_num = (n - win) / jump + 1;
   int win_new = (n_new - win) / jump + 1;
 
   NumericMatrix f1(512, 2);
@@ -386,15 +386,14 @@ List kl_online(
 
   // double lambda = lambda_p * eps;
   NumericVector lambda = rep(lambda_p * eps, win_new);
-  // double kl_s = 0;
 
-  Progress p(win_num - 1, display_progress);
+  Progress p(win_new - 1, display_progress);
 
   NumericVector kl(win_new);
   LogicalVector anomaly(win_new);
   NumericVector normal_win(n + n_new);
   normal_win[Range(0, n - 1)] = x;
-  normal_win[Range(n, n + n_new - 1)] = newx;
+  // normal_win[Range(n, n + n_new - 1)] = newx;
   int test = 0;
 
   // i = 1
@@ -410,14 +409,14 @@ List kl_online(
 
     p.increment();
 
-    if (!anomaly[i - 1]) {
-      normal_win[Range(n + test * win, n + test * win + win - 1)] = newx[Range((i - 1) * jump, (i - 1) * jump + win - 1)];
-      f1 = density_cpp(normal_win[Range(0, n + test * win + win - 1)]);
+    if (!anomaly[i - 1]) { // when normal
+      normal_win[Range(n + test * jump, n + test * jump + win - 1)] = newx[Range((i - 1) * jump, (i - 1) * jump + win - 1)];
+      f1 = density_cpp(normal_win[Range(0, n + test * jump + win - 1)]);
       test++;
     }
 
     if (kl[i - 1] < lambda[i - 1])
-      lambda[Range(i, win_new)] = rep(lambda_p * (kl[i - 2] + eps), win_new - i + 1);
+      lambda[Range(i, win_new - 1)] = rep(lambda_p * (kl[i - 2] + eps), win_new - i);
 
     f2 = density_cpp(newx[Range(i * jump, i * jump + win - 1)]);
     kl[i] = compute_kl(f1, f2);
