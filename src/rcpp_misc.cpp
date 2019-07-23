@@ -134,19 +134,3 @@ double compute_q7(NumericVector x, double prob) {
   return y[h];
 }
 
-// [[Rcpp::export]]
-double nrd0(NumericVector x) {
-  if (x.size() < 2)
-    stop("need at least 2 data points");
-
-  double hi = sd(x);
-  double lo = std::min(hi, (compute_q7(x, .75) - compute_q7(x, .25)) / 1.34);
-
-  if (lo == 0)
-    (lo = hi) || (lo = abs(x[0])) || (lo = 1);
-
-  return .9 * lo * pow(x.size(), -.2);
-}
-
-
-

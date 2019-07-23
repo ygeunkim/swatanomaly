@@ -244,6 +244,38 @@ kl_online <- function(x, newx, win, jump, lambda_p, eps, display_progress = FALS
     .Call('_swatanomaly_kl_online', PACKAGE = 'swatanomaly', x, newx, win, jump, lambda_p, eps, display_progress)
 }
 
+#' Simple Onlie KL Algorithm
+#'
+#' @description
+#' This function simplifies Online KL algorithm \code{\link{kl_online}}.
+#' @param x NumericVector. univariate data set that consits of non-anomaly.
+#' @param newx NumericVector. univariate data set that has possibility of anomaly.
+#' @param win int window size.
+#' @param jump int jump size for sliding window.
+#' @param lambda_p double initializing lambda_p for the threshold.
+#' @param eps double initializing epsilon for the threshold.
+#' @param display_progress If TRUE, display a progress bar. By default, FALSE.
+#' @return List,
+#' First element is kl divergence named divergence.
+#' Second element is threshold (lambda) for detecting anomaly named threshold.
+#' @details
+#' Unlike \code{\link{kl_online}}, this uses initial normal set for the first non-anomaly density estimation.
+#' The density does not change until the algorithm ends.
+#' @seealso
+#'    \link[stats]{density.default}
+#'     \code{\link{est_density}}
+#'     \code{\link{density_cpp}}
+#'     \code{\link{compute_kl}}
+#'     \code{\link{kl_dynamic}}
+#'     \code{\link{kl_online}}
+#' @references Cho, J., Tariq, S., Lee, S., Kim, Y. G., & Woo, S. (2019). \emph{Contextual Anomaly Detection by Correlated Probability Distributions using Kullback-Leibler Divergence}. Workshop on Mining and Learning From Time Series. \url{http://doi.org/10.1145/nnnnnnn.nnnnnnn}
+#' @useDynLib swatanomaly
+#' @importFrom Rcpp sourceCpp
+#' @export
+kl_faston <- function(x, newx, win, jump, lambda_p, eps, display_progress = FALSE) {
+    .Call('_swatanomaly_kl_faston', PACKAGE = 'swatanomaly', x, newx, win, jump, lambda_p, eps, display_progress)
+}
+
 #' Sums of squares in C++
 #'
 #' @description Compute a SS in C++
@@ -299,6 +331,10 @@ rbind_mat <- function(x, y) {
 
 concat_vec <- function(x, y) {
     .Call('_swatanomaly_concat_vec', PACKAGE = 'swatanomaly', x, y)
+}
+
+compute_q7 <- function(x, prob) {
+    .Call('_swatanomaly_compute_q7', PACKAGE = 'swatanomaly', x, prob)
 }
 
 #' Sliding window for NND

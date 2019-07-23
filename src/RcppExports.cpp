@@ -149,6 +149,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// kl_faston
+List kl_faston(NumericVector x, NumericVector newx, int win, int jump, double lambda_p, double eps, bool display_progress);
+RcppExport SEXP _swatanomaly_kl_faston(SEXP xSEXP, SEXP newxSEXP, SEXP winSEXP, SEXP jumpSEXP, SEXP lambda_pSEXP, SEXP epsSEXP, SEXP display_progressSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type newx(newxSEXP);
+    Rcpp::traits::input_parameter< int >::type win(winSEXP);
+    Rcpp::traits::input_parameter< int >::type jump(jumpSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda_p(lambda_pSEXP);
+    Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
+    Rcpp::traits::input_parameter< bool >::type display_progress(display_progressSEXP);
+    rcpp_result_gen = Rcpp::wrap(kl_faston(x, newx, win, jump, lambda_p, eps, display_progress));
+    return rcpp_result_gen;
+END_RCPP
+}
 // sum_sq
 double sum_sq(NumericVector x);
 RcppExport SEXP _swatanomaly_sum_sq(SEXP xSEXP) {
@@ -233,6 +250,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// compute_q7
+double compute_q7(NumericVector x, double prob);
+RcppExport SEXP _swatanomaly_compute_q7(SEXP xSEXP, SEXP probSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type prob(probSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_q7(x, prob));
+    return rcpp_result_gen;
+END_RCPP
+}
 // partnnd
 NumericVector partnnd(NumericMatrix data, int win, int jump, int from, int to);
 RcppExport SEXP _swatanomaly_partnnd(SEXP dataSEXP, SEXP winSEXP, SEXP jumpSEXP, SEXP fromSEXP, SEXP toSEXP) {
@@ -291,6 +320,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_swatanomaly_kl_dynamic", (DL_FUNC) &_swatanomaly_kl_dynamic, 6},
     {"_swatanomaly_match_kl", (DL_FUNC) &_swatanomaly_match_kl, 2},
     {"_swatanomaly_kl_online", (DL_FUNC) &_swatanomaly_kl_online, 7},
+    {"_swatanomaly_kl_faston", (DL_FUNC) &_swatanomaly_kl_faston, 7},
     {"_swatanomaly_sum_sq", (DL_FUNC) &_swatanomaly_sum_sq, 1},
     {"_swatanomaly_row_erase", (DL_FUNC) &_swatanomaly_row_erase, 2},
     {"_swatanomaly_seq_rcpp", (DL_FUNC) &_swatanomaly_seq_rcpp, 2},
@@ -298,6 +328,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_swatanomaly_rep_bool", (DL_FUNC) &_swatanomaly_rep_bool, 2},
     {"_swatanomaly_rbind_mat", (DL_FUNC) &_swatanomaly_rbind_mat, 2},
     {"_swatanomaly_concat_vec", (DL_FUNC) &_swatanomaly_concat_vec, 2},
+    {"_swatanomaly_compute_q7", (DL_FUNC) &_swatanomaly_compute_q7, 2},
     {"_swatanomaly_partnnd", (DL_FUNC) &_swatanomaly_partnnd, 5},
     {"_swatanomaly_nnd_normal", (DL_FUNC) &_swatanomaly_nnd_normal, 5},
     {"_swatanomaly_pred_nnd", (DL_FUNC) &_swatanomaly_pred_nnd, 5},

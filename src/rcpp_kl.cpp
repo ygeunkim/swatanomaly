@@ -73,56 +73,6 @@ NumericMatrix density_cpp(NumericVector x) {
   return den_xy;
 }
 
-//' Gaussian Kernel Density Estimation using pure Rcpp
-//'
-//' @description
-//' This function computes gaussian density estiamtes, copying \link[stats]{density.default} every default option.
-//' @param x NumericVector. data fro estimation.
-//' @return NumericMatrix of 2 columns.
-//' First column is the n coordinates of the points where the density is estimated (x).
-//' Second column is the estimated density values (y).
-//' @details
-//' Calling \link[stats]{density.default} in Rcpp environment worsens performance.
-//' So this function copies its syntax into Rcpp.
-//' @seealso
-//'    \link[stats]{density.default}
-//'    \code{\link{density_cpp}}
-//'    \code{\link{est_density}}
-//' @useDynLib swatanomaly
-//' @importFrom Rcpp sourceCpp
-//' @export
-// [[Rcpp::export]]
-NumericMatrix est_gauss(NumericVector x) {
-  int n = 512; // number of x at which the density is to be estimated
-  int nx = x.size();
-  int N = x.size();
-  NumericVector weights = rep((double)(1 / nx), nx);
-  double tot_mass = nx / N;
-
-  if (nx < 2)
-    stop("need at least 2 points to select a bandwidth automatically");
-
-  double bw = nrd0(x); // bandwidth
-  if (bw <= 0)
-    stop("'bw' is not positive.");
-
-  double from = min(x) - 3 * bw; // cut = 3
-  double to = max(x) + 3 * bw; // cut = 3
-
-  double lo = from - 4 * bw;
-  double up = to + 4 * bw;
-  int by = 2 * (up - lo) / (2 * n - 1);
-  IntegerVector kords(2 * n);
-  kords[0] = 0;
-  for (int i = 1; i < kords.size(); i++)
-    kords[i] = (i - 1) + by;
-  kords[Range(n + 1, 2 * n - 1)] = -kords[Range(n - 1, 2)]; // use rev?
-  kords = dnorm(kords, sd = bw);
-
-  arma::vec kords_vec(as<arma::vec>(kords));
-
-}
-
 // [[Rcpp::export]]
 int find_support(double x1, NumericVector x2) {
   int x_supp = 0;
@@ -464,6 +414,83 @@ List kl_online(
       f1 = density_cpp(normal_win[Range(0, n + test * jump + win - 1)]);
       test++;
     }
+
+    if (kl[i - 1] < lambda[i - 1])
+      lambda[Range(i, win_new - 1)] = rep(lambda_p * (kl[i - 2] + eps), win_new - i);
+
+    f2 = density_cpp(newx[Range(i * jump, i * jump + win - 1)]);
+    kl[i] = compute_kl(f1, f2);
+    anomaly[i] = kl[i] > lambda[i];
+  }
+
+  List kl_alg = List::create(Named("divergence") = kl, Named("threshold") = lambda, Named("anomaly") = anomaly);
+
+  return kl_alg;
+}
+
+//' Simple Onlie KL Algorithm
+//'
+//' @description
+//' This function simplifies Online KL algorithm \code{\link{kl_online}}.
+//' @param x NumericVector. univariate data set that consits of non-anomaly.
+//' @param newx NumericVector. univariate data set that has possibility of anomaly.
+//' @param win int window size.
+//' @param jump int jump size for sliding window.
+//' @param lambda_p double initializing lambda_p for the threshold.
+//' @param eps double initializing epsilon for the threshold.
+//' @param display_progress If TRUE, display a progress bar. By default, FALSE.
+//' @return List,
+//' First element is kl divergence named divergence.
+//' Second element is threshold (lambda) for detecting anomaly named threshold.
+//' @details
+//' Unlike \code{\link{kl_online}}, this uses initial normal set for the first non-anomaly density estimation.
+//' The density does not change until the algorithm ends.
+//' @seealso
+//'    \link[stats]{density.default}
+//'     \code{\link{est_density}}
+//'     \code{\link{density_cpp}}
+//'     \code{\link{compute_kl}}
+//'     \code{\link{kl_dynamic}}
+//'     \code{\link{kl_online}}
+//' @references Cho, J., Tariq, S., Lee, S., Kim, Y. G., & Woo, S. (2019). \emph{Contextual Anomaly Detection by Correlated Probability Distributions using Kullback-Leibler Divergence}. Workshop on Mining and Learning From Time Series. \url{http://doi.org/10.1145/nnnnnnn.nnnnnnn}
+//' @useDynLib swatanomaly
+//' @importFrom Rcpp sourceCpp
+//' @export
+// [[Rcpp::export]]
+List kl_faston(
+    NumericVector x,
+    NumericVector newx,
+    int win,
+    int jump,
+    double lambda_p,
+    double eps,
+    bool display_progress = false
+) {
+  int n_new = newx.size();
+  int win_new = (n_new - win) / jump + 1;
+
+  NumericMatrix f1(512, 2);
+  NumericMatrix f2(512, 2);
+
+  NumericVector lambda = rep(lambda_p * eps, win_new);
+
+  Progress p(win_new - 1, display_progress);
+
+  NumericVector kl(win_new);
+  LogicalVector anomaly(win_new);
+
+  // i = 1
+  f1 = density_cpp(x);
+  f2 = density_cpp(newx[Range(0, win - 1)]);
+  kl[0] = compute_kl(f1, f2);
+  anomaly[0] = kl[0] > lambda[0];
+
+  for(int i = 1; i < win_new; i++) {
+
+    if (Progress::check_abort())
+      return -1.0;
+
+    p.increment();
 
     if (kl[i - 1] < lambda[i - 1])
       lambda[Range(i, win_new - 1)] = rep(lambda_p * (kl[i - 2] + eps), win_new - i);
