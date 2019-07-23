@@ -15,7 +15,9 @@ Imports:
     RcppProgress (>= 0.4.0),
     dplyr (>= 0.7.8),
     foreach (>= 1.4.0)
+Depends: RcppArmadillo
 LinkingTo:
     Rcpp,
-    RcppProgress
+    RcppProgress,
+    RcppArmadillo
 RoxygenNote: 6.1.1

@@ -73,6 +73,56 @@ NumericMatrix density_cpp(NumericVector x) {
   return den_xy;
 }
 
+//' Gaussian Kernel Density Estimation using pure Rcpp
+//'
+//' @description
+//' This function computes gaussian density estiamtes, copying \link[stats]{density.default} every default option.
+//' @param x NumericVector. data fro estimation.
+//' @return NumericMatrix of 2 columns.
+//' First column is the n coordinates of the points where the density is estimated (x).
+//' Second column is the estimated density values (y).
+//' @details
+//' Calling \link[stats]{density.default} in Rcpp environment worsens performance.
+//' So this function copies its syntax into Rcpp.
+//' @seealso
+//'    \link[stats]{density.default}
+//'    \code{\link{density_cpp}}
+//'    \code{\link{est_density}}
+//' @useDynLib swatanomaly
+//' @importFrom Rcpp sourceCpp
+//' @export
+// [[Rcpp::export]]
+NumericMatrix est_gauss(NumericVector x) {
+  int n = 512; // number of x at which the density is to be estimated
+  int nx = x.size();
+  int N = x.size();
+  NumericVector weights = rep((double)(1 / nx), nx);
+  double tot_mass = nx / N;
+
+  if (nx < 2)
+    stop("need at least 2 points to select a bandwidth automatically");
+
+  double bw = nrd0(x); // bandwidth
+  if (bw <= 0)
+    stop("'bw' is not positive.");
+
+  double from = min(x) - 3 * bw; // cut = 3
+  double to = max(x) + 3 * bw; // cut = 3
+
+  double lo = from - 4 * bw;
+  double up = to + 4 * bw;
+  int by = 2 * (up - lo) / (2 * n - 1);
+  IntegerVector kords(2 * n);
+  kords[0] = 0;
+  for (int i = 1; i < kords.size(); i++)
+    kords[i] = (i - 1) + by;
+  kords[Range(n + 1, 2 * n - 1)] = -kords[Range(n - 1, 2)]; // use rev?
+  kords = dnorm(kords, sd = bw);
+
+  arma::vec kords_vec(as<arma::vec>(kords));
+
+}
+
 // [[Rcpp::export]]
 int find_support(double x1, NumericVector x2) {
   int x_supp = 0;
