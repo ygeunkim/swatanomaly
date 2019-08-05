@@ -6,7 +6,6 @@ project*
 
   - NND (baseline-method): Yun et al. (2018)
   - K-L divergence: Cho et al. (2019)
-  - SOM
 
 ## Installation
 
@@ -18,61 +17,55 @@ devtools::install_github("ygeunkim/swatanomaly")
 library(swatanomaly)
 ```
 
-## Nearest-Neighbor Distance Algorithm
+<!-- ## Nearest-Neighbor Distance Algorithm -->
 
-This algorithm follows k-fold cross-validation construction.
+<!-- This algorithm follows k-fold cross-validation construction. -->
 
-### Windowed NNS
+<!-- ### Windowed NNS -->
 
-| 123456789 | 123456789 | 123456789 | 123456789 | 123456789 |
-| :-------: | :-------: | :-------: | :-------: | :-------: |
-| ooooooooo | ooooooooo | ooooooooo | ooooooooo | ooooooooo |
-| ooooooooo | ooooooooo | ooooooooo | ooooooooo | ooooooooo |
-| ooooooooo | ooooooooo | ooooooooo | ooooooooo | ooooooooo |
+<!-- |123456789|123456789|123456789|123456789|123456789|   -->
 
-As k-fold CV, one fold is validation block and the remainings are
-training. NND is computed versus training. Consider the first block.
-Then we should compute NND of 9 observations, respectively.
+<!-- |:-------:|:-------:|:-------:|:-------:|:-------:|   -->
 
-For each ![i
-\\leftarrow 1](https://latex.codecogs.com/png.latex?i%20%5Cleftarrow%201
-"i \\leftarrow 1") to w(size of the block),
+<!-- |ooooooooo|ooooooooo|ooooooooo|ooooooooo|ooooooooo|   -->
 
-1.  Compute **Euclidean distance** versus every point in the training
-    block.
-2.  Find minimum value of the distance value.
-3.  It is the NND of this observation.
+<!-- |ooooooooo|ooooooooo|ooooooooo|ooooooooo|ooooooooo|   -->
 
-Repeat this process for every block. Here, Euclidean distance for
-multivariate series is computed by
+<!-- |ooooooooo|ooooooooo|ooooooooo|ooooooooo|ooooooooo|   -->
 
-  
-![d(\\mathbf{x}, \\mathbf{y}) = \\sqrt{\\sum\_j^p (x\_j -
-y\_j)^2}](https://latex.codecogs.com/png.latex?d%28%5Cmathbf%7Bx%7D%2C%20%5Cmathbf%7By%7D%29%20%3D%20%5Csqrt%7B%5Csum_j%5Ep%20%28x_j%20-%20y_j%29%5E2%7D
-"d(\\mathbf{x}, \\mathbf{y}) = \\sqrt{\\sum_j^p (x_j - y_j)^2}")  
+<!-- As k-fold CV, one fold is validation block and the remainings are training. NND is computed versus training. Consider the first block. Then we should compute NND of 9 observations, respectively. -->
 
-See `euc_nnd()` and `nns_cpp()`.
+<!-- For each $i \leftarrow 1$ to w(size of the block), -->
 
-### Setting threshold
+<!-- 1. Compute **Euclidean distance** versus every point in the training block. -->
 
-1.  arbitrary threshold
-2.  right tail value of NND pdf
+<!-- 2. Find minimum value of the distance value. -->
 
-`euc_pdf()` produces this NND pdf. The procedure is similar to the above
-windowed NNS with smaller partition, but different input.
+<!-- 3. It is the NND of this observation. -->
 
-  - `nns_cpp()` is provided window size (`win`), while
-  - `euc_pdf()` partition number (`partition`)
+<!-- Repeat this process for every block. Here, Euclidean distance for multivariate series is computed by -->
 
-Using this pdf, we can compute its quantile or all at once using
-`nnd_thr()`.
+<!-- $$d(\mathbf{x}, \mathbf{y}) = \sqrt{\sum_j^p (x_j - y_j)^2}$$ -->
 
-### Anomaly detection
+<!-- See `euc_nnd()` and `nns_cpp()`. -->
 
-Given the result of windowed NNS, compare with the threshold. Use
-`detect_nnd()`. It returns `TRUE` (anomaly) and `FALSE` (normal).
-Sometimes we want the other labels. In this case, `detect_nndvec` can
-give any label you want (`label`). For example, `-1` and `1`.
+<!-- ### Setting threshold -->
+
+<!-- 1. arbitrary threshold -->
+
+<!-- 2. right tail value of NND pdf -->
+
+<!-- `euc_pdf()` produces this NND pdf. The procedure is similar to the above windowed NNS with smaller partition, but different input. -->
+
+<!-- - `nns_cpp()` is provided window size (`win`), while -->
+
+<!-- - `euc_pdf()` partition number (`partition`) -->
+
+<!-- Using this pdf, we can compute its quantile or all at once using `nnd_thr()`. -->
+
+<!-- ### Anomaly detection -->
+
+<!-- Given the result of windowed NNS, compare with the threshold. Use `detect_nnd()`. It returns `TRUE` (anomaly) and `FALSE` (normal). Sometimes we want the other labels. In this case, `detect_nndvec` can give any label you want (`label`). For example, `-1` and `1`. -->
 
 ## Kullback-Leibler Divergence Algorithm
 
