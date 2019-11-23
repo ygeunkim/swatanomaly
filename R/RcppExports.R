@@ -404,3 +404,25 @@ pred_nnd <- function(data, newdata, win, jump, display_progress = FALSE) {
     .Call('_swatanomaly_pred_nnd', PACKAGE = 'swatanomaly', data, newdata, win, jump, display_progress)
 }
 
+#' Static Threshold
+#'
+#' @description
+#' This function detects anomaly for each window using static threshold.
+#'
+#' @param x NumericMatrix multivariate time series, which is forecasting error
+#' @param win int window size.
+#' @param jump int jump size for sliding window.
+#' @param threshold double threshold for anomaly
+#' @param display_progress If TRUE, display a progress bar. By default, FALSE.
+#' @return LogicalVector
+#' @details
+#' If at least one observation in the window is larger than the threshold, the entire window is anomaly.
+#'
+#' @references Pavel Filonov, Andrey Lavrentyev, and Artem Vorontsov. 2016. \emph{Multivariate industrial time series with cyber-attack simulation: Fault detection using an lstm-based predictive data model}. arXiv preprint \url{arXiv:1612.06676} (2016).
+#' @useDynLib swatanomaly
+#' @importFrom Rcpp sourceCpp
+#' @export
+detect_static <- function(x, win, jump, threshold, display_progress = FALSE) {
+    .Call('_swatanomaly_detect_static', PACKAGE = 'swatanomaly', x, win, jump, threshold, display_progress)
+}
+

@@ -24,6 +24,9 @@ Various anomaly detection algorithms studied in *NSR anomaly detection project*
 
 - NND (baseline-method): @Yun:2018di
 - K-L divergence: @Cho:2019ji
+- Online SOM Detector: separate repo with `python` (`ygeunkim/somanomaly`)
+- Functional Data Analysis
+- AutoEncoder
 
 ## Installation
 
@@ -31,52 +34,11 @@ Various anomaly detection algorithms studied in *NSR anomaly detection project*
 devtools::install_github("ygeunkim/swatanomaly")
 ```
 
-```{r}
+```{r, eval=FALSE}
 library(swatanomaly)
 ```
 
-<!-- ## Nearest-Neighbor Distance Algorithm -->
-
-<!-- This algorithm follows k-fold cross-validation construction. -->
-
-<!-- ### Windowed NNS -->
-
-<!-- |123456789|123456789|123456789|123456789|123456789|   -->
-<!-- |:-------:|:-------:|:-------:|:-------:|:-------:|   -->
-<!-- |ooooooooo|ooooooooo|ooooooooo|ooooooooo|ooooooooo|   -->
-<!-- |ooooooooo|ooooooooo|ooooooooo|ooooooooo|ooooooooo|   -->
-<!-- |ooooooooo|ooooooooo|ooooooooo|ooooooooo|ooooooooo|   -->
-
-<!-- As k-fold CV, one fold is validation block and the remainings are training. NND is computed versus training. Consider the first block. Then we should compute NND of 9 observations, respectively. -->
-
-<!-- For each $i \leftarrow 1$ to w(size of the block), -->
-
-<!-- 1. Compute **Euclidean distance** versus every point in the training block. -->
-<!-- 2. Find minimum value of the distance value. -->
-<!-- 3. It is the NND of this observation. -->
-
-<!-- Repeat this process for every block. Here, Euclidean distance for multivariate series is computed by -->
-
-<!-- $$d(\mathbf{x}, \mathbf{y}) = \sqrt{\sum_j^p (x_j - y_j)^2}$$ -->
-
-<!-- See `euc_nnd()` and `nns_cpp()`. -->
-
-<!-- ### Setting threshold -->
-
-<!-- 1. arbitrary threshold -->
-<!-- 2. right tail value of NND pdf -->
-
-<!-- `euc_pdf()` produces this NND pdf. The procedure is similar to the above windowed NNS with smaller partition, but different input. -->
-
-<!-- - `nns_cpp()` is provided window size (`win`), while -->
-<!-- - `euc_pdf()` partition number (`partition`) -->
-
-<!-- Using this pdf, we can compute its quantile or all at once using `nnd_thr()`. -->
-
-<!-- ### Anomaly detection -->
-
-<!-- Given the result of windowed NNS, compare with the threshold. Use `detect_nnd()`. It returns `TRUE` (anomaly) and `FALSE` (normal). Sometimes we want the other labels. In this case, `detect_nndvec` can give any label you want (`label`). For example, `-1` and `1`. -->
-
+<!-- This `R` package can cover NND and K-L divergence. As an baseline method, we provides static threshold method. -->
 
 ## Kullback-Leibler Divergence Algorithm
 
