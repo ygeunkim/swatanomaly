@@ -4,8 +4,7 @@
 \alias{nnd_thr}
 \title{NND pdf Threshold}
 \usage{
-nnd_thr(data, part_size, win_size, jump_size, prob,
-  display_progress = FALSE)
+nnd_thr(data, part_size, win_size, jump_size, prob, display_progress = FALSE)
 }
 \arguments{
 \item{data}{NumericMatrix multivariate data set}
