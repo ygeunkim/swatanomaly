@@ -29,7 +29,6 @@ LogicalVector detect_static(NumericMatrix x, int win, int jump, double threshold
 
   LogicalVector anomaly(win_num);
   NumericMatrix batch(win, np);
-  NumericVector batch_vec(win * np);
 
   Progress p(win_num - 1, display_progress);
   for (int i = 0; i < win_num; i++) {
@@ -39,11 +38,8 @@ LogicalVector detect_static(NumericMatrix x, int win, int jump, double threshold
     p.increment();
 
     batch = x(Range(i * jump, i * jump + win_num - 1), _);
-    // for (int j = 0; j < np; j++) {
-    //   batch_vec[Range(j * win_num, (j + 1) * win_num)] = batch(_, j);
-    // }
 
-    anomaly[i] = is_true(all(batch >= threshold));
+    anomaly[i] = all(batch > threshold).is_true();
   }
 
   return anomaly;
