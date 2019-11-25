@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{detect_static}
 \alias{detect_static}
-\title{Static Threshold}
+\title{Simple Static Threshold}
 \usage{
 detect_static(x, win, jump, threshold, display_progress = FALSE)
 }
