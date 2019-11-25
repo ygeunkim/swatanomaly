@@ -404,7 +404,7 @@ pred_nnd <- function(data, newdata, win, jump, display_progress = FALSE) {
     .Call('_swatanomaly_pred_nnd', PACKAGE = 'swatanomaly', data, newdata, win, jump, display_progress)
 }
 
-#' Static Threshold
+#' Simple Static Threshold
 #'
 #' @description
 #' This function detects anomaly for each window using static threshold.

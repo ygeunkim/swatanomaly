@@ -3,7 +3,7 @@
 using namespace Rcpp;
 #include "misc.h"
 
-//' Static Threshold
+//' Simple Static Threshold
 //'
 //' @description
 //' This function detects anomaly for each window using static threshold.
@@ -37,7 +37,7 @@ LogicalVector detect_static(NumericMatrix x, int win, int jump, double threshold
       return -1.0;
     p.increment();
 
-    batch = x(Range(i * jump, i * jump + win_num - 1), _);
+    batch = x(Range(i * jump, i * jump + win - 1), _);
 
     anomaly[i] = all(batch > threshold).is_true();
   }
