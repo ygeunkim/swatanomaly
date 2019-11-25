@@ -418,11 +418,36 @@ pred_nnd <- function(data, newdata, win, jump, display_progress = FALSE) {
 #' @details
 #' If at least one observation in the window is larger than the threshold, the entire window is anomaly.
 #'
-#' @references Pavel Filonov, Andrey Lavrentyev, and Artem Vorontsov. 2016. \emph{Multivariate industrial time series with cyber-attack simulation: Fault detection using an lstm-based predictive data model}. arXiv preprint \url{arXiv:1612.06676} (2016).
 #' @useDynLib swatanomaly
 #' @importFrom Rcpp sourceCpp
 #' @export
 detect_static <- function(x, win, jump, threshold, display_progress = FALSE) {
     .Call('_swatanomaly_detect_static', PACKAGE = 'swatanomaly', x, win, jump, threshold, display_progress)
+}
+
+compute_mse <- function(x, win, jump) {
+    .Call('_swatanomaly_compute_mse', PACKAGE = 'swatanomaly', x, win, jump)
+}
+
+#' Static Threshold based on MSE
+#'
+#' @description
+#' This function detects anomaly for each window based on window MSE.
+#'
+#' @param x NumericMatrix multivariate time series, which is forecasting error
+#' @param win int window size.
+#' @param jump int jump size for sliding window.
+#' @param threshold double threshold for anomaly
+#' @param display_progress If TRUE, display a progress bar. By default, FALSE.
+#' @return LogicalVector
+#' @details
+#' If the MSE is larger than given threshold, then the window is anomaly.
+#'
+#' @references Pavel Filonov, Andrey Lavrentyev, and Artem Vorontsov. 2016. \emph{Multivariate industrial time series with cyber-attack simulation: Fault detection using an lstm-based predictive data model}. arXiv preprint \url{arXiv:1612.06676} (2016).
+#' @useDynLib swatanomaly
+#' @importFrom Rcpp sourceCpp
+#' @export
+detect_mse <- function(x, win, jump, threshold, display_progress = FALSE) {
+    .Call('_swatanomaly_detect_mse', PACKAGE = 'swatanomaly', x, win, jump, threshold, display_progress)
 }
 

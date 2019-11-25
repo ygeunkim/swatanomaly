@@ -26,6 +26,3 @@ This function detects anomaly for each window using static threshold.
 \details{
 If at least one observation in the window is larger than the threshold, the entire window is anomaly.
 }
-\references{
-Pavel Filonov, Andrey Lavrentyev, and Artem Vorontsov. 2016. \emph{Multivariate industrial time series with cyber-attack simulation: Fault detection using an lstm-based predictive data model}. arXiv preprint \url{arXiv:1612.06676} (2016).
-}

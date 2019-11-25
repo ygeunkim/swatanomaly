@@ -322,6 +322,34 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// compute_mse
+NumericVector compute_mse(NumericMatrix x, int win, int jump);
+RcppExport SEXP _swatanomaly_compute_mse(SEXP xSEXP, SEXP winSEXP, SEXP jumpSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type win(winSEXP);
+    Rcpp::traits::input_parameter< int >::type jump(jumpSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_mse(x, win, jump));
+    return rcpp_result_gen;
+END_RCPP
+}
+// detect_mse
+LogicalVector detect_mse(NumericMatrix x, int win, int jump, double threshold, bool display_progress);
+RcppExport SEXP _swatanomaly_detect_mse(SEXP xSEXP, SEXP winSEXP, SEXP jumpSEXP, SEXP thresholdSEXP, SEXP display_progressSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type win(winSEXP);
+    Rcpp::traits::input_parameter< int >::type jump(jumpSEXP);
+    Rcpp::traits::input_parameter< double >::type threshold(thresholdSEXP);
+    Rcpp::traits::input_parameter< bool >::type display_progress(display_progressSEXP);
+    rcpp_result_gen = Rcpp::wrap(detect_mse(x, win, jump, threshold, display_progress));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_swatanomaly_compute_euc", (DL_FUNC) &_swatanomaly_compute_euc, 2},
@@ -348,6 +376,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_swatanomaly_nnd_normal", (DL_FUNC) &_swatanomaly_nnd_normal, 5},
     {"_swatanomaly_pred_nnd", (DL_FUNC) &_swatanomaly_pred_nnd, 5},
     {"_swatanomaly_detect_static", (DL_FUNC) &_swatanomaly_detect_static, 5},
+    {"_swatanomaly_compute_mse", (DL_FUNC) &_swatanomaly_compute_mse, 3},
+    {"_swatanomaly_detect_mse", (DL_FUNC) &_swatanomaly_detect_mse, 5},
     {NULL, NULL, 0}
 };
 
