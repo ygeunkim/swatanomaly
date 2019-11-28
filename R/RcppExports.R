@@ -438,7 +438,6 @@ compute_mse <- function(x, win, jump) {
 #' @param win int window size.
 #' @param jump int jump size for sliding window.
 #' @param threshold double threshold for anomaly
-#' @param display_progress If TRUE, display a progress bar. By default, FALSE.
 #' @return LogicalVector
 #' @details
 #' If the MSE is larger than given threshold, then the window is anomaly.
@@ -447,7 +446,49 @@ compute_mse <- function(x, win, jump) {
 #' @useDynLib swatanomaly
 #' @importFrom Rcpp sourceCpp
 #' @export
-detect_mse <- function(x, win, jump, threshold, display_progress = FALSE) {
-    .Call('_swatanomaly_detect_mse', PACKAGE = 'swatanomaly', x, win, jump, threshold, display_progress)
+detect_mse <- function(x, win, jump, threshold) {
+    .Call('_swatanomaly_detect_mse', PACKAGE = 'swatanomaly', x, win, jump, threshold)
+}
+
+#' Static Threshold based on p-norm
+#'
+#' @description
+#' This function detects anomaly for each observation based on p-norm.
+#'
+#' @param x NumericMatrix multivariate time series, which is forecasting error
+#' @param norm int p-norm
+#' @param threshold double threshold for anomaly
+#' @param display_progress If TRUE, display a progress bar. By default, FALSE.
+#' @return LogicalVector
+#' @details
+#' If the p-norm is larger than given threshold, then the observation is anomaly.
+#'
+#' @useDynLib swatanomaly
+#' @importFrom Rcpp sourceCpp
+#' @export
+detect_norm <- function(x, norm, threshold, display_progress = FALSE) {
+    .Call('_swatanomaly_detect_norm', PACKAGE = 'swatanomaly', x, norm, threshold, display_progress)
+}
+
+#' CUSUM
+#'
+#' @description
+#' This function detects anomaly for each window based on CUSUM.
+#'
+#' @param x NumericMatrix multivariate time series, which is forecasting error
+#' @param win int window size.
+#' @param jump int jump size for sliding window.
+#' @param norm int p-norm
+#' @param threshold double threshold for anomaly
+#' @param display_progress If TRUE, display a progress bar. By default, FALSE.
+#' @return LogicalVector
+#' @details
+#' If the p-norm is larger than given threshold, then the observation is anomaly.
+#'
+#' @useDynLib swatanomaly
+#' @importFrom Rcpp sourceCpp
+#' @export
+detect_cusum <- function(x, win, jump, norm, threshold, display_progress = FALSE) {
+    .Call('_swatanomaly_detect_cusum', PACKAGE = 'swatanomaly', x, win, jump, norm, threshold, display_progress)
 }
 

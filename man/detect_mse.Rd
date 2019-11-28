@@ -4,7 +4,7 @@
 \alias{detect_mse}
 \title{Static Threshold based on MSE}
 \usage{
-detect_mse(x, win, jump, threshold, display_progress = FALSE)
+detect_mse(x, win, jump, threshold)
 }
 \arguments{
 \item{x}{NumericMatrix multivariate time series, which is forecasting error}
@@ -14,8 +14,6 @@ detect_mse(x, win, jump, threshold, display_progress = FALSE)
 \item{jump}{int jump size for sliding window.}
 
 \item{threshold}{double threshold for anomaly}
-
-\item{display_progress}{If TRUE, display a progress bar. By default, FALSE.}
 }
 \value{
 LogicalVector

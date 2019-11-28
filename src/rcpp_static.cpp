@@ -74,7 +74,6 @@ NumericVector compute_mse(NumericMatrix x, int win, int jump) {
 //' @param win int window size.
 //' @param jump int jump size for sliding window.
 //' @param threshold double threshold for anomaly
-//' @param display_progress If TRUE, display a progress bar. By default, FALSE.
 //' @return LogicalVector
 //' @details
 //' If the MSE is larger than given threshold, then the window is anomaly.
@@ -84,7 +83,7 @@ NumericVector compute_mse(NumericMatrix x, int win, int jump) {
 //' @importFrom Rcpp sourceCpp
 //' @export
 // [[Rcpp::export]]
-LogicalVector detect_mse(NumericMatrix x, int win, int jump, double threshold, bool display_progress = false) {
+LogicalVector detect_mse(NumericMatrix x, int win, int jump, double threshold) {
   int n = x.nrow();
   int win_num = (n - win) / jump + 1;
 
@@ -94,6 +93,86 @@ LogicalVector detect_mse(NumericMatrix x, int win, int jump, double threshold, b
 
   anomaly = mse > threshold;
 
+  return anomaly;
+}
+
+//' Static Threshold based on p-norm
+//'
+//' @description
+//' This function detects anomaly for each observation based on p-norm.
+//'
+//' @param x NumericMatrix multivariate time series, which is forecasting error
+//' @param norm int p-norm
+//' @param threshold double threshold for anomaly
+//' @param display_progress If TRUE, display a progress bar. By default, FALSE.
+//' @return LogicalVector
+//' @details
+//' If the p-norm is larger than given threshold, then the observation is anomaly.
+//'
+//' @useDynLib swatanomaly
+//' @importFrom Rcpp sourceCpp
+//' @export
+// [[Rcpp::export]]
+LogicalVector detect_norm(NumericMatrix x, int norm, double threshold, bool display_progress = false) {
+  int n = x.nrow();
+
+  LogicalVector anomaly(n);
+  NumericVector error(n);
+
+  // p-norm
+  Progress p(n - 1, display_progress);
+  for (int i = 0; i < n; i++) {
+    if (Progress::check_abort())
+      return -1.0;
+    p.increment();
+
+    error[i] = sum(pow(x(i, _), norm));
+  }
+  anomaly = error > threshold;
+
+  return anomaly;
+}
+
+//' CUSUM
+//'
+//' @description
+//' This function detects anomaly for each window based on CUSUM.
+//'
+//' @param x NumericMatrix multivariate time series, which is forecasting error
+//' @param win int window size.
+//' @param jump int jump size for sliding window.
+//' @param norm int p-norm
+//' @param threshold double threshold for anomaly
+//' @param display_progress If TRUE, display a progress bar. By default, FALSE.
+//' @return LogicalVector
+//' @details
+//' If the p-norm is larger than given threshold, then the observation is anomaly.
+//'
+//' @useDynLib swatanomaly
+//' @importFrom Rcpp sourceCpp
+//' @export
+// [[Rcpp::export]]
+LogicalVector detect_cusum(NumericMatrix x, int win, int jump, int norm, double threshold, bool display_progress = false) {
+  int n = x.nrow();
+  int win_num = (n - win) / jump + 1;
+  LogicalVector anomaly(win_num);
+  NumericVector error(win);
+  NumericVector error_sum(win_num);
+
+  Progress p(win_num - 1, display_progress);
+  for (int i = 0; i < win_num; i++) {
+    if (Progress::check_abort())
+      return -1.0;
+    p.increment();
+
+    for (int w = 0; w < win; w++) {
+      error[w] = sum(pow(x(i * jump + w, _), norm));
+    }
+
+    error_sum[i] = sum(error);
+  }
+
+  anomaly = error_sum > threshold;
   return anomaly;
 }
 
