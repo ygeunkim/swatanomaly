@@ -113,7 +113,7 @@ LogicalVector detect_mse(NumericMatrix x, int win, int jump, double threshold) {
 //' @importFrom Rcpp sourceCpp
 //' @export
 // [[Rcpp::export]]
-NumericVector compute_norm(NumericMatrix x, int norm, bool display_progress = false) {
+NumericVector compute_norm(NumericMatrix x, double norm, bool display_progress = false) {
   int n = x.nrow();
   NumericVector error(n);
   // p-norm
@@ -145,7 +145,7 @@ NumericVector compute_norm(NumericMatrix x, int norm, bool display_progress = fa
 //' @importFrom Rcpp sourceCpp
 //' @export
 // [[Rcpp::export]]
-LogicalVector detect_norm(NumericMatrix x, int norm, double threshold, bool display_progress = false) {
+LogicalVector detect_norm(NumericMatrix x, double norm, double threshold, bool display_progress = false) {
   int n = x.nrow();
 
   LogicalVector anomaly(n);
@@ -178,7 +178,7 @@ LogicalVector detect_norm(NumericMatrix x, int norm, double threshold, bool disp
 //' @importFrom Rcpp sourceCpp
 //' @export
 // [[Rcpp::export]]
-NumericVector compute_cusum(NumericMatrix x, int win, int jump, int norm, bool display_progress = false) {
+NumericVector compute_cusum(NumericMatrix x, int win, int jump, double norm, bool display_progress = false) {
   int n = x.nrow();
   int win_num = (n - win) / jump + 1;
   LogicalVector anomaly(win_num);
@@ -192,7 +192,7 @@ NumericVector compute_cusum(NumericMatrix x, int win, int jump, int norm, bool d
     p.increment();
 
     for (int w = 0; w < win; w++) {
-      error[w] = sum(pow(x(i * jump + w, _), norm));
+      error[w] = pow(sum(pow(x(i * jump + w, _), norm)), 1 / norm);
     }
 
     error_sum[i] = sum(error);
@@ -219,7 +219,7 @@ NumericVector compute_cusum(NumericMatrix x, int win, int jump, int norm, bool d
 //' @importFrom Rcpp sourceCpp
 //' @export
 // [[Rcpp::export]]
-LogicalVector detect_cusum(NumericMatrix x, int win, int jump, int norm, double threshold, bool display_progress = false) {
+LogicalVector detect_cusum(NumericMatrix x, int win, int jump, double norm, double threshold, bool display_progress = false) {
   int n = x.nrow();
   int win_num = (n - win) / jump + 1;
   LogicalVector anomaly(win_num);
