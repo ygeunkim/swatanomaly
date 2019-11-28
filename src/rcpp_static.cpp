@@ -96,6 +96,38 @@ LogicalVector detect_mse(NumericMatrix x, int win, int jump, double threshold) {
   return anomaly;
 }
 
+//' p-norm of each observation
+//'
+//' @description
+//' This function computes p-norm w.r.t. the variables.
+//'
+//' @param x NumericMatrix multivariate time series, which is forecasting error
+//' @param norm int p-norm
+//' @param display_progress If TRUE, display a progress bar. By default, FALSE.
+//' @return NumericVector
+//' @seealso
+//'   \code{\link{detect_norm}}
+//'   \code{\link{train_norm}}
+//'
+//' @useDynLib swatanomaly
+//' @importFrom Rcpp sourceCpp
+//' @export
+// [[Rcpp::export]]
+NumericVector compute_norm(NumericMatrix x, int norm, bool display_progress = false) {
+  int n = x.nrow();
+  NumericVector error(n);
+  // p-norm
+  Progress p(n - 1, display_progress);
+  for (int i = 0; i < n; i++) {
+    if (Progress::check_abort())
+      return -1.0;
+    p.increment();
+
+    error[i] = sum(pow(x(i, _), norm));
+  }
+  return error;
+}
+
 //' Static Threshold based on p-norm
 //'
 //' @description
@@ -118,19 +150,54 @@ LogicalVector detect_norm(NumericMatrix x, int norm, double threshold, bool disp
 
   LogicalVector anomaly(n);
   NumericVector error(n);
+  error = compute_norm(x, norm, display_progress);
+  anomaly = error > threshold;
 
-  // p-norm
-  Progress p(n - 1, display_progress);
-  for (int i = 0; i < n; i++) {
+  return anomaly;
+}
+
+//' Window CUSUM
+//'
+//' @description
+//' This function computes the sum of p-norm in each window.
+//'
+//' @param x NumericMatrix multivariate time series, which is forecasting error
+//' @param win int window size.
+//' @param jump int jump size for sliding window.
+//' @param norm int p-norm
+//' @param display_progress If TRUE, display a progress bar. By default, FALSE.
+//' @return NumericVector
+//' @details
+//' This function will be used in both \code{\link{detect_cusum}} and \code{\link{train_cusum}}
+//' Use error data as an input.
+//'
+//' @seealso
+//'   \code{\link{detect_cusum}}
+//'   \code{\link{train_cusum}}
+//' @useDynLib swatanomaly
+//' @importFrom Rcpp sourceCpp
+//' @export
+// [[Rcpp::export]]
+NumericVector compute_cusum(NumericMatrix x, int win, int jump, int norm, bool display_progress = false) {
+  int n = x.nrow();
+  int win_num = (n - win) / jump + 1;
+  LogicalVector anomaly(win_num);
+  NumericVector error(win);
+  NumericVector error_sum(win_num);
+
+  Progress p(win_num - 1, display_progress);
+  for (int i = 0; i < win_num; i++) {
     if (Progress::check_abort())
       return -1.0;
     p.increment();
 
-    error[i] = sum(pow(x(i, _), norm));
-  }
-  anomaly = error > threshold;
+    for (int w = 0; w < win; w++) {
+      error[w] = sum(pow(x(i * jump + w, _), norm));
+    }
 
-  return anomaly;
+    error_sum[i] = sum(error);
+  }
+  return error_sum;
 }
 
 //' CUSUM
@@ -156,24 +223,9 @@ LogicalVector detect_cusum(NumericMatrix x, int win, int jump, int norm, double 
   int n = x.nrow();
   int win_num = (n - win) / jump + 1;
   LogicalVector anomaly(win_num);
-  NumericVector error(win);
   NumericVector error_sum(win_num);
-
-  Progress p(win_num - 1, display_progress);
-  for (int i = 0; i < win_num; i++) {
-    if (Progress::check_abort())
-      return -1.0;
-    p.increment();
-
-    for (int w = 0; w < win; w++) {
-      error[w] = sum(pow(x(i * jump + w, _), norm));
-    }
-
-    error_sum[i] = sum(error);
-  }
-
+  error_sum = compute_cusum(x, win, jump, norm, display_progress);
   anomaly = error_sum > threshold;
   return anomaly;
 }
-
 

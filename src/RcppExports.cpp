@@ -349,6 +349,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// compute_norm
+NumericVector compute_norm(NumericMatrix x, int norm, bool display_progress);
+RcppExport SEXP _swatanomaly_compute_norm(SEXP xSEXP, SEXP normSEXP, SEXP display_progressSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type norm(normSEXP);
+    Rcpp::traits::input_parameter< bool >::type display_progress(display_progressSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_norm(x, norm, display_progress));
+    return rcpp_result_gen;
+END_RCPP
+}
 // detect_norm
 LogicalVector detect_norm(NumericMatrix x, int norm, double threshold, bool display_progress);
 RcppExport SEXP _swatanomaly_detect_norm(SEXP xSEXP, SEXP normSEXP, SEXP thresholdSEXP, SEXP display_progressSEXP) {
@@ -360,6 +373,21 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type threshold(thresholdSEXP);
     Rcpp::traits::input_parameter< bool >::type display_progress(display_progressSEXP);
     rcpp_result_gen = Rcpp::wrap(detect_norm(x, norm, threshold, display_progress));
+    return rcpp_result_gen;
+END_RCPP
+}
+// compute_cusum
+NumericVector compute_cusum(NumericMatrix x, int win, int jump, int norm, bool display_progress);
+RcppExport SEXP _swatanomaly_compute_cusum(SEXP xSEXP, SEXP winSEXP, SEXP jumpSEXP, SEXP normSEXP, SEXP display_progressSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type win(winSEXP);
+    Rcpp::traits::input_parameter< int >::type jump(jumpSEXP);
+    Rcpp::traits::input_parameter< int >::type norm(normSEXP);
+    Rcpp::traits::input_parameter< bool >::type display_progress(display_progressSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_cusum(x, win, jump, norm, display_progress));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -407,7 +435,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_swatanomaly_detect_static", (DL_FUNC) &_swatanomaly_detect_static, 5},
     {"_swatanomaly_compute_mse", (DL_FUNC) &_swatanomaly_compute_mse, 3},
     {"_swatanomaly_detect_mse", (DL_FUNC) &_swatanomaly_detect_mse, 4},
+    {"_swatanomaly_compute_norm", (DL_FUNC) &_swatanomaly_compute_norm, 3},
     {"_swatanomaly_detect_norm", (DL_FUNC) &_swatanomaly_detect_norm, 4},
+    {"_swatanomaly_compute_cusum", (DL_FUNC) &_swatanomaly_compute_cusum, 5},
     {"_swatanomaly_detect_cusum", (DL_FUNC) &_swatanomaly_detect_cusum, 6},
     {NULL, NULL, 0}
 };

@@ -450,6 +450,26 @@ detect_mse <- function(x, win, jump, threshold) {
     .Call('_swatanomaly_detect_mse', PACKAGE = 'swatanomaly', x, win, jump, threshold)
 }
 
+#' p-norm of each observation
+#'
+#' @description
+#' This function computes p-norm w.r.t. the variables.
+#'
+#' @param x NumericMatrix multivariate time series, which is forecasting error
+#' @param norm int p-norm
+#' @param display_progress If TRUE, display a progress bar. By default, FALSE.
+#' @return NumericVector
+#' @seealso
+#'   \code{\link{detect_norm}}
+#'   \code{\link{train_norm}}
+#'
+#' @useDynLib swatanomaly
+#' @importFrom Rcpp sourceCpp
+#' @export
+compute_norm <- function(x, norm, display_progress = FALSE) {
+    .Call('_swatanomaly_compute_norm', PACKAGE = 'swatanomaly', x, norm, display_progress)
+}
+
 #' Static Threshold based on p-norm
 #'
 #' @description
@@ -468,6 +488,31 @@ detect_mse <- function(x, win, jump, threshold) {
 #' @export
 detect_norm <- function(x, norm, threshold, display_progress = FALSE) {
     .Call('_swatanomaly_detect_norm', PACKAGE = 'swatanomaly', x, norm, threshold, display_progress)
+}
+
+#' Window CUSUM
+#'
+#' @description
+#' This function computes the sum of p-norm in each window.
+#'
+#' @param x NumericMatrix multivariate time series, which is forecasting error
+#' @param win int window size.
+#' @param jump int jump size for sliding window.
+#' @param norm int p-norm
+#' @param display_progress If TRUE, display a progress bar. By default, FALSE.
+#' @return NumericVector
+#' @details
+#' This function will be used in both \code{\link{detect_cusum}} and \code{\link{train_cusum}}
+#' Use error data as an input.
+#'
+#' @seealso
+#'   \code{\link{detect_cusum}}
+#'   \code{\link{train_cusum}}
+#' @useDynLib swatanomaly
+#' @importFrom Rcpp sourceCpp
+#' @export
+compute_cusum <- function(x, win, jump, norm, display_progress = FALSE) {
+    .Call('_swatanomaly_compute_cusum', PACKAGE = 'swatanomaly', x, win, jump, norm, display_progress)
 }
 
 #' CUSUM
