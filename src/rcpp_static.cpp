@@ -123,7 +123,7 @@ NumericVector compute_norm(NumericMatrix x, int norm, bool display_progress = fa
       return -1.0;
     p.increment();
 
-    error[i] = sum(pow(x(i, _), norm));
+    error[i] = pow(sum(pow(x(i, _), norm)), 1 / norm);
   }
   return error;
 }
