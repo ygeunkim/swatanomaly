@@ -6,9 +6,8 @@ project*
 
   - NND (baseline-method): Yun et al. (2018)
   - K-L divergence: Cho et al. (2019)
-  - Online SOM Detector: separate repo with `python`
-    (`ygeunkim/somanomaly`)
-  - Functional Data Analysis
+  - Functional Data
+Analysis
   - AutoEncoder
 
 ## Installation

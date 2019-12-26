@@ -24,7 +24,6 @@ Various anomaly detection algorithms studied in *NSR anomaly detection project*
 
 - NND (baseline-method): @Yun:2018di
 - K-L divergence: @Cho:2019ji
-- Online SOM Detector: separate repo with `python` (`ygeunkim/somanomaly`)
 - Functional Data Analysis
 - AutoEncoder
 
