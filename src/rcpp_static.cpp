@@ -187,13 +187,16 @@ NumericVector compute_cusum(NumericMatrix x, int win, int jump, double norm, boo
 
   Progress p(win_num - 1, display_progress);
   for (int i = 0; i < win_num; i++) {
+    // for each window
     if (Progress::check_abort())
       return -1.0;
     p.increment();
 
-    for (int w = 0; w < win; w++) {
-      error[w] = pow(sum(pow(x(i * jump + w, _), norm)), 1 / norm);
-    }
+    error = compute_norm(x(Range(i * jump, i * jump + win - 1), _), norm);
+
+    // for (int w = 0; w < win; w++) {
+    //   error[w] = pow(sum(pow(x(i * jump + w, _), norm)), 1 / norm);
+    // }
 
     error_sum[i] = sum(error);
   }
