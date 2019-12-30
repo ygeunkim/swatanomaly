@@ -4,14 +4,12 @@
 \alias{compute_norm}
 \title{p-norm of each observation}
 \usage{
-compute_norm(x, norm, display_progress = FALSE)
+compute_norm(x, norm)
 }
 \arguments{
 \item{x}{NumericMatrix multivariate time series, which is forecasting error}
 
 \item{norm}{int p-norm}
-
-\item{display_progress}{If TRUE, display a progress bar. By default, FALSE.}
 }
 \value{
 NumericVector

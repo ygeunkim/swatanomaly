@@ -4,7 +4,7 @@
 \alias{detect_cusum}
 \title{CUSUM}
 \usage{
-detect_cusum(x, win, jump, norm, threshold, display_progress = FALSE)
+detect_cusum(x, win, jump, norm, threshold)
 }
 \arguments{
 \item{x}{NumericMatrix multivariate time series, which is forecasting error}
@@ -16,8 +16,6 @@ detect_cusum(x, win, jump, norm, threshold, display_progress = FALSE)
 \item{norm}{int p-norm}
 
 \item{threshold}{double threshold for anomaly}
-
-\item{display_progress}{If TRUE, display a progress bar. By default, FALSE.}
 }
 \value{
 LogicalVector

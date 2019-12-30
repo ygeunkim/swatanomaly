@@ -4,7 +4,7 @@
 \alias{detect_norm}
 \title{Static Threshold based on p-norm}
 \usage{
-detect_norm(x, norm, threshold, display_progress = FALSE)
+detect_norm(x, norm, threshold)
 }
 \arguments{
 \item{x}{NumericMatrix multivariate time series, which is forecasting error}
@@ -12,8 +12,6 @@ detect_norm(x, norm, threshold, display_progress = FALSE)
 \item{norm}{int p-norm}
 
 \item{threshold}{double threshold for anomaly}
-
-\item{display_progress}{If TRUE, display a progress bar. By default, FALSE.}
 }
 \value{
 LogicalVector

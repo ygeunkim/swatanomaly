@@ -4,7 +4,7 @@
 \alias{train_cusum}
 \title{Choose Threshold for CUSUM}
 \usage{
-train_cusum(x, win, jump, norm, prob = 0.9, display_progress = FALSE)
+train_cusum(x, win, jump, norm, prob = 0.9)
 }
 \arguments{
 \item{x}{Train data}
@@ -16,8 +16,6 @@ train_cusum(x, win, jump, norm, prob = 0.9, display_progress = FALSE)
 \item{norm}{p-norm}
 
 \item{prob}{Quantile}
-
-\item{display_progress}{If TRUE, display a progress bar. By default, FALSE.}
 }
 \value{
 Suggested threshold value for \code{\link{detect_cusum}}

@@ -3,7 +3,6 @@
 #' @param x Train data
 #' @param norm p-norm
 #' @param prob Quantile
-#' @param display_progress If TRUE, display a progress bar. By default, FALSE.
 #' @return Suggested threshold value for \code{\link{detect_norm}}
 #' @details
 #' By computing the quantile of every p-norm, threshold is given.
@@ -12,9 +11,9 @@
 #' \code{\link{detect_norm}}
 #' @importFrom stats quantile
 #' @export
-train_norm <- function(x, norm, prob = .9, display_progress = FALSE) {
+train_norm <- function(x, norm, prob = .9) {
   if (!is.matrix(x)) x <- as.matrix(x)
-  error <- compute_norm(x, norm, display_progress)
+  error <- compute_norm(x, norm)
   quantile(error, probs = prob)
 }
 
@@ -25,7 +24,6 @@ train_norm <- function(x, norm, prob = .9, display_progress = FALSE) {
 #' @param jump jump size
 #' @param norm p-norm
 #' @param prob Quantile
-#' @param display_progress If TRUE, display a progress bar. By default, FALSE.
 #' @return Suggested threshold value for \code{\link{detect_cusum}}
 #' @details
 #' By computing the quantile of every CUSUM, threshold is given.
@@ -34,8 +32,8 @@ train_norm <- function(x, norm, prob = .9, display_progress = FALSE) {
 #' \code{\link{detect_cusum}}
 #' @importFrom stats quantile
 #' @export
-train_cusum <- function(x, win, jump, norm, prob = .9, display_progress = FALSE) {
+train_cusum <- function(x, win, jump, norm, prob = .9) {
   if (!is.matrix(x)) x <- as.matrix(x)
-  error <- compute_cusum(x, win, jump, norm, display_progress)
+  error <- compute_cusum(x, win, jump, norm)
   quantile(error, probs = prob)
 }

@@ -103,7 +103,6 @@ LogicalVector detect_mse(NumericMatrix x, int win, int jump, double threshold) {
 //'
 //' @param x NumericMatrix multivariate time series, which is forecasting error
 //' @param norm int p-norm
-//' @param display_progress If TRUE, display a progress bar. By default, FALSE.
 //' @return NumericVector
 //' @seealso
 //'   \code{\link{detect_norm}}
@@ -113,16 +112,11 @@ LogicalVector detect_mse(NumericMatrix x, int win, int jump, double threshold) {
 //' @importFrom Rcpp sourceCpp
 //' @export
 // [[Rcpp::export]]
-NumericVector compute_norm(NumericMatrix x, double norm, bool display_progress = false) {
+NumericVector compute_norm(NumericMatrix x, double norm) {
   int n = x.nrow();
   NumericVector error(n);
   // p-norm
-  Progress p(n - 1, display_progress);
   for (int i = 0; i < n; i++) {
-    if (Progress::check_abort())
-      return -1.0;
-    p.increment();
-
     error[i] = pow(sum(pow(x(i, _), norm)), 1 / norm);
   }
   return error;
@@ -136,7 +130,6 @@ NumericVector compute_norm(NumericMatrix x, double norm, bool display_progress =
 //' @param x NumericMatrix multivariate time series, which is forecasting error
 //' @param norm int p-norm
 //' @param threshold double threshold for anomaly
-//' @param display_progress If TRUE, display a progress bar. By default, FALSE.
 //' @return LogicalVector
 //' @details
 //' If the p-norm is larger than given threshold, then the observation is anomaly.
@@ -145,12 +138,12 @@ NumericVector compute_norm(NumericMatrix x, double norm, bool display_progress =
 //' @importFrom Rcpp sourceCpp
 //' @export
 // [[Rcpp::export]]
-LogicalVector detect_norm(NumericMatrix x, double norm, double threshold, bool display_progress = false) {
+LogicalVector detect_norm(NumericMatrix x, double norm, double threshold) {
   int n = x.nrow();
 
   LogicalVector anomaly(n);
   NumericVector error(n);
-  error = compute_norm(x, norm, display_progress);
+  error = compute_norm(x, norm);
   anomaly = error > threshold;
 
   return anomaly;
@@ -165,7 +158,6 @@ LogicalVector detect_norm(NumericMatrix x, double norm, double threshold, bool d
 //' @param win int window size.
 //' @param jump int jump size for sliding window.
 //' @param norm int p-norm
-//' @param display_progress If TRUE, display a progress bar. By default, FALSE.
 //' @return NumericVector
 //' @details
 //' This function will be used in both \code{\link{detect_cusum}} and \code{\link{train_cusum}}
@@ -178,25 +170,17 @@ LogicalVector detect_norm(NumericMatrix x, double norm, double threshold, bool d
 //' @importFrom Rcpp sourceCpp
 //' @export
 // [[Rcpp::export]]
-NumericVector compute_cusum(NumericMatrix x, int win, int jump, double norm, bool display_progress = false) {
+NumericVector compute_cusum(NumericMatrix x, int win, int jump, double norm) {
   int n = x.nrow();
   int win_num = (n - win) / jump + 1;
   LogicalVector anomaly(win_num);
   NumericVector error(win);
   NumericVector error_sum(win_num);
 
-  Progress p(win_num - 1, display_progress);
   for (int i = 0; i < win_num; i++) {
     // for each window
-    if (Progress::check_abort())
-      return -1.0;
-    p.increment();
 
     error = compute_norm(x(Range(i * jump, i * jump + win - 1), _), norm);
-
-    // for (int w = 0; w < win; w++) {
-    //   error[w] = pow(sum(pow(x(i * jump + w, _), norm)), 1 / norm);
-    // }
 
     error_sum[i] = sum(error);
   }
@@ -213,7 +197,6 @@ NumericVector compute_cusum(NumericMatrix x, int win, int jump, double norm, boo
 //' @param jump int jump size for sliding window.
 //' @param norm int p-norm
 //' @param threshold double threshold for anomaly
-//' @param display_progress If TRUE, display a progress bar. By default, FALSE.
 //' @return LogicalVector
 //' @details
 //' If the p-norm is larger than given threshold, then the observation is anomaly.
@@ -222,12 +205,12 @@ NumericVector compute_cusum(NumericMatrix x, int win, int jump, double norm, boo
 //' @importFrom Rcpp sourceCpp
 //' @export
 // [[Rcpp::export]]
-LogicalVector detect_cusum(NumericMatrix x, int win, int jump, double norm, double threshold, bool display_progress = false) {
+LogicalVector detect_cusum(NumericMatrix x, int win, int jump, double norm, double threshold) {
   int n = x.nrow();
   int win_num = (n - win) / jump + 1;
   LogicalVector anomaly(win_num);
   NumericVector error_sum(win_num);
-  error_sum = compute_cusum(x, win, jump, norm, display_progress);
+  error_sum = compute_cusum(x, win, jump, norm);
   anomaly = error_sum > threshold;
   return anomaly;
 }

@@ -4,7 +4,7 @@
 \alias{compute_cusum}
 \title{Window CUSUM}
 \usage{
-compute_cusum(x, win, jump, norm, display_progress = FALSE)
+compute_cusum(x, win, jump, norm)
 }
 \arguments{
 \item{x}{NumericMatrix multivariate time series, which is forecasting error}
@@ -14,8 +14,6 @@ compute_cusum(x, win, jump, norm, display_progress = FALSE)
 \item{jump}{int jump size for sliding window.}
 
 \item{norm}{int p-norm}
-
-\item{display_progress}{If TRUE, display a progress bar. By default, FALSE.}
 }
 \value{
 NumericVector

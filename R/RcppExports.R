@@ -457,7 +457,6 @@ detect_mse <- function(x, win, jump, threshold) {
 #'
 #' @param x NumericMatrix multivariate time series, which is forecasting error
 #' @param norm int p-norm
-#' @param display_progress If TRUE, display a progress bar. By default, FALSE.
 #' @return NumericVector
 #' @seealso
 #'   \code{\link{detect_norm}}
@@ -466,8 +465,8 @@ detect_mse <- function(x, win, jump, threshold) {
 #' @useDynLib swatanomaly
 #' @importFrom Rcpp sourceCpp
 #' @export
-compute_norm <- function(x, norm, display_progress = FALSE) {
-    .Call('_swatanomaly_compute_norm', PACKAGE = 'swatanomaly', x, norm, display_progress)
+compute_norm <- function(x, norm) {
+    .Call('_swatanomaly_compute_norm', PACKAGE = 'swatanomaly', x, norm)
 }
 
 #' Static Threshold based on p-norm
@@ -478,7 +477,6 @@ compute_norm <- function(x, norm, display_progress = FALSE) {
 #' @param x NumericMatrix multivariate time series, which is forecasting error
 #' @param norm int p-norm
 #' @param threshold double threshold for anomaly
-#' @param display_progress If TRUE, display a progress bar. By default, FALSE.
 #' @return LogicalVector
 #' @details
 #' If the p-norm is larger than given threshold, then the observation is anomaly.
@@ -486,8 +484,8 @@ compute_norm <- function(x, norm, display_progress = FALSE) {
 #' @useDynLib swatanomaly
 #' @importFrom Rcpp sourceCpp
 #' @export
-detect_norm <- function(x, norm, threshold, display_progress = FALSE) {
-    .Call('_swatanomaly_detect_norm', PACKAGE = 'swatanomaly', x, norm, threshold, display_progress)
+detect_norm <- function(x, norm, threshold) {
+    .Call('_swatanomaly_detect_norm', PACKAGE = 'swatanomaly', x, norm, threshold)
 }
 
 #' Window CUSUM
@@ -499,7 +497,6 @@ detect_norm <- function(x, norm, threshold, display_progress = FALSE) {
 #' @param win int window size.
 #' @param jump int jump size for sliding window.
 #' @param norm int p-norm
-#' @param display_progress If TRUE, display a progress bar. By default, FALSE.
 #' @return NumericVector
 #' @details
 #' This function will be used in both \code{\link{detect_cusum}} and \code{\link{train_cusum}}
@@ -511,8 +508,8 @@ detect_norm <- function(x, norm, threshold, display_progress = FALSE) {
 #' @useDynLib swatanomaly
 #' @importFrom Rcpp sourceCpp
 #' @export
-compute_cusum <- function(x, win, jump, norm, display_progress = FALSE) {
-    .Call('_swatanomaly_compute_cusum', PACKAGE = 'swatanomaly', x, win, jump, norm, display_progress)
+compute_cusum <- function(x, win, jump, norm) {
+    .Call('_swatanomaly_compute_cusum', PACKAGE = 'swatanomaly', x, win, jump, norm)
 }
 
 #' CUSUM
@@ -525,7 +522,6 @@ compute_cusum <- function(x, win, jump, norm, display_progress = FALSE) {
 #' @param jump int jump size for sliding window.
 #' @param norm int p-norm
 #' @param threshold double threshold for anomaly
-#' @param display_progress If TRUE, display a progress bar. By default, FALSE.
 #' @return LogicalVector
 #' @details
 #' If the p-norm is larger than given threshold, then the observation is anomaly.
@@ -533,7 +529,7 @@ compute_cusum <- function(x, win, jump, norm, display_progress = FALSE) {
 #' @useDynLib swatanomaly
 #' @importFrom Rcpp sourceCpp
 #' @export
-detect_cusum <- function(x, win, jump, norm, threshold, display_progress = FALSE) {
-    .Call('_swatanomaly_detect_cusum', PACKAGE = 'swatanomaly', x, win, jump, norm, threshold, display_progress)
+detect_cusum <- function(x, win, jump, norm, threshold) {
+    .Call('_swatanomaly_detect_cusum', PACKAGE = 'swatanomaly', x, win, jump, norm, threshold)
 }
 
