@@ -116,6 +116,14 @@ NumericVector compute_norm(NumericMatrix x, double norm) {
   int n = x.nrow();
   NumericVector error(n);
   // p-norm
+  if (norm == 1) {
+    // 1-norm
+    for (int i = 0; i < n; i++) {
+      error[i] = abs(sum(x(i, _)));
+    }
+    return error;
+  }
+  // p > 1
   for (int i = 0; i < n; i++) {
     error[i] = pow(sum(pow(x(i, _), norm)), 1 / norm);
   }
