@@ -1,14 +1,8 @@
 
 # `swatanomaly`
 
-Various anomaly detection algorithms studied in *NSR anomaly detection
-project*
-
-  - NND (baseline-method): Yun et al. (2018)
-  - K-L divergence: Cho et al. (2019)
-  - Functional Data
-Analysis
-  - AutoEncoder
+Various anomaly detection algorithms studied in *anomaly detection
+project* including K-L divergence: Cho et al. (2019)
 
 ## Installation
 
