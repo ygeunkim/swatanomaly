@@ -20,12 +20,7 @@ pander::panderOptions("round", 3)
 
 # `swatanomaly`
 
-Various anomaly detection algorithms studied in *NSR anomaly detection project*
-
-- NND (baseline-method): @Yun:2018di
-- K-L divergence: @Cho:2019ji
-- Functional Data Analysis
-- AutoEncoder
+Various anomaly detection algorithms studied in *anomaly detection project* including K-L divergence: @Cho:2019ji
 
 ## Installation
 
